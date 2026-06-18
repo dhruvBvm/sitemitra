@@ -32,7 +32,6 @@ export default function MySites() {
       bc.postMessage({ siteId: newBookmarkId });
       bc.close();
 
-      setRefreshKey(prev => prev + 1);
       toast.success(newBookmarkId ? 'Site bookmarked' : 'Bookmark removed');
     } catch (err) {
       toast.error('Failed to bookmark site');
@@ -44,7 +43,6 @@ export default function MySites() {
     const bc = new BroadcastChannel('bookmark');
     const handler = (event) => {
       updateBookmark(event.data.siteId);
-      setRefreshKey(prev => prev + 1);
     };
     bc.addEventListener('message', handler);
     return () => {
@@ -60,7 +58,6 @@ export default function MySites() {
         authService.getBookmarkedSite().then((res) => {
           const sId = res?.site?._id || res?.site || null;
           updateBookmark(sId);
-          setRefreshKey(prev => prev + 1);
         }).catch((err) => console.error('Failed to sync bookmark', err));
       }
     };
@@ -69,25 +66,34 @@ export default function MySites() {
   }, [updateBookmark]);
 
   useEffect(() => {
+    let active = true;
     const fetchSites = async () => {
       try {
         const data = await managerService.getSites();
+        if (!active) return;
         setSites(Array.isArray(data) ? data : []);
         
         try {
           const bookmarkRes = await authService.getBookmarkedSite();
           const sId = bookmarkRes?.site?._id || bookmarkRes?.site || null;
+          if (!active) return;
           updateBookmark(sId);
         } catch (e) {
           console.error("Failed to fetch bookmark", e);
         }
       } catch (error) {
+        if (!active) return;
         toast.error('Failed to load sites');
       } finally {
-        setLoading(false);
+        if (active) {
+          setLoading(false);
+        }
       }
     };
     fetchSites();
+    return () => {
+      active = false;
+    };
   }, [refreshKey]);
 
   const columns = [

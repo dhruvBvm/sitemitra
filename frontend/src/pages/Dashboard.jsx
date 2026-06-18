@@ -29,7 +29,6 @@ export default function Dashboard() {
       const newBookmarkId = bookmarkedSiteId === siteId ? null : siteId;
       await authService.bookmarkSite(newBookmarkId);
       updateBookmark(newBookmarkId);
-      setRefreshKey(prev => prev + 1);
       toast.success(newBookmarkId ? 'Site bookmarked' : 'Bookmark removed');
       // Store in localStorage for cross-tab sync
       localStorage.setItem('lastBookmarkChange', Date.now().toString());
@@ -47,7 +46,6 @@ export default function Dashboard() {
     const bc = new BroadcastChannel('bookmark');
     const handler = (event) => {
       updateBookmark(event.data.siteId);
-      setRefreshKey(prev => prev + 1);
     };
     bc.addEventListener('message', handler);
     return () => {
@@ -64,7 +62,6 @@ export default function Dashboard() {
         authService.getBookmarkedSite().then((res) => {
           const sId = res?.site?._id || res?.site || null;
           updateBookmark(sId);
-          setRefreshKey(prev => prev + 1);
         }).catch((err) => console.error('Failed to sync bookmark', err));
       }
     };
@@ -84,6 +81,7 @@ export default function Dashboard() {
   }, [updateBookmark]);
 
   useEffect(() => {
+    let active = true;
     const fetchData = async () => {
       try {
         let fetchedSites = [];
@@ -95,6 +93,7 @@ export default function Dashboard() {
             const reqs = await requestService.getAllRequests();
             const pendingCount = reqs.filter(r => r.status?.startsWith('pending')).length;
             const approvedCount = reqs.filter(r => r.status === 'approved').length;
+            if (!active) return;
             statsData = [
               { label: 'MY REQUESTS', value: reqs.length, path: '/staff/requests', icon: FileText, color: 'border-blue-100', iconColor: 'text-blue-600', labelColor: 'text-blue-600' },
               { label: 'PENDING', value: pendingCount, path: '/staff/requests?status=pending_manager', icon: Clock, color: 'border-orange-100', iconColor: 'text-[#F59E0B]', labelColor: 'text-[#F59E0B]' },
@@ -103,11 +102,13 @@ export default function Dashboard() {
           } catch (e) { }
         } else if (user?.role === 'manager') {
           const data = await inventoryService.getSitesInventory();
+          if (!active) return;
           fetchedSites = data.data || [];
           try {
             const team = await managerService.getTeam();
             const reqs = await requestService.getAllRequests();
             const pendingCount = reqs.filter(r => r.status === 'pending_manager').length;
+            if (!active) return;
             statsData = [
               { label: 'APPROVALS', value: pendingCount, path: '/manager/transactions?status=pending_manager', icon: Clock, color: 'border-blue-100', iconColor: 'text-blue-600', labelColor: 'text-blue-600' },
               { label: 'ASSIGNED SITES', value: fetchedSites.length, path: '/manager/sites', icon: Building, color: 'border-emerald-100', iconColor: 'text-[#10B981]', labelColor: 'text-[#10B981]' },
@@ -116,9 +117,11 @@ export default function Dashboard() {
           } catch (e) { }
         } else if (user?.role === 'owner') {
           const data = await inventoryService.getSitesInventory();
+          if (!active) return;
           fetchedSites = data.data || [];
           try {
             const ownerStats = await ownerService.getDashboardStats();
+            if (!active) return;
             statsData = [
               { label: 'PENDING', value: ownerStats?.pendingApprovals || 0, path: '/owner/transactions?status=pending_owner', icon: Clock, color: 'border-blue-100', iconColor: 'text-blue-600', labelColor: 'text-blue-600' },
               { label: 'TOTAL SITES', value: ownerStats?.totalSites || fetchedSites.length, path: '/owner/sites', icon: Building, color: 'border-emerald-100', iconColor: 'text-[#10B981]', labelColor: 'text-[#10B981]' },
@@ -130,22 +133,30 @@ export default function Dashboard() {
         try {
           const bookmarkRes = await authService.getBookmarkedSite();
           const sId = bookmarkRes?.site?._id || bookmarkRes?.site || null;
+          if (!active) return;
           updateBookmark(sId);
         } catch (e) {
           console.error("Failed to fetch bookmark", e);
         }
 
+        if (!active) return;
         setSites(fetchedSites || []);
         setStats(statsData);
       } catch (error) {
+        if (!active) return;
         console.error(error);
         toast.error('Failed to load dashboard data');
       } finally {
-        setLoading(false);
+        if (active) {
+          setLoading(false);
+        }
       }
     };
     fetchData();
-  }, [user, refreshKey]);
+    return () => {
+      active = false;
+    };
+  }, [user?.role, refreshKey]);
 
   if (loading) return <Loader size="lg" className="mt-20" />;
 

@@ -35,7 +35,6 @@ export default function Sites() {
       bc.postMessage({ siteId: newBookmarkId });
       bc.close();
 
-      setRefreshKey(prev => prev + 1);
       toast.success(newBookmarkId ? 'Site bookmarked' : 'Bookmark removed');
     } catch (err) {
       toast.error('Failed to bookmark site');
@@ -47,7 +46,6 @@ export default function Sites() {
     const bc = new BroadcastChannel('bookmark');
     const handler = (event) => {
       updateBookmark(event.data.siteId);
-      setRefreshKey(prev => prev + 1);
     };
     bc.addEventListener('message', handler);
     return () => {
@@ -63,40 +61,12 @@ export default function Sites() {
         authService.getBookmarkedSite().then((res) => {
           const sId = res?.site?._id || res?.site || null;
           updateBookmark(sId);
-          setRefreshKey(prev => prev + 1);
         }).catch((err) => console.error('Failed to sync bookmark', err));
       }
     };
     window.addEventListener('storage', storageHandler);
     return () => window.removeEventListener('storage', storageHandler);
   }, [updateBookmark]);
-
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const [sitesData, usersData] = await Promise.all([
-        ownerService.getSites({ limit: 100 }),
-        ownerService.getUsers({ role: 'manager', limit: 100 })
-      ]);
-      setSites(sitesData.sites || sitesData);
-      setManagers(usersData.users || usersData);
-      
-      try {
-        const bookmarkRes = await authService.getBookmarkedSite();
-        const sId = bookmarkRes?.site?._id || bookmarkRes?.site || null;
-        updateBookmark(sId);
-      } catch (e) {
-        console.error("Failed to fetch bookmark", e);
-      }
-    } catch (error) {
-      toast.error('Failed to load sites');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const activeSites = sites.filter(s => s.status !== 'inactive');
-  const inactiveSites = sites.filter(s => s.status === 'inactive');
 
   const toggleStatus = async (site) => {
     try {
@@ -108,15 +78,50 @@ export default function Sites() {
         await ownerService.deleteSite(site._id);
       }
       toast.success('Site status updated');
-      fetchData();
+      setRefreshKey(prev => prev + 1);
     } catch (error) {
       toast.error('Failed to update status');
     }
   };
 
   useEffect(() => {
+    let active = true;
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const [sitesData, usersData] = await Promise.all([
+          ownerService.getSites({ limit: 100 }),
+          ownerService.getUsers({ role: 'manager', limit: 100 })
+        ]);
+        if (!active) return;
+        setSites(sitesData.sites || sitesData);
+        setManagers(usersData.users || usersData);
+        
+        try {
+          const bookmarkRes = await authService.getBookmarkedSite();
+          const sId = bookmarkRes?.site?._id || bookmarkRes?.site || null;
+          if (!active) return;
+          updateBookmark(sId);
+        } catch (e) {
+          console.error("Failed to fetch bookmark", e);
+        }
+      } catch (error) {
+        if (!active) return;
+        toast.error('Failed to load sites');
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
     fetchData();
+    return () => {
+      active = false;
+    };
   }, [refreshKey]);
+
+  const activeSites = sites.filter(s => s.status !== 'inactive');
+  const inactiveSites = sites.filter(s => s.status === 'inactive');
 
   if (loading) return <Loader size="lg" className="mt-20" />;
 
