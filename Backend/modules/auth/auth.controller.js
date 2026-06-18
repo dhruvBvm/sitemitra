@@ -180,16 +180,17 @@ const login = async (req, res) => {
     await user.save();
 
     // Set HttpOnly cookies
+    const isProd = process.env.NODE_ENV === 'production';
     const cookieOptions = {
       httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
       maxAge: 15 * 60 * 1000,
     };
     const refreshCookieOptions = {
       httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     };
     res.cookie('accessToken', accessToken, cookieOptions);
