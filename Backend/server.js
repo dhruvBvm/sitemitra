@@ -18,6 +18,13 @@ require('./modules/notification/notification.model');
 require('./modules/request/request.model');
 require('./modules/inventory/inventory.model');
 
+const allowedOrigin = process.env.CLIENT_URL || 'http://localhost:3000';
+
+// Middleware - replace your existing cors line with this:
+app.use(cors({ 
+  origin: allowedOrigin, 
+  credentials: true 
+}));
 // Routes
 const authRoutes = require('./modules/auth/auth.routes');
 const ownerRoutes = require('./modules/owner/owner.routes');
@@ -70,7 +77,6 @@ dotenv.config();
 
     // Middleware
     app.use(express.json());
-    app.use(cors({ origin: true, credentials: true }));
     app.use(cookieParser());
     app.use(express.urlencoded({ extended: true }));
     app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
