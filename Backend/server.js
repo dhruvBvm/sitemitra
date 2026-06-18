@@ -69,15 +69,18 @@ dotenv.config();
 
     // Middleware
     app.use(express.json());
-    const allowedOrigin = process.env.CLIENT_URL || "http://localhost:3000";
+    const allowedOrigin = [
+      "http://localhost:3000",
+      "http://localhost:5173",
+    ].concat(process.env.CLIENT_URL ? [process.env.CLIENT_URL] : []);
 
     app.use(
       cors({
-        origin: 'http://localhost:5173',
+        origin: allowedOrigin,
         credentials: true,
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Authorization']
-      })
+        methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+      }),
     );
     app.use(cookieParser());
     app.use(express.urlencoded({ extended: true }));
