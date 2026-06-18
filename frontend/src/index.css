@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+:root {
+  --border-color: #E0E7FF;
+  --primary-hover: #1D4ED8;
+  --primary-color: #2563EB;
+  --success-color: #10B981;
+  --warning-color: #F59E0B;
+  --danger-color: #EF4444;
+  --bg-color: #F8FAFC;
+  --card-bg: #FFFFFF;
+  --text-main: #0a2540;
+  --text-secondary: #6B7280;
+  --radius-card: 24px;
+  --radius-button: 16px;
+  --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+
+
+/* Global Theme Overrides based on exact design specs */
+@theme {
+  --text-xs: 12px;
+  --text-sm: 16px;     /* Body */
+  --text-base: 16px;   /* Card Titles */
+  --text-lg: 18px;     /* Section Headers */
+  --text-xl: 20px;
+  --text-2xl: 22px;    /* Page Headers */
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  justify-content: center;
+}
+
+#root {
+  width: 100%;
+  max-width: 428px;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Ensure accessible touch targets & consistent styling */
+input:not([type="checkbox"]):not([type="radio"]), 
+select, 
+textarea {
+  min-height: 44px;
+  border-radius: 8px !important;
+  padding: 12px !important;
+  border: 1px solid #ddd !important;
+  background-color: #fff !important;
+}
+
+/* Fix overlapping search icons by restoring tailwind padding over the !important default above */
+#root input.pl-9, #root select.pl-9, #root textarea.pl-9 {
+  padding-left: 36px !important;
+}
+#root input.pl-10, #root select.pl-10, #root textarea.pl-10 {
+  padding-left: 40px !important;
+}
+
+button:not(.rounded-full):not(.p-2) {
+  border-radius: 8px !important;
+  min-height: 44px;
+}
+
+/* Card Styling Unification */
+.Card, .card, div.shadow-sm:not(button):not(.bg-transparent):not(.bg-slate-50):not(.bg-[#F3F4F6]):not(.bg-\[\#2563EB\]):not(.bg-[#10B981]):not(.fixed):not(.sticky):not(.flex-row) {
+  background-color: #fff !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+  border: 1px solid #f0f0f0 !important;
+  padding: 14px !important;
+}
+
+/* Page Container Padding enforcement */
+/* Apply to main content areas but NOT Layout wrapper itself so header/footer can span full width of the mobile container */
+main {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+main > div.p-4, main > div.px-4 {
+  /* Avoid double padding if the inner div already has it */
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Make stock quantities pop out more */
+.text-2xl, .text-3xl {
+  font-weight: 700;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--text-secondary);
+  border-radius: 4px;
+  opacity: 0.5;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-main);
+}
