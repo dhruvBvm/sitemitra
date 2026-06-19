@@ -11,9 +11,9 @@ export default function Layout() {
   }
 
   return (
-    <div className="max-h-screen bg-[#f8faff] w-full max-w-[428px] mx-auto fixed top-0 bottom-0 min-h-screen ">
+    <div className="fixed inset-0 max-w-[428px] mx-auto bg-[#f8faff] flex flex-col overflow-y-auto">
       <Navbar />
-      <main className="w-full">
+      <main className="flex-1 w-full overflow-y-auto pb-20">
         <Outlet />
       </main>
       <BottomNavigation />

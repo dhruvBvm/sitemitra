@@ -65,7 +65,7 @@ export default function BottomNavigation() {
     return false;
   };
 
-  return <div className="sticky bottom-0 left-0 right-0 mx-auto max-w-[428px] z-50 bg-white border-t border-[#E5E7EB] overflow-x-hidden">
+  return <div className="sticky w-full bottom-0 left-0 right-0 mx-auto max-w-[428px] z-50 bg-white border-t border-[#E5E7EB] overflow-x-hidden">
     <div className="mx-auto max-w-[428px] flex justify-around items-center h-14 px-3">
       {navItems.map((item) => {
         const isActive = checkActive(item.path, item.name);
