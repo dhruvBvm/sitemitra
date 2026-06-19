@@ -1,42 +1,73 @@
 @import "tailwindcss";
 
 :root {
-  --border-color: #E0E7FF;
-  --primary-hover: #1D4ED8;
-  --primary-color: #2563EB;
-  --success-color: #10B981;
-  --warning-color: #F59E0B;
-  --danger-color: #EF4444;
-  --bg-color: #F8FAFC;
-  --card-bg: #FFFFFF;
+  --border-color: #e0e7ff;
+  --primary-hover: #1d4ed8;
+  --primary-color: #2563eb;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --danger-color: #ef4444;
+  --bg-color: #f8fafc;
+  --card-bg: #ffffff;
   --text-main: #0a2540;
-  --text-secondary: #6B7280;
-  --radius-card: 24px;
+  --text-secondary: #6b7280;
+  --radius-card: 6px;
   --radius-button: 16px;
-  --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.02);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
 }
-
-
 
 /* Global Theme Overrides based on exact design specs */
 @theme {
-  --text-xs: 12px;
-  --text-sm: 16px;     /* Body */
-  --text-base: 16px;   /* Card Titles */
-  --text-lg: 18px;     /* Section Headers */
+  --text-xs: 14px;
+  --text-sm: 16px;
+  /* Body */
+  --text-base: 18px;
+  /* Card Titles */
+  --text-lg: 20px;
+  /* Section Headers */
   --text-xl: 20px;
-  --text-2xl: 22px;    /* Page Headers */
+  --text-2xl: 22px;
+  /* Page Headers */
 }
 
 body {
   margin: 0;
   background-color: var(--bg-color);
   color: var(--text-main);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   display: flex;
   justify-content: center;
+}
+
+* {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+#root > * {
+  max-width: 428px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Removed interfering .fixed/.sticky rule */
+
+img,
+table,
+iframe,
+video {
+  max-width: 100% !important;
+  height: auto !important;
 }
 
 #root {
@@ -48,55 +79,151 @@ body {
   display: flex;
   flex-direction: column;
   position: relative;
+  overflow-x: clip;
+  margin: 0 auto;
 }
 
 /* Ensure accessible touch targets & consistent styling */
-input:not([type="checkbox"]):not([type="radio"]), 
-select, 
+input:not([type="checkbox"]):not([type="radio"]),
+select,
 textarea {
-  min-height: 44px;
-  border-radius: 8px !important;
-  padding: 12px !important;
-  border: 1px solid #ddd !important;
+  min-height: 32px !important;
+  border-radius: 6px !important;
+  padding: 8px 10px !important;
+  border: 1px solid #e5e7eb !important;
   background-color: #fff !important;
+  font-size: 15px !important;
 }
 
 /* Fix overlapping search icons by restoring tailwind padding over the !important default above */
-#root input.pl-9, #root select.pl-9, #root textarea.pl-9 {
+#root input.pl-9,
+#root select.pl-9,
+#root textarea.pl-9 {
   padding-left: 36px !important;
 }
-#root input.pl-10, #root select.pl-10, #root textarea.pl-10 {
+
+#root input.pl-10,
+#root select.pl-10,
+#root textarea.pl-10 {
   padding-left: 40px !important;
 }
 
-button:not(.rounded-full):not(.p-2) {
-  border-radius: 8px !important;
-  min-height: 44px;
+button:not(.rounded-full):not(.p-2):not(.p-1):not(.p-1\.5):not(.w-8):not(
+    .w-10
+  ):not([aria-label]) {
+  border-radius: 6px !important;
+  padding: 8px 12px !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
 }
 
 /* Card Styling Unification */
-.Card, .card, div.shadow-sm:not(button):not(.bg-transparent):not(.bg-slate-50):not(.bg-[#F3F4F6]):not(.bg-\[\#2563EB\]):not(.bg-[#10B981]):not(.fixed):not(.sticky):not(.flex-row) {
-  background-color: #fff !important;
-  border-radius: 12px !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
-  border: 1px solid #f0f0f0 !important;
-  padding: 14px !important;
+.Card,
+.card,
+div.shadow-sm:not(button):not(.bg-transparent):not(.bg-\[\#2563EB\]):not(
+    .bg-\[\#10B981\]
+  ):not(.fixed):not(.sticky):not(.flex-row),
+div.border.rounded-\[20px\],
+div.border.rounded-\[16px\],
+div.border.rounded-2xl,
+div.border.rounded-xl,
+div.bg-white.border:not(button):not(input):not(select):not(textarea),
+div.bg-slate-50.border:not(button):not(input):not(select):not(textarea),
+div.active\:scale-\[0\.99\].border {
+  background-color: #ffffff !important;
+  border-radius: 6px !important;
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+  border: 1px solid #e5e7eb !important;
+  padding: 10px !important;
 }
 
-/* Page Container Padding enforcement */
-/* Apply to main content areas but NOT Layout wrapper itself so header/footer can span full width of the mobile container */
-main {
-  padding-left: 16px;
-  padding-right: 16px;
+/* Remove double padding from CardContent inside Card */
+.Card > div,
+.card > div,
+div.shadow-sm > div {
+  padding: 0 !important;
 }
-main > div.p-4, main > div.px-4 {
-  /* Avoid double padding if the inner div already has it */
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+
+/* Enforce Card Title font size (14px bold) */
+.Card h3,
+.card h3,
+div.shadow-sm h3,
+div.border h3,
+.Card h2,
+.card h2,
+div.shadow-sm h2,
+div.border h2,
+.Card h4,
+.card h4,
+div.shadow-sm h4,
+div.border h4,
+.Card .card-title,
+.card .card-title {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.25 !important;
+  color: #1f2937 !important;
+}
+
+/* Page Titles */
+h1 {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+/* Enforce Card Body text font size (13px) */
+.Card p,
+.card p,
+div.shadow-sm p,
+div.border p,
+.Card
+  span:not(.font-bold):not(.text-xs):not(.text-\[10px\]):not(.text-\[11px\]),
+.card
+  span:not(.font-bold):not(.text-xs):not(.text-\[10px\]):not(.text-\[11px\]),
+div.shadow-sm
+  span:not(.font-bold):not(.text-xs):not(.text-\[10px\]):not(.text-\[11px\]),
+div.border
+  span:not(.font-bold):not(.text-xs):not(.text-\[10px\]):not(.text-\[11px\]),
+.Card .text-sm,
+.card .text-sm,
+div.shadow-sm .text-sm,
+div.border .text-sm {
+  font-size: 13px !important;
+}
+
+/* Labels and small text */
+label {
+  font-size: 12px !important;
+}
+
+.text-xs {
+  font-size: 12px !important;
+}
+
+.text-\[11px\] {
+  font-size: 11px !important;
+}
+
+.text-\[10px\] {
+  font-size: 10px !important;
+}
+
+/* Card Gap and Spacing Unification (6px) */
+.space-y-3 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(8px * calc(1 - var(--tw-space-y-reverse))) !important;
+  margin-bottom: calc(8px * var(--tw-space-y-reverse)) !important;
+}
+
+.gap-3 {
+  gap: 8px !important;
 }
 
 /* Make stock quantities pop out more */
-.text-2xl, .text-3xl {
+.text-2xl,
+.text-3xl {
   font-weight: 700;
 }
 
@@ -105,14 +232,61 @@ main > div.p-4, main > div.px-4 {
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--text-secondary);
   border-radius: 4px;
   opacity: 0.5;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-main);
 }
+
+/* Card hover shadow and transition effects */
+.Card,
+.card,
+div.shadow-sm:not(button):not(.bg-transparent):not(.bg-\[\#2563EB\]):not(
+    .bg-\[\#10B981\]
+  ):not(.fixed):not(.sticky):not(.flex-row),
+div.border.rounded-\[20px\],
+div.border.rounded-\[16px\],
+div.border.rounded-2xl,
+div.border.rounded-xl,
+div.bg-white.border:not(button):not(input):not(select):not(textarea),
+div.bg-slate-50.border:not(button):not(input):not(select):not(textarea),
+div.active\:scale-\[0\.99\].border {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.Card:hover,
+.card:hover,
+div.shadow-sm:not(button):not(.bg-transparent):not(.bg-\[\#2563EB\]):not(
+    .bg-\[\#10B981\]
+  ):not(.fixed):not(.sticky):not(.flex-row):hover,
+div.border.rounded-\[20px\]:hover,
+div.border.rounded-\[16px\]:hover,
+div.border.rounded-2xl:hover,
+div.border.rounded-xl:hover,
+div.bg-white.border:not(button):not(input):not(select):not(textarea):hover,
+div.bg-slate-50.border:not(button):not(input):not(select):not(textarea):hover,
+div.active\:scale-\[0\.99\].border:hover {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  border-color: #2563eb !important;
+}
+
+/* Force all sticky headers to be full‑width fixed headers */
+/* .sticky.top-\[56px\] {
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100vw !important;
+  top: 56px !important;
+  z-index: 40 !important;
+} */

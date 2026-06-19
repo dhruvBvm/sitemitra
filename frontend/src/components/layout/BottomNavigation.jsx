@@ -14,20 +14,20 @@ export default function BottomNavigation() {
 
   const rolePrefix = getRolePrefix();
 
-  const navItems = user?.role === 'staff' 
+  const navItems = user?.role === 'staff'
     ? [
-        { name: 'Dashboard', path: `${rolePrefix}/dashboard`, icon: LayoutDashboard },
-        { name: 'Requests', path: `${rolePrefix}/requests`, icon: ClipboardList },
-      ]
+      { name: 'Dashboard', path: `${rolePrefix}/dashboard`, icon: LayoutDashboard },
+      { name: 'Requests', path: `${rolePrefix}/requests`, icon: ClipboardList },
+    ]
     : user?.role === 'manager'
-    ? [
+      ? [
         { name: 'Dashboard', path: `${rolePrefix}/dashboard`, icon: LayoutDashboard },
         { name: 'Transactions', path: `${rolePrefix}/transactions`, icon: ArrowRightLeft },
         { name: 'Materials', path: `${rolePrefix}/materials`, icon: Box },
         { name: 'Site View', path: `${rolePrefix}/sites`, icon: LayoutDashboard },
         { name: 'Team', path: `${rolePrefix}/team`, icon: ClipboardList },
       ]
-    : [
+      : [
         { name: 'Dashboard', path: `${rolePrefix}/dashboard`, icon: LayoutDashboard },
         { name: 'Transactions', path: `${rolePrefix}/transactions`, icon: ArrowRightLeft },
         { name: 'Materials', path: `${rolePrefix}/materials`, icon: Box },
@@ -65,30 +65,29 @@ export default function BottomNavigation() {
     return false;
   };
 
-  return (
-    <div className="fixed bottom-0 left-0 right-0 max-w-[428px] mx-auto bg-white border-t border-[#E5E7EB] z-50 px-2 pb-safe">
-      <div className="flex justify-around items-center h-16">
-        {navItems.map((item) => {
-          const isActive = checkActive(item.path, item.name);
+  return <div className="sticky bottom-0 left-0 right-0 mx-auto max-w-[428px] z-50 bg-white border-t border-[#E5E7EB] overflow-x-hidden">
+    <div className="mx-auto max-w-[428px] flex justify-around items-center h-14 px-3">
+      {navItems.map((item) => {
+        const isActive = checkActive(item.path, item.name);
 
-          return (
-            <Link
-              key={item.name}
-              to={item.path}
-              className={cn(
-                "flex flex-col items-center justify-center w-full h-full space-y-1 relative transition-colors duration-200",
-                isActive ? "text-[#2563EB] active" : "text-[#9E9E9E] hover:text-[#1F2937]"
-              )}
-            >
-              {isActive && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-1 bg-[#2563EB] rounded-b-full shadow-[0_2px_6px_rgba(37,99,235,0.4)]" />
-              )}
-              <item.icon className={cn("w-6 h-6 transition-all duration-200", isActive && "stroke-[2.5] scale-110")} />
-              <span className="text-[10px] font-bold">{item.name}</span>
-            </Link>
-          );
-        })}
-      </div>
+        return (
+          <Link
+            key={item.name}
+            to={item.path}
+            className={cn(
+              "flex flex-col items-center justify-center w-full h-full space-y-1 relative transition-colors duration-200",
+              isActive ? "text-[#2563EB] active" : "text-[#9E9E9E] hover:text-[#1F2937]"
+            )}
+          >
+            {isActive && (
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-1 bg-[#2563EB] rounded-b-full shadow-[0_2px_6px_rgba(37,99,235,0.4)]" />
+            )}
+            <item.icon className={cn("w-6 h-6 transition-all duration-200", isActive && "stroke-[2.5] scale-110")} />
+            <span className="text-[10px] font-bold">{item.name}</span>
+          </Link>
+        );
+      })}
     </div>
-  );
+  </div>
+
 }

@@ -11,7 +11,7 @@ export default function Layout() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8faff] w-full max-w-[428px] mx-auto relative shadow-md pb-16">
+    <div className="max-h-screen bg-[#f8faff] w-full max-w-[428px] mx-auto fixed top-0 bottom-0 min-h-screen ">
       <Navbar />
       <main className="w-full">
         <Outlet />

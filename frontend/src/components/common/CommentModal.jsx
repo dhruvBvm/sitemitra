@@ -22,7 +22,7 @@ export default function CommentModal({ isOpen, onClose, onConfirm, title, confir
         <div>
           <label className="block text-sm font-bold text-[#1F2937] mb-2">Add comment (optional)</label>
           <textarea
-            className="w-full px-3 py-3 text-sm border border-transparent rounded-[16px] focus:ring-2 focus:ring-[#2563EB] box-border resize-none"
+            className="w-full px-3 py-3 text-sm border border-slate-200 rounded-md focus:ring-2 focus:ring-[#2563EB] box-border resize-none"
             rows={4}
             placeholder="Write your remarks here..."
             value={comment}
@@ -33,7 +33,7 @@ export default function CommentModal({ isOpen, onClose, onConfirm, title, confir
           <Button 
             type="button" 
             variant="outline" 
-            className="flex-1 py-2.5 px-4 rounded-[16px]" 
+            className="flex-1" 
             onClick={onClose}
             disabled={actionLoading}
           >

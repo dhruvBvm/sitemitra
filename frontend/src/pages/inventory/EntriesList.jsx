@@ -132,29 +132,33 @@ export default function EntriesList() {
 
   const getMaterialsSummary = (materials) => {
     if (!materials || materials.length === 0) return 'None';
-    return materials.map(m => `${m.materialName}: ${m.quantity} ${m.unit}`).join(', ');
+    return materials.map(m => {
+      const raw = m.materialName || '';
+      const capitalized = raw.charAt(0).toUpperCase() + raw.slice(1);
+      return `${capitalized}: ${m.quantity} ${m.unit}`;
+    }).join(', ');
   };
 
 
 
   return (
-    <div className="space-y-6 max-w-6xl mx-auto p-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-[#1F2937]">
+    <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-1">
+      <div className="flex justify-between items-center mt-2 mb-2">
+        <h1 className="text-2xl font-bold text-[#1F2937] tracking-tight">
           {activeTab === 'received' ? 'Received Entries' : 'Used Entries'}
         </h1>
-        <Button onClick={() => navigate(activeTab === 'received' ? '/inventory/received/create' : '/inventory/used/create')}>
-          <Plus className="w-4 h-4 mr-2" />
-          {activeTab === 'received' ? 'Create Received Entry' : 'Create Used Entry'}
+        <Button className="flex items-center py-2.5 px-2 rounded-md" onClick={() => navigate(activeTab === 'received' ? '/inventory/received/create' : '/inventory/used/create')}>
+          <Plus className="w-4 h-4 mr-1" />
+          {activeTab === 'received' ? 'Received' : 'Used'}
         </Button>
       </div>
 
-      <Card>
+      <Card className="shadow-sm border-slate-200">
         <div className="border-b border-[#E5E7EB]">
-          <nav className="flex -mb-px px-6" aria-label="Tabs">
+          <nav className="flex -mb-px px-4" aria-label="Tabs">
             <button
               onClick={() => setActiveTab('received')}
-              className={`whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm transition-colors ${
+              className={`flex-1 whitespace-nowrap py-3 px-2 border-b-2 font-bold text-[13px] transition-colors ${
                 activeTab === 'received'
                   ? 'border-[#2563EB] text-[#2563EB]'
                   : 'border-transparent text-[#6B7280] hover:text-[#1F2937] hover:border-[#E5E7EB]'
@@ -164,7 +168,7 @@ export default function EntriesList() {
             </button>
             <button
               onClick={() => setActiveTab('used')}
-              className={`whitespace-nowrap py-4 px-6 border-b-2 font-medium text-sm transition-colors ${
+              className={`flex-1 whitespace-nowrap py-3 px-2 border-b-2 font-bold text-[13px] transition-colors ${
                 activeTab === 'used'
                   ? 'border-[#2563EB] text-[#2563EB]'
                   : 'border-transparent text-[#6B7280] hover:text-[#1F2937] hover:border-[#E5E7EB]'
@@ -177,14 +181,14 @@ export default function EntriesList() {
 
         <CardContent className="p-0">
           {/* Filters */}
-          <div className="sticky z-10 bg-white p-6 border-b border-[#E5E7EB]" style={{ top: '56px' }}>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+          <div className="sticky z-10 bg-white p-4 border-b border-[#E5E7EB]" style={{ top: '56px' }}>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4">
             <div>
               <label className="block text-sm font-medium text-[#1F2937] mb-1">Site</label>
               <select
                 value={selectedSite}
                 onChange={(e) => setSelectedSite(e.target.value)}
-                className="w-full px-3 py-2 border border-transparent rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+                className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
               >
                 <option value="">All Sites</option>
                 {sites.map(site => (
@@ -200,7 +204,7 @@ export default function EntriesList() {
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-3 py-2 border border-transparent rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+                className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
               />
             </div>
             <div>
@@ -209,7 +213,7 @@ export default function EntriesList() {
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-3 py-2 border border-transparent rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+                className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
               />
             </div>
             <div>
@@ -223,40 +227,40 @@ export default function EntriesList() {
                   placeholder="Search entry no..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 border border-transparent rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+                  className="w-full pl-9 pr-3 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
                 />
               </div>
             </div>
           </div>
           
             <div className="flex justify-end">
-              <Button onClick={handleApplyFilters} className="flex items-center gap-2 rounded-[16px]">
+              <Button onClick={handleApplyFilters} className="flex items-center gap-2 rounded-md">
                 <Filter className="w-4 h-4" /> Apply Filters
               </Button>
             </div>
           </div>
 
-          <div className="p-6">
+          <div className="p-3">
 
           {loading ? (
             <Loader size="md" className="my-10" />
           ) : (
-            <div className="flex flex-col space-y-3">
+            <div className="flex flex-col space-y-2">
               {entries.length === 0 ? (
-                <div className="text-center py-10 bg-[#f8faff] rounded-[20px] border border-dashed border-[#E5E7EB]">
+                <div className="text-center py-10 bg-[#f8faff] rounded-lg border border-dashed border-[#E5E7EB]">
                   <p className="text-sm font-medium text-[#6B7280]">No entries found.</p>
                 </div>
               ) : (
                 entries.map((entry) => (
-                  <Card 
+                  <div 
                     key={entry._id} 
-                    className="hover:shadow-sm transition-all active:scale-[0.98] cursor-pointer shadow-sm rounded-[20px]"
+                    className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer active:scale-[0.98]"
                     onClick={() => openDetails(entry._id)}
                   >
-                    <CardContent className="p-[14px] flex flex-col space-y-3">
+                    <div className="flex flex-col space-y-1">
                       <div className="flex justify-between items-start">
                         <div>
-                          <h3 className="font-bold text-[#1F2937] text-base">{entry.entryNo}</h3>
+                          <h3 className="text-base font-bold text-[#1F2937] leading-tight">{entry.entryNo}</h3>
                           <div className="text-xs text-[#6B7280] mt-0.5">{entry.siteId?.siteName || '-'}</div>
                         </div>
                         <div className="text-right">
@@ -276,13 +280,13 @@ export default function EntriesList() {
                         </div>
                       </div>
                       <div className="text-sm text-[#6B7280] border-t border-slate-100 pt-2">
-                        <span className="text-xs text-[#6B7280] block mb-1 uppercase font-bold tracking-wider">Materials</span>
+                        <span className="text-[10px] text-slate-400 block mb-1 uppercase font-bold tracking-wider">Materials</span>
                         <p className="line-clamp-2">
                           {getMaterialsSummary(entry.materials)}
                         </p>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 ))
               )}
             </div>
@@ -296,7 +300,7 @@ export default function EntriesList() {
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50" onClick={() => setSelectedEntry(null)}>
           <div 
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-[16px] w-[90%] max-w-[400px] max-h-[80vh] flex flex-col mx-auto overflow-hidden shadow-xl animate-in zoom-in-95 duration-200"
+            className="bg-white rounded-md w-[90%] max-w-[400px] max-h-[80vh] flex flex-col mx-auto overflow-hidden shadow-xl animate-in zoom-in-95 duration-200"
           >
             <div className="flex items-center justify-between p-[16px] border-b border-[#eee] sticky top-0 bg-white z-10">
               <h2 className="text-lg font-bold text-[#1F2937] break-words">
@@ -309,12 +313,12 @@ export default function EntriesList() {
             <div className="p-[16px] overflow-y-auto break-words [&_img]:max-w-full [&_img]:h-auto flex-1">
               {detailsLoading ? (
                 <div className="animate-pulse space-y-4">
-                  <div className="h-20 bg-[#F3F4F6] rounded-[20px]"></div>
-                  <div className="h-32 bg-[#F3F4F6] rounded-[20px]"></div>
+                  <div className="h-20 bg-[#F3F4F6] rounded-md"></div>
+                  <div className="h-32 bg-[#F3F4F6] rounded-md"></div>
                 </div>
               ) : (
                 <div className="space-y-6">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-[#f8faff] p-4 rounded-[16px]">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-[#f8faff] p-2 rounded-md">
                     <div>
                       <p className="text-sm text-[#6B7280] mb-1">Date</p>
                       <p className="font-medium">
@@ -333,7 +337,7 @@ export default function EntriesList() {
                   {selectedEntry.notes && (
                     <div>
                       <h4 className="text-sm font-semibold text-[#1F2937] mb-2">Notes</h4>
-                      <p className="text-sm text-[#6B7280] bg-[#f8faff] p-3 rounded-[16px] border border-transparent">
+                      <p className="text-sm text-[#6B7280] bg-[#f8faff] p-2 rounded-md border border-transparent">
                         {selectedEntry.notes}
                       </p>
                     </div>
@@ -354,9 +358,9 @@ export default function EntriesList() {
                     <h4 className="text-lg font-semibold text-[#1F2937] mb-4">Materials</h4>
                     <div className="space-y-4">
                       {selectedEntry.materials.map((mat, idx) => (
-                        <div key={idx} className="border border-transparent rounded-[16px] p-4">
+                        <div key={idx} className="border border-transparent rounded-md p-2">
                           <div className="flex justify-between mb-2">
-                            <span className="font-medium text-[#1F2937]">{mat.materialName}</span>
+                            <span className="capitalize font-medium text-[#1F2937]">{mat.materialName}</span>
                             <span className="font-semibold text-[#2563EB]">{mat.quantity} {mat.unit}</span>
                           </div>
                           {mat.imageUrls?.length > 0 && (

@@ -29,7 +29,7 @@ export default function EditUser() {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState(null);
-  
+
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({
     resolver: yupResolver(editUserSchema),
     defaultValues: { assignedSites: [] }
@@ -46,7 +46,7 @@ export default function EditUser() {
         const usersData = await ownerService.getUsers({ limit: 1000 });
         const usersList = usersData.users || usersData || [];
         const user = usersList.find(u => u._id === id);
-        
+
         if (user) {
           setUserRole(user.role);
           reset({
@@ -75,13 +75,13 @@ export default function EditUser() {
       if (!data.password) {
         delete data.password;
       }
-      
+
       // Ensure assignedSites is array
       if (!data.assignedSites) data.assignedSites = [];
       else if (!Array.isArray(data.assignedSites)) data.assignedSites = [data.assignedSites];
 
       await ownerService.updateUser(id, data);
-      
+
       toast.success('User updated successfully!');
       navigate(-1);
     } catch (error) {
@@ -92,93 +92,97 @@ export default function EditUser() {
   if (loading) return <Loader size="lg" className="mt-20" />;
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f8faff] font-sans max-w-[428px] mx-auto relative pb-24">
+    <div className="w-full bg-[#f8faff] min-h-screen pb-[80px] font-sans">
       {/* Sticky Header */}
-      <div className="fixed top-14 left-1/2 -translate-x-1/2 w-full max-w-[428px] z-40 bg-white shadow-sm px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="p-1.5 bg-[#f8faff] text-[#6B7280] rounded-full hover:bg-[#F3F4F6] transition-colors">
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <h1 className="text-[1.1rem] font-bold tracking-tight text-[#1F2937]">Edit User</h1>
+      <div className="sticky top-[56px] left-0 right-0 mx-auto max-w-[428px] z-30 bg-white border-b border-gray-200 overflow-x-hidden">
+        <div className="w-full max-w-[428px] mx-auto px-3 py-2 max-w-[428px] mx-auto px-3 py-2 flex flex-col gap-1.5 justify-between">
+          {/* FULL-WIDTH STICKY HEADER – DO NOT REMOVE OR WRAP IN CONTAINER */}
+          <div className="flex items-center gap-2">
+            <button onClick={() => navigate(-1)} className="p-1.5 bg-[#f8faff] text-[#6B7280] rounded-full hover:bg-[#F3F4F6] transition-colors">
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <h1 className="text-[1.1rem] font-bold tracking-tight text-[#1F2937]">Edit User</h1>
+          </div>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="px-4 py-6 space-y-5 pt-[72px]">
-        <div className="bg-white rounded-[20px] shadow-sm border border-transparent p-4 space-y-4">
-          <div>
-            <label className="block text-sm font-bold text-[#1F2937] mb-1">Name *</label>
-            <input
-              type="text"
-              {...register('name')}
-              className="w-full px-3 py-3 border border-transparent rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border"
-            />
-            {errors.name && <p className="mt-1 text-xs font-semibold text-red-500">{errors.name.message}</p>}
+      <div className="max-w-[428px] mx-auto px-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="py-6 space-y-5">
+          <div className="bg-white rounded-md shadow-sm border border-transparent p-2 space-y-4">
+            <div>
+              <label className="block text-sm font-bold text-[#1F2937] mb-1">Name *</label>
+              <input
+                type="text"
+                {...register('name')}
+                className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border"
+              />
+              {errors.name && <p className="mt-1 text-xs font-semibold text-red-500">{errors.name.message}</p>}
+            </div>
+
+            <div>
+              <label className="block text-sm font-bold text-[#1F2937] mb-1">Email *</label>
+              <input
+                type="email"
+                {...register('email')}
+                className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border"
+              />
+              {errors.email && <p className="mt-1 text-xs font-semibold text-red-500">{errors.email.message}</p>}
+            </div>
+
+            <div>
+              <label className="block text-sm font-bold text-[#1F2937] mb-1">Mobile *</label>
+              <input
+                type="text"
+                {...register('mobile')}
+                className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border"
+              />
+              {errors.mobile && <p className="mt-1 text-xs font-semibold text-red-500">{errors.mobile.message}</p>}
+            </div>
+
+            <div>
+              <label className="block text-sm font-bold text-[#1F2937] mb-1">Password (Leave blank to keep unchanged)</label>
+              <input
+                type="password"
+                {...register('password')}
+                className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border"
+              />
+              {errors.password && <p className="mt-1 text-xs font-semibold text-red-500">{errors.password.message}</p>}
+            </div>
+
+            <div className="pt-2">
+              <SiteMultiSelect
+                role="owner"
+                register={register}
+                error={errors.assignedSites}
+                availableSites={null}
+                disabled={false}
+                required={userRole === 'staff'}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-bold text-[#1F2937] mb-1">Status</label>
+              <select
+                {...register('status')}
+                className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border bg-white"
+              >
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-bold text-[#1F2937] mb-1">Email *</label>
-            <input
-              type="email"
-              {...register('email')}
-              className="w-full px-3 py-3 border border-transparent rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border"
-            />
-            {errors.email && <p className="mt-1 text-xs font-semibold text-red-500">{errors.email.message}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-bold text-[#1F2937] mb-1">Mobile *</label>
-            <input
-              type="text"
-              {...register('mobile')}
-              className="w-full px-3 py-3 border border-transparent rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border"
-            />
-            {errors.mobile && <p className="mt-1 text-xs font-semibold text-red-500">{errors.mobile.message}</p>}
-          </div>
-          
-          <div>
-            <label className="block text-sm font-bold text-[#1F2937] mb-1">Password (Leave blank to keep unchanged)</label>
-            <input
-              type="password"
-              {...register('password')}
-              className="w-full px-3 py-3 border border-transparent rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border"
-            />
-            {errors.password && <p className="mt-1 text-xs font-semibold text-red-500">{errors.password.message}</p>}
-          </div>
-
-          <div className="pt-2">
-            <SiteMultiSelect 
-              role="owner" 
-              register={register} 
-              error={errors.assignedSites} 
-              availableSites={null}
-              disabled={false}
-              required={userRole === 'staff'}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-bold text-[#1F2937] mb-1">Status</label>
-            <select
-              {...register('status')}
-              className="w-full px-3 py-3 border border-transparent rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border bg-white"
+          {/* Sticky Submit Button */}
+          <div className="mt-4 w-full px-2">
+            <Button
+              type="submit"
+              isLoading={isSubmitting}
+              className="w-full text-base font-bold shadow-sm"
             >
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Sticky Submit Button */}
-        <div className="fixed bottom-[64px] left-0 right-0 bg-white border-t border-[#E5E7EB] p-3 flex justify-center z-40 max-w-[428px] mx-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-          <Button
-            type="submit"
-            isLoading={isSubmitting}
-            className="w-full text-base font-bold shadow-sm"
-          >
-            {isSubmitting ? 'Saving...' : 'Update User'}
-          </Button>
-        </div>
-      </form>
+              {isSubmitting ? 'Saving...' : 'Update User'}
+            </Button>
+          </div></form>
+      </div>
     </div>
   );
 }

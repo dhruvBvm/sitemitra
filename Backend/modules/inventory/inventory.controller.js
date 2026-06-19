@@ -26,7 +26,7 @@ exports.listSitesInventory = async (req, res) => {
     }
     
     const sites = await Site.find(siteFilter)
-      .select('siteName siteCode status location managerId')
+      .select('siteName siteCode status address managerId')
       .populate('managerId', 'name');
     const inventories = await Inventory.find({ ownerId, siteId: { $in: sites.map(s => s._id) } });
     
@@ -37,7 +37,7 @@ exports.listSitesInventory = async (req, res) => {
         siteName: site.siteName,
         siteCode: site.siteCode,
         status: site.status,
-        location: site.location,
+        address: site.address,
         manager: site.managerId ? { name: site.managerId.name } : null,
         totalItems: inv ? inv.items.length : 0,
         updatedAt: inv ? inv.updatedAt : null
@@ -228,7 +228,7 @@ exports.getMaterialHistory = async (req, res) => {
 exports.createReceivedEntry = async (req, res) => {
   const ownerId = req.user.role === 'owner' ? req.user._id : (req.user.ownerId || req.user.parentUserId);
   try {
-    const { siteId, receivedDate, materials, notes, imageUrls, supplierName, challanNo, vehicleNo } = req.body;
+    const { siteId, receivedDate, materials, notes, imageUrls, supplierName, challanNo, vehicleNo, entryNo } = req.body;
     
     const site = await Site.findOne({
       _id: siteId,
@@ -296,10 +296,10 @@ exports.createReceivedEntry = async (req, res) => {
       imageUrls: m.imageUrls || []
     }));
 
-    const entryNo = `RCV-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+    const entryNoVal = entryNo || `RCV-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
     const entry = new InventoryEntry({
       type: 'received',
-      entryNo,
+      entryNo: entryNoVal,
       siteId,
       ownerId,
       date: receivedDate || Date.now(),
@@ -416,7 +416,7 @@ exports.getReceivedEntry = async (req, res) => {
 exports.createUsedEntry = async (req, res) => {
   const ownerId = req.user.role === 'owner' ? req.user._id : (req.user.ownerId || req.user.parentUserId);
   try {
-    const { siteId, usedDate, materials, notes, imageUrls } = req.body;
+    const { siteId, usedDate, materials, notes, imageUrls, entryNo } = req.body;
     
     const site = await Site.findOne({
       _id: siteId,
@@ -490,10 +490,10 @@ exports.createUsedEntry = async (req, res) => {
       imageUrls: m.imageUrls || []
     }));
 
-    const entryNo = `USE-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+    const entryNoVal = entryNo || `USE-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
     const entry = new InventoryEntry({
       type: 'used',
-      entryNo,
+      entryNo: entryNoVal,
       siteId,
       ownerId,
       date: usedDate || Date.now(),

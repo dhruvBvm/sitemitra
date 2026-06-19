@@ -12,6 +12,7 @@ import { useAuthStore } from '../store/authStore';
 import toast from 'react-hot-toast';
 
 import { useNavigate } from 'react-router-dom';
+import StatusBadge from '../components/common/StatusBadge';
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(true);
@@ -166,19 +167,19 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto pb-20">
+    <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-1">
 
-      {/* Stats Cards Row */}
+      {/* Metrics Row - NOT STICKY */}
       {stats.length > 0 && (
-        <div className="px-4 pt-4 pb-2 w-full">
-          <div className="flex flex-wrap gap-3">
+        <div className="flex overflow-x-auto hide-scrollbar gap-2 w-[calc(100%+16px)] -mx-2 px-2 pb-2 mt-2">
+          <div className="flex flex-wrap gap-2">
             {stats.map((stat, idx) => {
               const Icon = stat.icon;
               return (
                 <div
                   key={idx}
                   onClick={() => navigate(stat.path)}
-                  className="relative rounded-[12px] bg-white border border-[#E5E7EB] shadow-[0_1px_2px_rgba(0,0,0,0.05)] py-3 px-3 flex-1 min-w-[100px] min-h-[90px] cursor-pointer transition-all active:scale-[0.98]"
+                  className="relative rounded-lg bg-white border border-slate-200 shadow-sm p-2 flex-1 min-w-[100px] min-h-[90px] cursor-pointer transition-all hover:shadow-md active:scale-[0.98]"
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -187,7 +188,7 @@ export default function Dashboard() {
                   }}
                 >
                   {/* Icon positioned top‑right */}
-                  <div className="absolute top-3 right-3">
+                  <div className="absolute top-2 right-3">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center ${(() => { const color = stat.iconColor || ''; if (color.includes('blue')) return 'bg-blue-50'; if (color.includes('#10B981') || color.includes('emerald')) return 'bg-emerald-50'; if (color.includes('#F59E0B') || color.includes('orange')) return 'bg-orange-50'; return 'bg-gray-50'; })()}`}
                     >
                       {Icon && <Icon className={`w-5 h-5 ${stat.iconColor}`} />}
@@ -204,32 +205,32 @@ export default function Dashboard() {
         </div>
       )}
 
-      <div className="px-4 pb-2">
+      <div className="pb-2">
         <h1 className="text-2xl font-bold text-[#1F2937] tracking-tight">Sites</h1>
       </div>
 
-      <div className="px-4 pt-0">
+      <div className="pt-0">
         {sites.length === 0 ? (
-          <div className="text-center py-10 bg-[#f8faff] rounded-[20px] border border-dashed border-[#E5E7EB]">
-            <Building className="mx-auto h-10 w-10 text-slate-400 mb-3" />
+          <div className="text-center py-10 bg-[#f8faff] rounded-lg border border-dashed border-[#E5E7EB]">
+            <Building className="mx-auto h-10 w-10 text-slate-400 mb-2" />
             <p className="text-sm font-medium text-[#6B7280]">No active sites found.</p>
           </div>
         ) : (
-          <div className="flex flex-col space-y-3">
+          <div className="flex flex-col space-y-2">
             {sites.map((site) => (
-              <Card
+              <div
                 key={site.siteId || site._id}
-                className="hover:shadow-sm transition-all active:scale-[0.98] border-l-4 border-l-blue-600 cursor-pointer group shadow-sm rounded-[20px]"
+                className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer group active:scale-[0.98]"
                 onClick={() => navigate(user?.role === 'staff' ? `/sites/${site.siteId || site._id}` : `/${user?.role}/inventory/${site.siteId || site._id}`)}
               >
-                <CardContent className="p-[14px] flex items-center justify-between">
+                <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-1.5">
                       <div className="space-y-1">
                         <h3 className="text-base font-bold text-[#1F2937] leading-tight">{site.siteName}</h3>
                         <div className="flex items-center text-sm font-medium text-[#6B7280]">
                           <MapPin className="h-3.5 w-3.5 mr-1" />
-                          {site.location || 'Location not specified'}
+                          {site.address || 'Location not specified'}
                         </div>
                         {site.siteCode && (
                           <div className="flex items-center text-xs text-slate-400 font-mono">
@@ -247,9 +248,7 @@ export default function Dashboard() {
                             className={`w-5 h-5 ${(bookmarkedSiteId === (site.siteId || site._id)) ? 'fill-[#F59E0B] text-[#F59E0B]' : 'text-slate-400'}`} 
                           />
                         </button>
-                        <div className="bg-blue-50 text-[#2563EB] px-2 py-1 rounded text-xs font-bold uppercase">
-                          {site.status || 'Active'}
-                        </div>
+                        <StatusBadge status={site.status || 'active'} />
                       </div>
                     </div>
                     <div className="mt-2 pt-2 border-t border-slate-100 flex justify-between items-center text-sm font-normal text-[#1F2937]">
@@ -259,8 +258,8 @@ export default function Dashboard() {
                     </div>
                   </div>
                   <ChevronRight className="h-5 w-5 text-slate-400 ml-2 group-hover:text-[#2563EB] transition-colors" />
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
         )}

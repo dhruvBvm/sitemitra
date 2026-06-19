@@ -34,7 +34,7 @@ export default function ConfirmModal({
         </Button>
         <Button 
           onClick={onConfirm} 
-          className={`px-4 py-2 rounded-[16px] font-medium shadow-sm transition-colors ${getConfirmButtonClasses()}`}
+          className={`font-medium shadow-sm transition-colors ${getConfirmButtonClasses()}`}
         >
           {confirmText}
         </Button>

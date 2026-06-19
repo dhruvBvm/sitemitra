@@ -105,7 +105,7 @@ export default function MySites() {
       cell: (row) => (
         <div className="flex items-center text-[#6B7280]">
           <MapPin className="w-4 h-4 mr-1 text-slate-400" />
-          <span className="truncate max-w-[200px]">{row.address}</span>
+          <span className="truncate max-w-[200px]">{row.address || 'Location not specified'}</span>
         </div>
       )
     },
@@ -127,22 +127,22 @@ export default function MySites() {
   if (loading) return <Loader size="lg" className="mt-20" />;
 
   return (
-    <div className="p-4 max-w-[428px] mx-auto pb-24 space-y-4">
+    <div className="p-2 max-w-[428px] mx-auto px-4 pb-24 space-y-4">
       <div className="flex justify-between items-center mt-2 mb-4">
         <h1 className="text-[20px] font-bold text-[#1F2937]">My Assigned Sites</h1>
       </div>
 
       <div className="space-y-4">
         {sites.length === 0 ? (
-          <div className="text-center py-10 bg-[#f8faff] rounded-[20px] border border-dashed border-[#E5E7EB]">
+          <div className="text-center py-10 bg-[#f8faff] rounded-md border border-dashed border-[#E5E7EB]">
             <p className="text-sm font-medium text-[#6B7280]">No sites assigned to you.</p>
           </div>
         ) : (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
             {sites.map((site) => (
               <div 
                 key={site._id || site.siteId} 
-                className="bg-white shadow-sm border border-transparent rounded-[20px] p-[14px] cursor-pointer hover:border-blue-300 transition-colors"
+                className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer"
                 onClick={() => navigate(`/sites/${site.siteId || site._id}`)}
               >
                 <div className="flex justify-between items-start mb-2">
@@ -162,9 +162,9 @@ export default function MySites() {
                     <StatusBadge status={site.status} />
                   </div>
                 </div>
-                <div className="text-sm text-[#6B7280] mb-3 flex items-start">
+                <div className="text-sm text-[#6B7280] mb-2 flex items-start">
                   <MapPin className="w-4 h-4 mr-1 mt-0.5 text-slate-400 shrink-0" />
-                  <span className="line-clamp-2">{site.address || site.location || 'No address provided'}</span>
+                  <span className="line-clamp-2">{site.address || 'Location not specified'}</span>
                 </div>
                 <div className="flex justify-between items-center border-t border-slate-100 pt-3">
                   <div className="text-sm">
@@ -173,7 +173,7 @@ export default function MySites() {
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="text-[#2563EB] border-[#2563EB] hover:bg-blue-50 px-3 py-2 rounded-[16px] font-medium mt-1"
+                    className="text-[#2563EB] border-[#2563EB] hover:bg-blue-50 px-2 py-2 rounded-md font-medium mt-1"
                     onClick={(e) => {
                       e.stopPropagation();
                       navigate(`/manager/inventory/${site.siteId || site._id}`);

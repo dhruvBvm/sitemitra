@@ -54,9 +54,9 @@ export default function Notifications() {
   };
 
   return (
-    <div className="space-y-6 max-w-3xl mx-auto">
-      <div className="flex justify-between items-center border-b pb-4">
-        <h1 className="text-2xl font-bold text-[#1F2937] flex items-center">
+    <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-1">
+      <div className="flex justify-between items-center mt-2 mb-4 border-b border-[#E5E7EB] pb-2">
+        <h1 className="text-2xl font-bold text-[#1F2937] flex items-center tracking-tight">
           <Bell className="w-6 h-6 mr-2 text-[#6B7280]" />
           Notifications
         </h1>
@@ -71,12 +71,11 @@ export default function Notifications() {
           <div className="text-center text-[#6B7280] py-10">No notifications found</div>
         )}
         {!loading && notifications.map((notif) => (
-          <Card 
+          <div 
             key={notif._id} 
-            className={`transition-colors cursor-pointer ${!notif.isRead ? 'bg-blue-50/50 border-blue-100' : ''}`}
+            className={`rounded-lg p-2 shadow-sm border transition-shadow cursor-pointer active:scale-[0.98] flex gap-2 ${!notif.isRead ? 'bg-blue-50 border-blue-200' : 'bg-white border-slate-200 hover:shadow-md'}`}
             onClick={() => !notif.isRead && markAsRead(notif._id)}
           >
-            <CardContent className="p-4 flex gap-4">
               <div className="flex-shrink-0 mt-1">
                 {getIcon(notif.type)}
               </div>
@@ -96,8 +95,7 @@ export default function Notifications() {
                   <span className="h-2.5 w-2.5 bg-[#2563EB] rounded-full inline-block"></span>
                 </div>
               )}
-            </CardContent>
-          </Card>
+          </div>
         ))}
       </div>
     </div>

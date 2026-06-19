@@ -16,7 +16,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 const createUsedSchema = yup.object().shape({
   siteId: yup.string().required('Site is required'),
-  usedNumber: yup.string().optional(),
+  entryNo: yup.string().optional(),
   usedDate: yup.string().required('Date is required'),
   materials: yup.array().of(
     yup.object().shape({
@@ -39,7 +39,7 @@ export default function CreateUsed() {
     resolver: yupResolver(createUsedSchema),
     defaultValues: {
       siteId: prefilledSiteId,
-      usedNumber: `USE-${Date.now().toString().slice(-6)}`,
+      entryNo: `USE-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}-${String(Math.floor(Math.random() * 10000)).padStart(4, '0')}`,
       usedDate: new Date().toISOString().split('T')[0],
       materials: [{ materialId: '', name: '', qty: '', unit: '' }],
       notes: ''
@@ -218,6 +218,7 @@ export default function CreateUsed() {
 
       await inventoryService.createUsedEntry({
         siteId: data.siteId,
+        entryNo: data.entryNo,
         usedDate: data.usedDate,
         notes: data.notes || '',
         materials: materialsPayload,
@@ -236,35 +237,36 @@ export default function CreateUsed() {
   if (pageLoading) return <Loader size="lg" className="mt-20" />;
 
   return (
-    <div className="flex flex-col min-h-screen max-w-[428px] mx-auto overflow-x-hidden pb-28 bg-[#f8faff] relative">
-      <form onSubmit={handleSubmit(onSubmit)} className="flex-1">
-        <div className="sticky top-0 z-40 bg-[#f8fafc] px-4 pt-4 pb-2">
-          <div className="bg-red-50 shadow-sm border border-red-200 rounded-[20px] p-[14px]">
-            <div className="flex items-center mb-3">
-              <button type="button" onClick={() => navigate(-1)} className="p-2 mr-2 -ml-2 rounded-full hover:bg-red-100 transition-colors flex items-center justify-center shrink-0">
-                <ArrowLeft className="w-6 h-6 text-[#1F2937]" />
+    <div className="w-full bg-[#f8faff] min-h-screen pb-28 font-sans pb-[80px]">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex-1 w-full flex flex-col">
+        <div className="sticky top-[56px] left-0 right-0 mx-auto max-w-[428px] z-30 bg-white border-b border-gray-200 overflow-x-hidden">
+          <div className="max-w-[428px] mx-auto px-3 py-2 flex flex-col gap-1.5">
+            {/* FULL-WIDTH STICKY HEADER – DO NOT REMOVE OR WRAP IN CONTAINER */}
+            <div className="flex items-center mb-2">
+              <button type="button" onClick={() => navigate(-1)} className="p-1 mr-2 rounded-full hover:bg-red-100 transition-colors flex items-center justify-center shrink-0">
+                <ArrowLeft className="w-5 h-5 text-[#1F2937]" />
               </button>
-              <h1 className="text-xl font-bold text-[#1F2937] tracking-tight">Record Used Stock</h1>
+              <h1 className="text-[18px] font-bold text-[#1F2937] tracking-tight">Record Used Stock</h1>
             </div>
             
-            <div className="space-y-3">
-              <input type="text" readOnly {...register('usedNumber')} className="w-full px-3 py-2 border border-red-200 rounded-[16px] bg-red-100/50 text-[#6B7280] font-medium text-sm outline-none cursor-not-allowed" />
+            <div className="space-y-2">
+              <input type="text" readOnly {...register('entryNo')} className="w-full px-2 py-2 border border-red-200 rounded-md bg-red-100/50 text-[#6B7280] font-medium text-sm outline-none cursor-not-allowed" />
               
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-xs font-bold text-[#1F2937] mb-1">Date</label>
+                  <label className="block text-[12px] font-bold text-[#1F2937] mb-1">Date</label>
                   <input 
                     type="date"
                     {...register('usedDate')}
-                    className="w-full px-3 py-2 border border-transparent rounded-[16px] bg-white text-[#1F2937] focus:ring-2 focus:ring-[#2563EB] box-border text-sm"
+                    className="w-full px-2 py-2 border border-transparent rounded-md bg-[#f8faff] text-[#1F2937] focus:ring-2 focus:ring-[#2563EB] box-border text-[13px]"
                   />
                   {errors.usedDate && <p className="text-red-500 text-[10px] mt-0.5 absolute -bottom-4">{errors.usedDate.message}</p>}
                 </div>
                 <div className="relative">
-                  <label className="block text-xs font-bold text-[#1F2937] mb-1">Site *</label>
+                  <label className="block text-[12px] font-bold text-[#1F2937] mb-1">Site *</label>
                   <select 
                     {...register('siteId')}
-                    className={`w-full px-3 py-2 border border-transparent rounded-[16px] bg-white text-[#1F2937] focus:ring-2 focus:ring-[#2563EB] box-border text-sm ${prefilledSiteId ? 'pointer-events-none opacity-80 bg-[#f8faff]' : ''}`}
+                    className={`w-full px-2 py-2 border border-transparent rounded-md bg-[#f8faff] text-[#1F2937] focus:ring-2 focus:ring-[#2563EB] box-border text-[13px] ${prefilledSiteId ? 'pointer-events-none opacity-80' : ''}`}
                     tabIndex={prefilledSiteId ? -1 : 0}
                   >
                     <option value="">Select a site</option>
@@ -279,31 +281,31 @@ export default function CreateUsed() {
           </div>
         </div>
 
-        <div className="space-y-6 px-4 pt-1">
+        <div className="space-y-6 max-w-[428px] w-full mx-auto px-2 pt-3">
 
         <div>
           <div className="flex justify-between items-center mb-2 px-1">
             <h3 className="text-lg font-bold text-[#1F2937] tracking-wide">Materials Used</h3>
           </div>
           
-          <div className="flex flex-col space-y-3">
+          <div className="flex flex-col space-y-2">
             {fields.map((field, index) => {
               const selectedMatId = watch(`materials.${index}.materialId`);
               const avail = getAvailableStock(selectedMatId);
 
               return (
-              <Card key={field.id} className="shadow-sm border-[#E5E7EB] relative overflow-visible rounded-[20px]">
+              <Card key={field.id} className="shadow-sm border-[#E5E7EB] relative overflow-visible rounded-md">
                 {fields.length > 1 && (
                   <button type="button" onClick={() => remove(index)} className="absolute -top-2 -right-2 z-10 text-red-500 bg-white border border-red-200 shadow-sm p-1.5 rounded-full hover:bg-red-50">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 )}
-                <CardContent className="p-[14px]">
+                <CardContent className="p-2">
                   <div className="mb-2">
                     <span className="text-sm font-bold text-[#FFC107]">Item {index + 1}</span>
                   </div>
                   
-                  <div className="grid grid-cols-1 gap-3">
+                  <div className="grid grid-cols-1 gap-2">
                     <div className="w-full">
                       <select
                         {...register(`materials.${index}.materialId`, {
@@ -313,20 +315,26 @@ export default function CreateUsed() {
                             setValue(`materials.${index}.name`, selected?.materialName || '');
                           }
                         })}
-                        className="w-full px-3 py-3 text-sm border border-transparent rounded-[16px] focus:ring-2 focus:ring-[#FFC107] box-border"
+                        className="w-full px-2 py-2 text-sm border border-transparent rounded-md focus:ring-2 focus:ring-[#FFC107] box-border"
                         disabled={!selectedSiteId}
                       >
                         <option value="">Select Material</option>
-                        {materials.map(m => (
-                          <option key={m._id} value={m._id}>{m.materialName}</option>
-                        ))}
+                        {materials.map(m => {
+                          const name = m.materialName || '';
+                          const capitalized = name.charAt(0).toUpperCase() + name.slice(1);
+                          return (
+                            <option key={m._id} value={m._id} className="capitalize">
+                              {capitalized}
+                            </option>
+                          );
+                        })}
                       </select>
                       {selectedMatId && (
                         <div className="text-xs text-[#6B7280] mt-1.5 font-medium">Available Stock: <span className="text-[#2563EB] font-bold">{avail} {watch(`materials.${index}.unit`)}</span></div>
                       )}
                     </div>
 
-                    <div className="flex flex-col gap-4 w-full">
+                    <div className="flex flex-col gap-2 w-full">
                       <div className="w-full">
                         <input 
                           type="number"
@@ -335,7 +343,7 @@ export default function CreateUsed() {
                              validate: v => !v || Number(v) <= avail || 'Exceeds stock'
                           })}
                           placeholder="Qty"
-                          className="w-full px-3 py-3 text-sm border border-transparent rounded-[16px] focus:ring-2 focus:ring-[#FFC107] box-border"
+                          className="w-full px-2 py-2 text-sm border border-transparent rounded-md focus:ring-2 focus:ring-[#FFC107] box-border"
                           style={{ WebkitAppearance: 'none', margin: 0, MozAppearance: 'textfield' }}
                         />
                         {errors.materials?.[index]?.qty && <span className="text-xs text-red-500 block mt-1">{errors.materials[index].qty.message}</span>}
@@ -346,7 +354,7 @@ export default function CreateUsed() {
                           readOnly
                           placeholder="Unit"
                           {...register(`materials.${index}.unit`)}
-                          className="w-full px-3 py-3 text-sm border border-transparent rounded-[16px] bg-[#F3F4F6] text-[#6B7280] outline-none box-border text-center cursor-not-allowed"
+                          className="w-full px-2 py-2 text-sm border border-transparent rounded-md bg-[#F3F4F6] text-[#6B7280] outline-none box-border text-center cursor-not-allowed"
                         />
                       </div>
                     </div>
@@ -363,7 +371,7 @@ export default function CreateUsed() {
                       />
                       <label 
                         htmlFor={`matImg${field.id}`} 
-                        className="cursor-pointer flex items-center justify-center w-full text-sm font-bold text-[#1F2937] hover:text-[#1F2937] bg-amber-50 border border-amber-200 border-dashed px-3 py-3 rounded-[16px] box-border"
+                        className="cursor-pointer flex items-center justify-center w-full text-sm font-bold text-[#1F2937] hover:text-[#1F2937] bg-amber-50 border border-amber-200 border-dashed px-2 py-2 rounded-md box-border"
                       >
                         <Camera className="w-5 h-5 mr-2" />
                         Add Photos {(materialImages[field.id]?.length || 0) > 0 && `(${materialImages[field.id].length})`}
@@ -376,8 +384,8 @@ export default function CreateUsed() {
                       {materialImages[field.id]?.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-3 w-full">
                           {materialImages[field.id].map((url, i) => (
-                            <div key={i} className="relative w-[80px] h-[80px] rounded-[16px] border border-transparent shrink-0">
-                              <img src={url} alt="material" className="w-full h-full object-cover rounded-[16px]" />
+                            <div key={i} className="relative w-[80px] h-[80px] rounded-md border border-transparent shrink-0">
+                              <img src={url} alt="material" className="w-full h-full object-cover rounded-md" />
                               <button type="button" onClick={() => handleRemoveMaterialImage(field.id, i)} className="absolute -top-1.5 -right-1.5 bg-[#EF4444] text-white rounded-full p-0.5 shadow">
                                 <X className="w-3 h-3" />
                               </button>
@@ -392,13 +400,13 @@ export default function CreateUsed() {
             )})}
           </div>
           
-          <Button type="button" variant="outline" className="w-full mt-3 border-dashed border-2 border-[#E5E7EB] text-[#6B7280] bg-white py-2.5 px-4 rounded-[16px]" onClick={() => append({ materialId: '', name: '', qty: '', unit: '' })}>
+          <Button type="button" variant="outline" className="w-full mt-3 border-dashed border-2 border-[#E5E7EB] text-[#6B7280] bg-white py-2.5 px-2 rounded-md" onClick={() => append({ materialId: '', name: '', qty: '', unit: '' })}>
             <Plus className="w-5 h-5 mr-1" /> Add Material
           </Button>
         </div>
 
         <Card className="shadow-sm border-[#E5E7EB]">
-          <CardContent className="p-3 space-y-4 w-full">
+          <CardContent className="p-2 space-y-4 w-full">
             <div className="w-full">
               <label className="block text-sm font-bold text-[#1F2937] mb-2">Usage Photos</label>
               <input 
@@ -409,15 +417,15 @@ export default function CreateUsed() {
                 className="hidden" 
                 onChange={handleEntryImageChange}
               />
-              <label htmlFor="globalImages" className="cursor-pointer flex flex-col items-center justify-center p-6 border-2 border-dashed border-[#E5E7EB] rounded-[16px] bg-[#f8faff] hover:bg-[#F3F4F6] transition-colors w-full box-border">
+              <label htmlFor="globalImages" className="cursor-pointer flex flex-col items-center justify-center p-6 border-2 border-dashed border-[#E5E7EB] rounded-md bg-[#f8faff] hover:bg-[#F3F4F6] transition-colors w-full box-border">
                 <Upload className="w-8 h-8 text-[#FFC107] mb-2" />
                 <span className="text-sm font-bold text-[#6B7280] text-center">Upload Photos</span>
               </label>
               {imageFiles.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-3 w-full">
                   {imageFiles.map((f, i) => (
-                    <div key={i} className="relative w-[80px] h-[80px] bg-[#F3F4F6] rounded-[16px] border border-transparent shrink-0">
-                       <img src={URL.createObjectURL(f)} alt="uploaded" className="w-full h-full object-cover rounded-[16px]" />
+                    <div key={i} className="relative w-[80px] h-[80px] bg-[#F3F4F6] rounded-md border border-transparent shrink-0">
+                       <img src={URL.createObjectURL(f)} alt="uploaded" className="w-full h-full object-cover rounded-md" />
                        <button type="button" onClick={() => handleRemoveOrderImage(i)} className="absolute -top-1.5 -right-1.5 bg-[#EF4444] text-white rounded-full p-0.5 shadow">
                          <X className="w-3 h-3" />
                        </button>
@@ -432,24 +440,23 @@ export default function CreateUsed() {
               <textarea 
                 {...register('notes')}
                 rows={3}
-                className="w-full px-3 py-3 border border-transparent rounded-[16px] focus:ring-2 focus:ring-[#FFC107] box-border"
+                className="w-full px-2 py-2 border border-transparent rounded-md focus:ring-2 focus:ring-[#FFC107] box-border"
                 placeholder="Where was this used?..."
               />
             </div>
           </CardContent>
         </Card>
 
-          <div className="fixed bottom-[64px] left-0 right-0 max-w-[428px] mx-auto bg-white border-t border-[#E5E7EB] p-4 z-40 shadow-[0_-8px_15px_-3px_rgba(0,0,0,0.1)]">
+          <div className="mt-4 w-full px-2">
             <Button
               type="submit"
               isLoading={isSubmitting}
-              className="w-full bg-[#EF4444] hover:bg-red-700 text-white font-bold py-[14px] text-base rounded-[8px] py-2.5 px-4"
+              className="w-full bg-[#EF4444] hover:bg-red-700 text-white font-bold py-[14px] text-base rounded-[8px] py-2.5 px-2"
             >
               Record Used Stock
             </Button>
           </div>
-        </div>
-      </form>
+        </div></form>
       
       <ConfirmModal
         isOpen={!!confirmData}

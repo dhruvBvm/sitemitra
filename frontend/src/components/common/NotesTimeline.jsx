@@ -25,7 +25,7 @@ export default function NotesTimeline({ history }) {
           iconClass = 'bg-blue-100 text-[#2563EB]';
         }
         return (
-          <div key={idx} className="flex space-x-3 bg-white p-3 rounded-[16px] border border-transparent shadow-sm">
+          <div key={idx} className="flex space-x-3 bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
             <div className={`mt-0.5 p-1.5 rounded-full h-fit flex-shrink-0 ${iconClass}`}> 
               <Icon className="w-4 h-4" />
             </div>

@@ -18,14 +18,14 @@ export default function Transactions() {
   const statusFilter = searchParams.get('status');
   const { user } = useAuthStore();
   const [sites, setSites] = useState([]);
-  
+
   // Filters
   const [selectedSite, setSelectedSite] = useState('');
   const [selectedType, setSelectedType] = useState('All');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   // Applied filters (to avoid fetching on every keypress)
   const [appliedFilters, setAppliedFilters] = useState({
     siteId: '',
@@ -140,7 +140,7 @@ export default function Transactions() {
       // Client-side search by entry/order number
       if (appliedFilters.search) {
         const query = appliedFilters.search.toLowerCase();
-        merged = merged.filter(item => 
+        merged = merged.filter(item =>
           item.number?.toLowerCase().includes(query)
         );
       }
@@ -214,7 +214,11 @@ export default function Transactions() {
 
   const getMaterialsSummary = (materials) => {
     if (!materials || materials.length === 0) return 'None';
-    return materials.map(m => `${m.materialName || m.name}: ${m.quantity || m.qty} ${m.unit}`).join(', ');
+    return materials.map(m => {
+      const raw = m.materialName || m.name || '';
+      const capitalized = raw.charAt(0).toUpperCase() + raw.slice(1);
+      return `${capitalized}: ${m.quantity || m.qty} ${m.unit}`;
+    }).join(', ');
   };
 
   // Pagination Logic
@@ -225,79 +229,82 @@ export default function Transactions() {
   );
 
   return (
-    <div className="flex flex-col min-h-screen space-y-4 max-w-7xl mx-auto px-4 pb-4 pt-1">
-
+    <>
       {/* Filter Bar Wrapper */}
-      <div className="sticky z-10 bg-[#f8faff] -mx-4 px-4 py-2" style={{ top: '56px' }}>
-        <div className="flex flex-col gap-2 bg-white shadow-sm border border-transparent rounded-[12px] p-2">
-        {/* Row 1 */}
-        <div className="flex gap-2">
-          <select
-            value={selectedSite}
-            onChange={(e) => setSelectedSite(e.target.value)}
-            className="flex-1 w-full p-2 text-sm border border-transparent rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
-          >
-            <option value="">All Sites</option>
-            {sites.map(site => (
-              <option key={site.siteId} value={site.siteId}>{site.siteName}</option>
-            ))}
-          </select>
-          <select
-            value={selectedType}
-            onChange={(e) => setSelectedType(e.target.value)}
-            className="flex-1 w-full p-2 text-sm border border-transparent rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
-          >
-            <option value="All">All Types</option>
-            <option value="Requests">Requests</option>
-            <option value="Received">Received</option>
-            <option value="Used">Used</option>
-          </select>
-        </div>
+      <div className="sticky top-[56px] left-0 right-0 z-40 bg-white   border-[#E5E7EB] overflow-x-hidden fixed-div">
+        <div className="max-w-[428px] mx-auto px-4 py-2 flex flex-col gap-1.5">
+          {/* FULL-WIDTH STICKY HEADER – DO NOT REMOVE OR WRAP IN CONTAINER */}
+          <div className="fixed-div"></div>
+          {/* Row 1: Site and Type */}
+          <div className="flex gap-2 w-full">
+            <select
+              value={selectedSite}
+              onChange={(e) => setSelectedSite(e.target.value)}
+              className="flex-1 w-full p-2 text-sm border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
+            >
+              <option value="">All Sites</option>
+              {sites.map(site => (
+                <option key={site.siteId} value={site.siteId}>{site.siteName}</option>
+              ))}
+            </select>
+            <select
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+              className="flex-1 w-full p-2 text-sm border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
+            >
+              <option value="All">All Types</option>
+              <option value="Requests">Requests</option>
+              <option value="Received">Received</option>
+              <option value="Used">Used</option>
+            </select>
+          </div>
 
-        {/* Row 2 */}
-        <div className="flex gap-2">
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="flex-1 w-full p-2 text-sm border border-transparent rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white text-[#6B7280]"
-            title="Date From"
-          />
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="flex-1 w-full p-2 text-sm border border-transparent rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white text-[#6B7280]"
-            title="Date To"
-          />
-        </div>
-
-        {/* Row 3 */}
-        <div className="flex gap-2">
-          <div className="relative flex-1">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-4 w-4 text-slate-400" />
-            </div>
+          {/* Row 2: Date Range */}
+          <div className="flex gap-2 w-full">
             <input
-              type="text"
-              placeholder="Search REQ-, RCV-, USE-"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 p-2 text-sm border border-transparent rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="flex-1 w-full p-2 text-sm border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white text-[#6B7280]"
+              title="Date From"
+            />
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="flex-1 w-full p-2 text-sm border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white text-[#6B7280]"
+              title="Date To"
             />
           </div>
-          <button 
-            onClick={handleApplyFilters} 
-            className="shrink-0 bg-[#2563EB] text-white px-4 py-2 rounded-[16px] font-medium hover:bg-[#2563EB] transition-colors h-[44px] flex items-center justify-center text-sm"
+
+          {/* Row 3: Search */}
+          <div className="w-full">
+            <div className="relative w-full">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-4 w-4 text-slate-400" />
+              </div>
+              <input
+                type="text"
+                placeholder="Search REQ-, RCV-, USE-"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-3 p-2 text-sm border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
+              />
+            </div>
+          </div>
+
+          {/* Row 4: Apply Filters Button */}
+          <button
+            onClick={handleApplyFilters}
+            className="w-full bg-[#2563EB] text-white px-4 py-2 rounded-md font-medium hover:bg-[#1d4ed8] transition-colors flex items-center justify-center text-sm"
           >
             Apply Filters
           </button>
         </div>
       </div>
-      </div>
 
       {/* Main Content */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-1">
         {loading ? (
           <div className="py-20 flex justify-center items-center">
             <Loader size="md" />
@@ -307,22 +314,25 @@ export default function Transactions() {
             <div className="flex flex-col gap-2">
               {paginatedData.length > 0 ? (
                 paginatedData.map(row => (
-                  <div key={row._id + '-' + row.transactionType} className="bg-white rounded-[12px] p-[14px] shadow-sm border border-transparent hover:shadow-md transition-shadow">
+                  <div
+                    key={row._id + '-' + row.transactionType}
+                    className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer active:scale-[0.98]"
+                    onClick={() => openDetails(row)}
+                  >
                     <div className="flex justify-between items-start mb-2">
                       <div className="flex items-center gap-2">
-                        <span className={`inline-flex px-2 py-0.5 rounded text-xs font-bold ${
-                          row.transactionType === 'Request' ? 'bg-blue-100 text-blue-800' :
-                          row.transactionType === 'Received' ? 'bg-[#10B981] text-white' :
-                          'bg-orange-100 text-orange-800'
-                        }`}>
+                        <span className={`inline-flex px-2 py-0.5 rounded text-xs font-bold ${row.transactionType === 'Request' ? 'bg-blue-100 text-blue-800' :
+                            row.transactionType === 'Received' ? 'bg-[#10B981] text-white' :
+                              'bg-orange-100 text-orange-800'
+                          }`}>
                           {row.transactionType}
                         </span>
                         <span className="text-sm font-bold text-[#1F2937]">{row.number}</span>
                       </div>
                       <span className="text-xs text-[#6B7280] font-medium">{formatDate(row.date)}</span>
                     </div>
-                    
-                    <div className="mb-3 space-y-1">
+
+                    <div className="mb-2 space-y-1">
                       <div className="text-sm text-[#6B7280]">
                         <span className="font-semibold text-[#1F2937]">Site:</span> {row.siteId?.siteName || '-'}
                       </div>
@@ -330,12 +340,12 @@ export default function Transactions() {
                         <span className="font-semibold text-[#1F2937]">Materials:</span> {getMaterialsSummary(row.materials)}
                       </div>
                       {row.notes && (
-                         <div className="text-sm text-[#6B7280] line-clamp-1 italic">
-                            <span className="font-semibold text-[#1F2937] not-italic">Notes:</span> {row.notes}
-                         </div>
+                        <div className="text-sm text-[#6B7280] line-clamp-1 italic">
+                          <span className="font-semibold text-[#1F2937] not-italic">Notes:</span> {row.notes}
+                        </div>
                       )}
                     </div>
-                    
+
                     <div className="flex justify-between items-center pt-3 border-t border-slate-100">
                       <div className="flex items-center gap-2">
                         {row.transactionType === 'Request' ? (
@@ -347,27 +357,27 @@ export default function Transactions() {
                         )}
                       </div>
                       <div className="flex gap-2 items-center">
-                         {row.transactionType === 'Request' && user?.role === 'manager' && row.status === 'pending_manager' && (
-                           <>
-                             <Button size="sm" className="bg-[#2563EB] text-white px-4 py-2.5 h-auto text-xs hover:bg-[#2563EB] rounded-[16px]" onClick={(e) => openModal(e, 'approve', row._id)} disabled={actionLoading === row._id}>
-                               {actionLoading === row._id ? '...' : 'Approve'}
-                             </Button>
-                             <Button size="sm" variant="outline" className="text-[#EF4444] border-[#EF4444] hover:bg-red-50 px-4 py-2.5 h-auto text-xs rounded-[16px]" onClick={(e) => openModal(e, 'reject', row._id)} disabled={actionLoading === row._id}>
-                               {actionLoading === row._id ? '...' : 'Reject'}
-                             </Button>
-                           </>
+                        {row.transactionType === 'Request' && user?.role === 'manager' && row.status === 'pending_manager' && (
+                          <>
+                            <Button size="sm" className="bg-[#2563EB] text-white px-2 py-2.5 h-auto text-xs hover:bg-[#2563EB] rounded-md" onClick={(e) => openModal(e, 'approve', row._id)} disabled={actionLoading === row._id}>
+                              {actionLoading === row._id ? '...' : 'Approve'}
+                            </Button>
+                            <Button size="sm" variant="outline" className="text-[#EF4444] border-[#EF4444] hover:bg-red-50 px-2 py-2.5 h-auto text-xs rounded-md" onClick={(e) => openModal(e, 'reject', row._id)} disabled={actionLoading === row._id}>
+                              {actionLoading === row._id ? '...' : 'Reject'}
+                            </Button>
+                          </>
                         )}
                         {row.transactionType === 'Request' && user?.role === 'owner' && (row.status === 'pending_admin' || row.status === 'pending_owner') && (
-                           <>
-                             <Button size="sm" className="bg-[#2563EB] text-white px-4 py-2.5 h-auto text-xs hover:bg-[#2563EB] rounded-[16px]" onClick={(e) => openModal(e, 'approve', row._id)} disabled={actionLoading === row._id}>
-                               {actionLoading === row._id ? '...' : 'Approve'}
-                             </Button>
-                             <Button size="sm" variant="outline" className="text-[#EF4444] border-[#EF4444] hover:bg-red-50 px-4 py-2.5 h-auto text-xs rounded-[16px]" onClick={(e) => openModal(e, 'reject', row._id)} disabled={actionLoading === row._id}>
-                               {actionLoading === row._id ? '...' : 'Reject'}
-                             </Button>
-                           </>
+                          <>
+                            <Button size="sm" className="bg-[#2563EB] text-white px-2 py-2.5 h-auto text-xs hover:bg-[#2563EB] rounded-md" onClick={(e) => openModal(e, 'approve', row._id)} disabled={actionLoading === row._id}>
+                              {actionLoading === row._id ? '...' : 'Approve'}
+                            </Button>
+                            <Button size="sm" variant="outline" className="text-[#EF4444] border-[#EF4444] hover:bg-red-50 px-2 py-2.5 h-auto text-xs rounded-md" onClick={(e) => openModal(e, 'reject', row._id)} disabled={actionLoading === row._id}>
+                              {actionLoading === row._id ? '...' : 'Reject'}
+                            </Button>
+                          </>
                         )}
-                        <Button variant="ghost" size="sm" onClick={() => openDetails(row)} className="text-[#2563EB] hover:bg-blue-50 py-2.5 px-4 h-auto text-xs rounded-[16px]">
+                        <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); openDetails(row); }} className="text-[#2563EB] hover:bg-blue-50 py-2.5 px-2 h-auto text-xs rounded-md">
                           <Eye className="w-3 h-3 mr-1" /> View
                         </Button>
                       </div>
@@ -375,15 +385,17 @@ export default function Transactions() {
                   </div>
                 ))
               ) : (
-                <div className="py-16 text-center text-[#6B7280] bg-white rounded-[12px] border border-transparent">
-                  No transactions found.
+                <div className="text-center py-10 bg-[#f8faff] rounded-lg border border-dashed border-[#E5E7EB]">
+                  <p className="text-sm font-medium text-[#6B7280]">
+                    No transactions found.
+                  </p>
                 </div>
               )}
             </div>
 
             {/* Pagination controls */}
             {totalPages > 1 && (
-              <div className="px-4 py-4 flex items-center justify-between">
+              <div className="px-2 py-4 flex items-center justify-between">
                 <span className="text-sm text-[#6B7280]">
                   Page <span className="font-bold">{currentPage}</span> of {totalPages}
                 </span>
@@ -413,14 +425,14 @@ export default function Transactions() {
         )}
       </div>
 
-      <CommentModal 
-        isOpen={modalOpen} 
-        onClose={() => setModalOpen(false)} 
-        onConfirm={handleAction} 
-        title={modalConfig.title} 
-        confirmText={modalConfig.confirmText} 
-        actionLoading={!!actionLoading} 
+      <CommentModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onConfirm={handleAction}
+        title={modalConfig.title}
+        confirmText={modalConfig.confirmText}
+        actionLoading={!!actionLoading}
       />
-    </div>
+    </>
   );
 }

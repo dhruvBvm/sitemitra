@@ -46,25 +46,26 @@ export default function CreateSite() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f8faff] font-sans max-w-[428px] mx-auto relative pb-24">
+    <div className="flex flex-col min-h-screen bg-[#f8faff] font-sans max-w-[428px] mx-auto relative pb-[80px]">
       {/* Sticky Header */}
-      <div className="fixed top-14 left-1/2 -translate-x-1/2 w-full max-w-[428px] z-40 bg-white shadow-sm px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="p-1.5 bg-[#f8faff] text-[#6B7280] rounded-full hover:bg-[#F3F4F6] transition-colors">
-            <ArrowLeft className="w-5 h-5" />
+      <div className="sticky top-0 z-30 bg-white border-b border-gray-200">
+        <div className="flex items-center gap-3 px-4 py-3">
+          {/* FULL-WIDTH STICKY HEADER – DO NOT REMOVE OR WRAP IN CONTAINER */}
+          <button type="button" onClick={() => navigate(-1)} className="p-1 mr-3 -ml-1 rounded-full hover:bg-[#F3F4F6] transition-colors text-[#6B7280] shrink-0">
+            <ArrowLeft className="w-6 h-6" />
           </button>
-          <h1 className="text-[1.1rem] font-bold tracking-tight text-[#1F2937]">Create Site</h1>
+          <h1 className="text-[20px] font-bold tracking-tight text-[#1F2937]">Create Site</h1>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="px-4 py-6 space-y-5 pt-[72px]">
-        <div className="bg-white rounded-[20px] shadow-sm border border-transparent p-4 space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="px-2 py-6 space-y-5 pt-[72px]">
+        <div className="bg-white rounded-md shadow-sm border border-transparent p-2 space-y-4">
           <div>
             <label className="block text-sm font-bold text-[#1F2937] mb-1">Site Name *</label>
             <input
               type="text"
               {...register('siteName')}
-              className="w-full px-3 py-3 border border-transparent rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border"
+              className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border"
               placeholder="e.g. Downtown Highrise"
             />
             {errors.siteName && <p className="mt-1 text-xs font-semibold text-red-500">{errors.siteName.message}</p>}
@@ -75,7 +76,7 @@ export default function CreateSite() {
             <input
               type="text"
               {...register('siteCode')}
-              className="w-full px-3 py-3 border border-transparent rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border"
+              className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border"
               placeholder="e.g. DT-001"
             />
             {errors.siteCode && <p className="mt-1 text-xs font-semibold text-red-500">{errors.siteCode.message}</p>}
@@ -86,7 +87,7 @@ export default function CreateSite() {
             <textarea
               {...register('address')}
               rows={3}
-              className="w-full px-3 py-3 border border-transparent rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border resize-none"
+              className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border resize-none"
               placeholder="Full site address..."
             />
             {errors.address && <p className="mt-1 text-xs font-semibold text-red-500">{errors.address.message}</p>}
@@ -96,7 +97,7 @@ export default function CreateSite() {
             <label className="block text-sm font-bold text-[#1F2937] mb-1">Assign Manager</label>
             <select
               {...register('managerId')}
-              className="w-full px-3 py-3 border border-transparent rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border bg-white"
+              className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border bg-white"
             >
               <option value="">None</option>
               {managers.map(m => (
@@ -109,7 +110,7 @@ export default function CreateSite() {
             <label className="block text-sm font-bold text-[#1F2937] mb-1">Status</label>
             <select
               {...register('status')}
-              className="w-full px-3 py-3 border border-transparent rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border bg-white"
+              className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] text-sm box-border bg-white"
             >
               <option value="active">Active</option>
               <option value="inactive">Inactive</option>
@@ -118,7 +119,7 @@ export default function CreateSite() {
         </div>
 
         {/* Sticky Submit Button */}
-        <div className="fixed bottom-[64px] left-0 right-0 bg-white border-t border-[#E5E7EB] p-3 flex justify-center z-40 max-w-[428px] mx-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <div className="mt-4 w-full px-2">
           <Button
             type="submit"
             isLoading={isSubmitting}
@@ -126,8 +127,7 @@ export default function CreateSite() {
           >
             {isSubmitting ? 'Creating...' : 'Create Site'}
           </Button>
-        </div>
-      </form>
+        </div></form>
     </div>
   );
 }

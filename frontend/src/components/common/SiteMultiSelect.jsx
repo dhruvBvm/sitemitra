@@ -34,7 +34,7 @@ export default function SiteMultiSelect({ role = 'owner', register, error, avail
   return (
     <div>
       <label className="block text-sm font-medium text-[#1F2937] mb-2">Assigned Sites {required && '*'}</label>
-      <div className={`grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[240px] overflow-y-auto p-3 rounded-[16px] border ${error ? 'border-[#EF4444]' : 'border-[#E5E7EB] bg-[#f8faff]'} ${disabled ? 'opacity-60 cursor-not-allowed' : ''}`}>
+      <div className={`grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[240px] overflow-y-auto p-3 rounded-md border ${error ? 'border-[#EF4444]' : 'border-slate-200 bg-slate-50'} ${disabled ? 'opacity-60 cursor-not-allowed' : ''}`}>
         {sites.length === 0 ? (
           <p className="text-sm text-[#6B7280] italic col-span-full">No sites available</p>
         ) : (

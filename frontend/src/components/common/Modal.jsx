@@ -21,20 +21,20 @@ export default function Modal({ isOpen, onClose, title, children, className }) {
       <div 
         onClick={(e) => e.stopPropagation()}
         className={cn(
-          "bg-white rounded-[16px] w-[90%] max-w-[400px] max-h-[80vh] flex flex-col mx-auto overflow-hidden shadow-xl animate-in zoom-in-95 duration-200",
+          "bg-white rounded-lg w-[90%] max-w-[400px] max-h-[80vh] flex flex-col mx-auto overflow-hidden shadow-xl animate-in zoom-in-95 duration-200",
           className
         )}
       >
-        <div className="flex items-center justify-between p-[16px] border-b border-[#eee] sticky top-0 bg-white z-10">
+        <div className="flex items-center justify-between p-4 border-b border-slate-200 sticky top-0 bg-white z-10">
           <h2 className="text-lg font-bold text-[#1F2937] break-words">{title}</h2>
           <button 
             onClick={onClose}
-            className="p-1 rounded-full hover:bg-[#F3F4F6] text-[#6B7280] transition-colors focus-visible:outline-none py-2.5 px-4"
+            className="p-1.5 rounded-full hover:bg-slate-100 text-slate-500 transition-colors focus-visible:outline-none"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
-        <div className="p-[16px] overflow-y-auto break-words [&_img]:max-w-full [&_img]:h-auto flex-1">
+        <div className="p-4 overflow-y-auto break-words [&_img]:max-w-full [&_img]:h-auto flex-1 text-[13px]">
           {children}
         </div>
       </div>

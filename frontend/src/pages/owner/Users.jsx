@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import StatusBadge from '../../components/common/StatusBadge';
 import Button from '../../components/common/Button';
 import Modal from '../../components/common/Modal';
-import { Plus } from 'lucide-react';
+import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { ownerService } from '../../services/owner';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -106,21 +106,21 @@ export default function Users() {
   if (loading) return <Loader size="lg" className="mt-20" />;
 
   return (
-    <div className="space-y-6 p-4 pb-24">
-      <div className="flex justify-between items-center mt-2 mb-4">
-        <h1 className="text-2xl font-bold text-[#1F2937]">User Management</h1>
+    <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-1">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold text-[#1F2937] tracking-tight">User Management</h1>
       </div>
 
       <div className="flex overflow-x-auto hide-scrollbar gap-2 pb-2">
         <button 
           onClick={() => setActiveTab('managers')} 
-          className={activeTab === 'managers' ? "bg-[#2563EB] text-white font-bold text-[14px] whitespace-nowrap py-2 px-4 rounded-full shrink-0 shadow-sm" : "bg-[#F3F4F6] text-[#1F2937] font-medium text-[14px] whitespace-nowrap py-2 px-4 rounded-full shrink-0 hover:bg-[#F3F4F6] transition-colors"}
+          className={activeTab === 'managers' ? "bg-[#2563EB] text-white font-bold text-[14px] whitespace-nowrap py-2 px-2 rounded-full shrink-0 shadow-sm" : "bg-[#F3F4F6] text-[#1F2937] font-medium text-[14px] whitespace-nowrap py-2 px-2 rounded-full shrink-0 hover:bg-[#F3F4F6] transition-colors"}
         >
           Managers
         </button>
         <button 
           onClick={() => setActiveTab('staff')} 
-          className={activeTab === 'staff' ? "bg-[#2563EB] text-white font-bold text-[14px] whitespace-nowrap py-2 px-4 rounded-full shrink-0 shadow-sm" : "bg-[#F3F4F6] text-[#1F2937] font-medium text-[14px] whitespace-nowrap py-2 px-4 rounded-full shrink-0 hover:bg-[#F3F4F6] transition-colors"}
+          className={activeTab === 'staff' ? "bg-[#2563EB] text-white font-bold text-[14px] whitespace-nowrap py-2 px-2 rounded-full shrink-0 shadow-sm" : "bg-[#F3F4F6] text-[#1F2937] font-medium text-[14px] whitespace-nowrap py-2 px-2 rounded-full shrink-0 hover:bg-[#F3F4F6] transition-colors"}
         >
           Staff
         </button>
@@ -130,70 +130,80 @@ export default function Users() {
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <h2 className="text-lg font-bold text-[#1F2937]">Managers ({allManagers.length})</h2>
-            <Button className="flex items-center py-2.5 px-4 rounded-[16px]" onClick={() => { setValueCreate('role', 'manager'); setIsModalOpen(true); }}>
-              <Plus className="w-4 h-4 mr-2" />
+            <Button className="flex items-center bg-[#2563EB] text-white rounded-[6px] px-3 py-1.5 h-auto text-[14px] hover:bg-[#1d4ed8]" onClick={() => { setValueCreate('role', 'manager'); setIsModalOpen(true); }}>
+              <Plus className="w-4 h-4 mr-1" />
               Create Manager
             </Button>
           </div>
           
           {allManagers.length === 0 ? (
-            <div className="text-center py-10 bg-[#f8faff] rounded-[20px] border border-dashed border-[#E5E7EB]">
+            <div className="text-center py-10 bg-[#f8faff] rounded-lg border border-dashed border-[#E5E7EB]">
               <p className="text-sm font-medium text-[#6B7280]">No managers found.</p>
             </div>
           ) : (
             <div className="flex flex-col space-y-6">
               {/* Active Managers */}
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {activeManagers.length > 0 && <h3 className="text-xs font-bold text-[#6B7280] uppercase tracking-wider px-1">Active Managers</h3>}
                 {activeManagers.map((manager) => (
-                  <div key={manager._id} className="bg-white shadow-sm border border-transparent rounded-[20px] p-[14px]">
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <h3 className="text-base font-bold text-[#1F2937]">{manager.name}</h3>
+                  <div key={manager._id} className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow relative flex flex-col gap-1.5">
+                    <div className="flex justify-between items-start">
+                      <div className="pr-20">
+                        <h3 className="text-base font-bold text-[#1F2937] leading-tight">{manager.name}</h3>
                         <p className="text-sm font-medium text-[#6B7280]">{manager.email}</p>
+                        <p className="text-sm font-medium text-[#6B7280]">Mobile: {manager.mobile}</p>
                       </div>
-                      <StatusBadge status={manager.status} />
+                      
+                      {/* Top Right Controls */}
+                      <div className="absolute top-[8px] right-[8px] flex flex-col items-end gap-[6px]">
+                        {manager.status === 'active' ? (
+                          <span className="bg-[#10B981] text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">Active</span>
+                        ) : (
+                          <StatusBadge status={manager.status} />
+                        )}
+                        <div className="flex gap-[6px]">
+                          <button onClick={() => window.location.href = `/owner/users/edit/${manager._id}`} className="w-9 h-9 rounded-[6px] flex items-center justify-center bg-[#f8faff] text-[#2563EB] hover:bg-blue-100 transition-colors border border-[#E5E7EB]">
+                          <Pencil className="w-5 h-5" />
+                        </button>
+                        <button onClick={() => toggleStatus(manager)} className="w-9 h-9 rounded-[6px] flex items-center justify-center bg-[#f8faff] text-[#EF4444] hover:bg-red-50 transition-colors border border-[#E5E7EB]">
+                          <Trash2 className="w-5 h-5" />
+                        </button>
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-sm text-[#6B7280] mb-3">
-                      <span className="font-medium text-[#6B7280]">Mobile:</span> {manager.mobile}
-                    </div>
-                    <div className="flex justify-between items-center border-t border-slate-100 pt-3">
-                      <div className="text-sm">
-                        <span className="font-medium text-[#6B7280]">Assigned Sites:</span> <span className="text-[#1F2937] font-medium">{manager.assignedSites?.length || 0}</span>
+                    
+                    <div className="flex justify-between items-center border-t border-slate-100 pt-1.5 mt-0.5">
+                      <div className="text-sm font-normal text-[#1F2937]">
+                        <span className="font-medium text-[#6B7280]">Sites:</span> {manager.assignedSites?.length || 0}
                       </div>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        <Button variant="outline" size="sm" className="text-[#6B7280] border-[#E5E7EB] hover:bg-[#f8faff] px-3 py-2 rounded-[16px] font-medium" onClick={() => window.location.href = `/users/${manager._id}`}>
-                          Assign Sites
-                        </Button>
-                        <Button variant="outline" size="sm" className="text-[#2563EB] border-[#2563EB] hover:bg-blue-50 px-3 py-2 rounded-[16px] font-medium" onClick={() => window.location.href = `/owner/users/edit/${manager._id}`}>
-                          Edit
-                        </Button>
-                        <Button variant="outline" size="sm" className="text-[#EF4444] border-[#EF4444] hover:bg-red-50 px-3 py-2 rounded-[16px] font-medium" onClick={() => toggleStatus(manager)}>
-                          Deactivate
-                        </Button>
-                      </div>
+                      <Button variant="outline" size="sm" className="text-[#6B7280] border-[#E5E7EB] hover:bg-[#f8faff] px-2 py-1 rounded-[6px] font-medium text-[12px] h-auto" onClick={() => window.location.href = `/users/${manager._id}`}>
+                        Assign Sites
+                      </Button>
                     </div>
                   </div>
                 ))}
               </div>
 
               {/* Inactive Managers */}
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {inactiveManagers.length > 0 && <h3 className="text-xs font-bold text-[#6B7280] uppercase tracking-wider px-1">Inactive Managers</h3>}
                 {inactiveManagers.map((manager) => (
-                  <div key={manager._id} className="bg-white shadow-sm border border-transparent rounded-[20px] p-[14px] opacity-75">
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <h3 className="text-base font-bold text-[#1F2937]">{manager.name}</h3>
+                  <div key={manager._id} className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow relative flex flex-col gap-1.5 opacity-75">
+                    <div className="flex justify-between items-start">
+                      <div className="pr-20">
+                        <h3 className="text-base font-bold text-[#1F2937] leading-tight">{manager.name}</h3>
                         <p className="text-sm font-medium text-[#6B7280]">{manager.email}</p>
+                        <p className="text-sm font-medium text-[#6B7280]">Mobile: {manager.mobile}</p>
                       </div>
-                      <StatusBadge status={manager.status} />
+                      
+                      {/* Top Right Controls */}
+                      <div className="absolute top-[8px] right-[8px] flex flex-col items-end gap-[6px]">
+                        <StatusBadge status={manager.status} />
+                      </div>
                     </div>
-                    <div className="text-sm text-[#6B7280] mb-3">
-                      <span className="font-medium text-[#6B7280]">Mobile:</span> {manager.mobile}
-                    </div>
-                    <div className="flex justify-end border-t border-slate-100 pt-3">
-                      <Button variant="outline" size="sm" className="text-[#10B981] border-[#10B981] hover:bg-green-50 px-3 py-2 rounded-[16px] font-medium" onClick={() => toggleStatus(manager)}>
+                    
+                    <div className="flex justify-end border-t border-slate-100 pt-1.5 mt-0.5">
+                      <Button variant="outline" size="sm" className="text-[#10B981] border-[#E5E7EB] hover:bg-green-50 px-2 py-1 rounded-[6px] font-medium text-[12px] h-auto" onClick={() => toggleStatus(manager)}>
                         Activate
                       </Button>
                     </div>
@@ -209,70 +219,80 @@ export default function Users() {
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <h2 className="text-lg font-bold text-[#1F2937]">Staff ({staffList.length})</h2>
-            <Button className="flex items-center py-2.5 px-4 rounded-[16px]" onClick={() => { setValueCreate('role', 'staff'); setIsModalOpen(true); }}>
-              <Plus className="w-4 h-4 mr-2" />
+            <Button className="flex items-center bg-[#2563EB] text-white rounded-[6px] px-3 py-1.5 h-auto text-[14px] hover:bg-[#1d4ed8]" onClick={() => { setValueCreate('role', 'staff'); setIsModalOpen(true); }}>
+              <Plus className="w-4 h-4 mr-1" />
               Create Staff
             </Button>
           </div>
           
           {staffList.length === 0 ? (
-            <div className="text-center py-10 bg-[#f8faff] rounded-[20px] border border-dashed border-[#E5E7EB]">
+            <div className="text-center py-10 bg-[#f8faff] rounded-lg border border-dashed border-[#E5E7EB]">
               <p className="text-sm font-medium text-[#6B7280]">No staff found.</p>
             </div>
           ) : (
             <div className="flex flex-col space-y-6">
               {/* Active Staff */}
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {activeStaff.length > 0 && <h3 className="text-xs font-bold text-[#6B7280] uppercase tracking-wider px-1">Active Staff</h3>}
                 {activeStaff.map((staff) => (
-                  <div key={staff._id} className="bg-white shadow-sm border border-transparent rounded-[20px] p-[14px]">
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <h3 className="text-base font-bold text-[#1F2937]">{staff.name}</h3>
+                  <div key={staff._id} className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow relative flex flex-col gap-1.5">
+                    <div className="flex justify-between items-start">
+                      <div className="pr-20">
+                        <h3 className="text-base font-bold text-[#1F2937] leading-tight">{staff.name}</h3>
                         <p className="text-sm font-medium text-[#6B7280]">{staff.email}</p>
+                        <p className="text-sm font-medium text-[#6B7280]">Mobile: {staff.mobile}</p>
                       </div>
-                      <StatusBadge status={staff.status} />
+                      
+                      {/* Top Right Controls */}
+                      <div className="absolute top-[8px] right-[8px] flex flex-col items-end gap-[6px]">
+                        {staff.status === 'active' ? (
+                          <span className="bg-[#10B981] text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">Active</span>
+                        ) : (
+                          <StatusBadge status={staff.status} />
+                        )}
+                        <div className="flex gap-[6px]">
+                          <button onClick={() => window.location.href = `/owner/users/edit/${staff._id}`} className="w-9 h-9 rounded-[6px] flex items-center justify-center bg-[#f8faff] text-[#2563EB] hover:bg-blue-100 transition-colors border border-[#E5E7EB]">
+                          <Pencil className="w-5 h-5" />
+                        </button>
+                        <button onClick={() => toggleStatus(staff)} className="w-9 h-9 rounded-[6px] flex items-center justify-center bg-[#f8faff] text-[#EF4444] hover:bg-red-50 transition-colors border border-[#E5E7EB]">
+                          <Trash2 className="w-5 h-5" />
+                        </button>
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-sm text-[#6B7280] mb-3 flex justify-between">
-                      <div><span className="font-medium text-[#6B7280]">Mobile:</span> {staff.mobile}</div>
-                    </div>
-                    <div className="flex justify-between items-center border-t border-slate-100 pt-3">
-                      <div className="text-sm">
-                        <span className="font-medium text-[#6B7280]">Assigned Sites:</span> <span className="text-[#1F2937] font-medium">{staff.assignedSites?.length || 0}</span>
+                    
+                    <div className="flex justify-between items-center border-t border-slate-100 pt-1.5 mt-0.5">
+                      <div className="text-sm font-normal text-[#1F2937]">
+                        <span className="font-medium text-[#6B7280]">Sites:</span> {staff.assignedSites?.length || 0}
                       </div>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        <Button variant="outline" size="sm" className="text-[#6B7280] border-[#E5E7EB] hover:bg-[#f8faff] px-3 py-2 rounded-[16px] font-medium" onClick={() => window.location.href = `/users/${staff._id}`}>
-                          Assign Sites
-                        </Button>
-                        <Button variant="outline" size="sm" className="text-[#2563EB] border-[#2563EB] hover:bg-blue-50 px-3 py-2 rounded-[16px] font-medium" onClick={() => window.location.href = `/owner/users/edit/${staff._id}`}>
-                          Edit
-                        </Button>
-                        <Button variant="outline" size="sm" className="text-[#EF4444] border-[#EF4444] hover:bg-red-50 px-3 py-2 rounded-[16px] font-medium" onClick={() => toggleStatus(staff)}>
-                          Deactivate
-                        </Button>
-                      </div>
+                      <Button variant="outline" size="sm" className="text-[#6B7280] border-[#E5E7EB] hover:bg-[#f8faff] px-2 py-1 rounded-[6px] font-medium text-[12px] h-auto" onClick={() => window.location.href = `/users/${staff._id}`}>
+                        Assign Sites
+                      </Button>
                     </div>
                   </div>
                 ))}
               </div>
 
               {/* Inactive Staff */}
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {inactiveStaff.length > 0 && <h3 className="text-xs font-bold text-[#6B7280] uppercase tracking-wider px-1">Inactive Staff</h3>}
                 {inactiveStaff.map((staff) => (
-                  <div key={staff._id} className="bg-white shadow-sm border border-transparent rounded-[20px] p-[14px] opacity-75">
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <h3 className="text-base font-bold text-[#1F2937]">{staff.name}</h3>
+                  <div key={staff._id} className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow relative flex flex-col gap-1.5 opacity-75">
+                    <div className="flex justify-between items-start">
+                      <div className="pr-20">
+                        <h3 className="text-base font-bold text-[#1F2937] leading-tight">{staff.name}</h3>
                         <p className="text-sm font-medium text-[#6B7280]">{staff.email}</p>
+                        <p className="text-sm font-medium text-[#6B7280]">Mobile: {staff.mobile}</p>
                       </div>
-                      <StatusBadge status={staff.status} />
+                      
+                      {/* Top Right Controls */}
+                      <div className="absolute top-[8px] right-[8px] flex flex-col items-end gap-[6px]">
+                        <StatusBadge status={staff.status} />
+                      </div>
                     </div>
-                    <div className="text-sm text-[#6B7280] mb-3 flex justify-between">
-                      <div><span className="font-medium text-[#6B7280]">Mobile:</span> {staff.mobile}</div>
-                    </div>
-                    <div className="flex justify-end border-t border-slate-100 pt-3">
-                      <Button variant="outline" size="sm" className="text-[#10B981] border-[#10B981] hover:bg-green-50 px-3 py-2 rounded-[16px] font-medium" onClick={() => toggleStatus(staff)}>
+                    
+                    <div className="flex justify-end border-t border-slate-100 pt-1.5 mt-0.5">
+                      <Button variant="outline" size="sm" className="text-[#10B981] border-[#E5E7EB] hover:bg-green-50 px-2 py-1 rounded-[6px] font-medium text-[12px] h-auto" onClick={() => toggleStatus(staff)}>
                         Activate
                       </Button>
                     </div>

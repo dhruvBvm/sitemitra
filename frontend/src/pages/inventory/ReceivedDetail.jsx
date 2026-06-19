@@ -28,52 +28,74 @@ export default function ReceivedDetail() {
 
   if (loading) {
     return (
-      <div className="flex flex-col min-h-screen space-y-4 max-w-3xl mx-auto p-4 pb-20">
-        <div className="flex items-center gap-3 mb-2">
-          <button onClick={() => navigate(-1)} className="flex items-center justify-center w-[44px] h-[44px] bg-blue-50 text-[#2563EB] rounded-full hover:bg-blue-100 transition-colors shrink-0">
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <div>
-            <h1 className="text-2xl font-bold text-[#1F2937]">Received Details</h1>
-            <p className="text-sm text-[#6B7280]">Loading...</p>
+    <>
+      <div className="sticky top-[56px] left-0 right-0 z-40 bg-white shadow-sm border-b border-[#E5E7EB] overflow-x-hidden">
+        <div className="max-w-[428px] mx-auto px-4 py-2 flex flex-col gap-1.5">
+          <div className="flex items-center gap-2">
+            <button onClick={() => navigate(-1)} className="p-1.5 bg-[#f8faff] text-[#6B7280] rounded-full hover:bg-[#F3F4F6] transition-colors shrink-0">
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <div>
+              <h1 className="text-[1.1rem] font-bold tracking-tight text-[#1F2937]">Received Details</h1>
+              <p className="text-[13px] text-[#6B7280]">Loading...</p>
+            </div>
           </div>
         </div>
-        <div className="animate-pulse space-y-4 mt-4">
-          <div className="h-32 bg-[#F3F4F6] rounded-[20px]"></div>
-          <div className="h-48 bg-[#F3F4F6] rounded-[20px]"></div>
-          <div className="h-20 bg-[#F3F4F6] rounded-[20px]"></div>
-        </div>
       </div>
+      <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto px-4 pb-24 pt-4 animate-pulse">
+        <div className="h-32 bg-[#F3F4F6] rounded-lg"></div>
+        <div className="h-48 bg-[#F3F4F6] rounded-lg"></div>
+        <div className="h-20 bg-[#F3F4F6] rounded-lg"></div>
+      </div>
+    </>
     );
   }
 
   if (!entry) {
     return (
-      <div className="flex flex-col min-h-screen space-y-4 max-w-3xl mx-auto p-4">
-        <div className="flex items-center mb-4">
-          <button onClick={() => navigate(-1)} className="flex items-center justify-center w-[44px] h-[44px] bg-blue-50 text-[#2563EB] rounded-full hover:bg-blue-100 transition-colors">
-            <ArrowLeft className="w-5 h-5" />
-          </button>
+    <>
+      <div className="sticky top-[56px] left-0 right-0 z-40 bg-white shadow-sm border-b border-[#E5E7EB] overflow-x-hidden">
+        <div className="max-w-[428px] mx-auto px-4 py-2 flex flex-col gap-1.5">
+          <div className="flex items-center gap-2">
+            <button onClick={() => navigate(-1)} className="p-1.5 bg-[#f8faff] text-[#6B7280] rounded-full hover:bg-[#F3F4F6] transition-colors shrink-0">
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <div>
+              <h1 className="text-[1.1rem] font-bold tracking-tight text-[#1F2937]">Received Details</h1>
+              <p className="text-[13px] text-[#6B7280]">Not Found</p>
+            </div>
+          </div>
         </div>
+      </div>
+      <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto px-4 pb-24 pt-4">
         <div className="text-center py-20 text-[#6B7280]">Entry not found.</div>
       </div>
+    </>
     );
   }
 
   return (
-    <div className="flex flex-col min-h-screen space-y-4 max-w-3xl mx-auto p-4 overflow-y-auto pb-20">
-      <div className="flex items-center gap-3 mb-2">
-        <button onClick={() => navigate(-1)} className="flex items-center justify-center w-[44px] h-[44px] bg-blue-50 text-[#2563EB] rounded-full hover:bg-blue-100 transition-colors shrink-0">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <div>
-          <h1 className="text-2xl font-bold text-[#1F2937]">Received Details</h1>
-          <p className="text-sm text-[#6B7280]">{entry.entryNo}</p>
+    <>
+      {/* Sticky Header */}
+      <div className="sticky top-[56px] left-0 right-0 z-40 bg-white shadow-sm border-b border-[#E5E7EB] overflow-x-hidden">
+        <div className="max-w-[428px] mx-auto px-4 py-2 flex flex-col gap-1.5 justify-between">
+          {/* FULL-WIDTH STICKY HEADER – DO NOT REMOVE OR WRAP IN CONTAINER */}
+          <div className="flex items-center gap-2">
+            <button onClick={() => navigate(-1)} className="p-1.5 bg-[#f8faff] text-[#6B7280] rounded-full hover:bg-[#F3F4F6] transition-colors shrink-0">
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <div>
+              <h1 className="text-[1.1rem] font-bold tracking-tight text-[#1F2937]">Received Details</h1>
+              <p className="text-[13px] text-[#6B7280]">{entry.entryNo}</p>
+            </div>
+          </div>
         </div>
       </div>
+      
+      <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto px-4 pb-24 pt-4">
 
-      <div className="bg-white rounded-[20px] shadow-sm border border-transparent p-5 space-y-4">
-        <div className="grid grid-cols-2 gap-4">
+      <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-3 space-y-4">
+        <div className="grid grid-cols-2 gap-2">
           <div>
             <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Date</p>
             <p className="text-sm font-semibold text-[#1F2937] flex items-center gap-1">
@@ -107,13 +129,13 @@ export default function ReceivedDetail() {
         </div>
       </div>
 
-      <div className="bg-white rounded-[20px] shadow-sm border border-transparent p-5">
+      <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-3">
         <h2 className="text-sm font-bold text-[#1F2937] uppercase tracking-wider mb-4">Notes</h2>
         {entry.notes || entry.userNotes ? (
-          <div className="space-y-3">
+          <div className="space-y-2">
             {(entry.userNotes || entry.notes) && (
               <div>
-                <p className="text-sm text-[#1F2937] bg-[#f8faff] p-3 rounded-[16px] flex items-start gap-2 border border-transparent">
+                <p className="text-sm text-[#1F2937] bg-[#f8faff] p-2 rounded-lg flex items-start gap-2 border border-slate-100">
                   <AlignLeft className="w-4 h-4 text-slate-400 mt-0.5 shrink-0" />
                   <span>{entry.notes || entry.userNotes}</span>
                 </p>
@@ -121,17 +143,17 @@ export default function ReceivedDetail() {
             )}
           </div>
         ) : (
-          <p className="text-sm text-[#6B7280] italic bg-[#f8faff] p-4 rounded-[16px] border border-transparent text-center">No notes provided</p>
+          <p className="text-sm text-[#6B7280] italic bg-[#f8faff] p-2 rounded-lg border border-slate-100 text-center">No notes provided</p>
         )}
       </div>
 
-      <div className="bg-white rounded-[20px] shadow-sm border border-transparent p-5">
+      <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-3">
         <h2 className="text-sm font-bold text-[#1F2937] uppercase tracking-wider mb-4">Materials Received</h2>
         <div className="space-y-4">
           {entry.materials?.map((mat, i) => (
-            <div key={i} className="flex flex-col p-4 bg-[#f8faff] rounded-[16px] border border-transparent">
+            <div key={i} className="flex flex-col p-2 bg-[#f8faff] rounded-lg border border-slate-100">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-bold text-[#1F2937]">{mat.materialName || mat.name}</span>
+                <span className="capitalize text-sm font-bold text-[#1F2937]">{mat.materialName || mat.name}</span>
                 <span className="text-sm font-bold text-[#2563EB] bg-blue-50 px-2 py-0.5 rounded">{mat.quantity || mat.qty} <span className="text-xs text-[#2563EB] font-medium">{mat.unit}</span></span>
               </div>
               
@@ -155,17 +177,18 @@ export default function ReceivedDetail() {
       </div>
 
       {entry.imageUrls && entry.imageUrls.length > 0 && (
-        <div className="bg-white rounded-[20px] shadow-sm border border-transparent p-5">
+        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-3">
           <h2 className="text-sm font-bold text-[#1F2937] uppercase tracking-wider mb-4">Entry Documents</h2>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             {entry.imageUrls.map((img, idx) => (
-              <a key={idx} href={img} target="_blank" rel="noreferrer" className="w-20 h-20 rounded-[16px] border border-transparent overflow-hidden hover:scale-105 transition-transform block">
+              <a key={idx} href={img} target="_blank" rel="noreferrer" className="w-20 h-20 rounded-md border border-transparent overflow-hidden hover:scale-105 transition-transform block">
                 <img src={img} alt="attachment" className="w-full h-full object-cover" />
               </a>
             ))}
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }

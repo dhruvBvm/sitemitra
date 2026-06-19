@@ -52,7 +52,7 @@ const createManualRequest = async (req, res) => {
         imageUrls: urls
       };
     });
-    const requestNo = await generateRequestNo();
+    const requestNo = req.body.requestNo || await generateRequestNo();
     let initialStatus = 'pending_manager';
     let approvalHistory = [];
     if (user.role === 'owner') {
@@ -147,7 +147,7 @@ const createPhotoRequest = async (req, res) => {
 
     const ownerId = user.role === 'owner' ? user._id : (user.ownerId || user.parentUserId);
 
-    const requestNo = await generateRequestNo();
+    const requestNo = req.body.requestNo || await generateRequestNo();
     // Ensure at most 5 order images
     let orderFiles = (req.files || []).filter(f => f.fieldname === 'orderImages');
     if (orderFiles.length === 0 && req.files && req.files.length > 0) {

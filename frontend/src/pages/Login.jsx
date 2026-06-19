@@ -36,7 +36,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f8faff] py-12 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#f8faff] py-12 px-2">
       <div className="w-full bg-white p-6 rounded-2xl shadow-md border border-transparent">
         <div className="text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="mx-auto h-16 w-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
@@ -62,7 +62,7 @@ export default function Login() {
                 </div>
                 <input
                   {...register('email')}
-                  className="appearance-none block w-full pl-10 px-3 py-3 border border-transparent rounded-[16px] shadow-sm placeholder-slate-400 focus:outline-none focus:ring-[#2563EB] focus:border-[#2563EB] text-sm transition-colors"
+                  className="appearance-none block w-full pl-10 px-2 py-2 border border-transparent rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-[#2563EB] focus:border-[#2563EB] text-sm transition-colors"
                   placeholder="owner@example.com"
                 />
               </div>
@@ -80,7 +80,7 @@ export default function Login() {
                 <input
                   type="password"
                   {...register('password')}
-                  className="appearance-none block w-full pl-10 px-3 py-3 border border-transparent rounded-[16px] shadow-sm placeholder-slate-400 focus:outline-none focus:ring-[#2563EB] focus:border-[#2563EB] text-sm transition-colors"
+                  className="appearance-none block w-full pl-10 px-2 py-2 border border-transparent rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-[#2563EB] focus:border-[#2563EB] text-sm transition-colors"
                   placeholder="••••••••"
                 />
               </div>
@@ -91,7 +91,7 @@ export default function Login() {
           <div>
             <Button
               type="submit"
-              className="w-full py-3 text-base px-4 rounded-[16px]"
+              className="w-full py-2 text-base px-2 rounded-md"
               isLoading={isLoading}
             >
               Sign In

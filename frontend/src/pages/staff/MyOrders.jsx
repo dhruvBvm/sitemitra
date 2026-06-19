@@ -38,35 +38,35 @@ export default function MyOrders() {
   if (loading) return <Loader size="lg" className="mt-20" />;
 
   return (
-    <div className="space-y-4 pb-20 max-w-[428px] mx-auto overflow-x-hidden p-4">
-      <div className="flex justify-between items-center pb-2">
+    <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-1">
+      <div className="flex justify-between items-center mt-2 pb-2">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-[#1F2937]">My Requests</h1>
           <p className="text-sm font-medium text-[#6B7280]">Track your material requests</p>
         </div>
         <Button 
           onClick={() => navigate('/staff/create-order')} 
-          className="bg-[#2563EB] text-white hover:bg-[#2563EB] py-3 px-4 text-sm rounded-[16px] flex items-center"
+          className="bg-[#2563EB] text-white hover:bg-[#2563EB] py-2 px-2 text-sm rounded-md flex items-center"
         >
           <Plus className="w-4 h-4 mr-1 stroke-[2.5]" />
           New Request
         </Button>
       </div>
 
-      <div className="flex flex-col space-y-3">
+      <div className="flex flex-col space-y-2">
         {orders.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-[20px] border border-dashed border-[#E5E7EB]">
-            <FileText className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+          <div className="text-center py-12 bg-white rounded-md border border-dashed border-[#E5E7EB]">
+            <FileText className="w-10 h-10 text-slate-300 mx-auto mb-2" />
             <p className="text-sm font-medium text-[#6B7280]">You haven't created any requests yet.</p>
           </div>
         ) : (
           orders.map(order => (
-            <Card 
+            <div 
               key={order._id} 
-              className="shadow-sm border-[#E5E7EB] cursor-pointer hover:border-[#2563EB] transition-colors rounded-[20px]"
+              className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer active:scale-[0.98]"
               onClick={() => handleView(order)}
             >
-              <CardContent className="p-[14px] flex flex-col space-y-3">
+              <div className="flex flex-col space-y-1">
                 <div className="flex justify-between items-start">
                   <div>
                     <span className="inline-flex px-2 py-1 rounded text-xs font-bold mb-1.5 bg-[#FFC107]/20 text-[#FFC107] uppercase tracking-wider">
@@ -93,12 +93,16 @@ export default function MyOrders() {
                   <span className="text-xs text-[#6B7280] block mb-1 uppercase font-bold tracking-wider">Materials</span>
                   <p className="line-clamp-2">
                     {order.materials?.length > 0 ? 
-                      order.materials.map(m => `${m.materialName || m.name}: ${m.quantity || m.qty} ${m.unit}`).join(', ') 
+                      order.materials.map(m => {
+                        const raw = m.materialName || m.name || '';
+                        const capitalized = raw.charAt(0).toUpperCase() + raw.slice(1);
+                        return `${capitalized}: ${m.quantity || m.qty} ${m.unit}`;
+                      }).join(', ') 
                       : 'None'}
                   </p>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           ))
         )}
       </div>

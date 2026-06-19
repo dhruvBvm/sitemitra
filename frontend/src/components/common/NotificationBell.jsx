@@ -59,13 +59,13 @@ export default function NotificationBell() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-[16px] shadow-xl border border-transparent z-50 overflow-hidden">
+        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-slate-200 z-50 overflow-hidden">
           <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-[#f8faff]">
             <h3 className="font-semibold text-[#1F2937]">Notifications</h3>
             {unreadCount > 0 && (
               <button 
                 onClick={handleMarkAllRead}
-                className="text-xs text-[#2563EB] hover:text-blue-800 font-medium py-2.5 px-4 rounded-[16px]"
+                className="text-xs text-[#2563EB] hover:text-blue-800 font-medium py-1.5 px-3 rounded-md"
               >
                 Mark all as read
               </button>
