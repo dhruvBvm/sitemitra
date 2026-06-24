@@ -15,14 +15,13 @@ import CommentModal from '../../components/common/CommentModal';
 export default function Transactions() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const statusFilter = searchParams.get('status');
   const { user } = useAuthStore();
   const [sites, setSites] = useState([]);
 
   // Filters
   const todayStr = new Date().toISOString().split('T')[0];
   const [selectedSite, setSelectedSite] = useState('');
-  const [selectedType, setSelectedType] = useState('All');
+  const [selectedType, setSelectedType] = useState(searchParams.get('type') || 'All');
   const [selectedDateRange, setSelectedDateRange] = useState('All Time');
   const [startDate, setStartDate] = useState(todayStr);
   const [endDate, setEndDate] = useState(todayStr);
@@ -31,7 +30,7 @@ export default function Transactions() {
   // Applied filters (to avoid fetching on every keypress)
   const [appliedFilters, setAppliedFilters] = useState({
     siteId: '',
-    type: 'All',
+    type: searchParams.get('type') || 'All',
     startDate: '',
     endDate: '',
     search: ''
@@ -148,11 +147,6 @@ export default function Transactions() {
         merged = merged.filter(item =>
           item.number?.toLowerCase().includes(query)
         );
-      }
-
-      // Filter by status if provided in URL
-      if (statusFilter) {
-        merged = merged.filter(item => item.transactionType === 'Request' && item.status === statusFilter);
       }
 
       // Sort by exact creation time using MongoDB ObjectId timestamp descending (latest at top)

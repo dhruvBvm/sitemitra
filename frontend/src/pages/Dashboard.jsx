@@ -97,8 +97,8 @@ export default function Dashboard() {
             if (!active) return;
             statsData = [
               { label: 'MY REQUESTS', value: reqs.length, path: '/staff/requests', icon: FileText, color: 'border-blue-100', iconColor: 'text-blue-600', labelColor: 'text-blue-600' },
-              { label: 'PENDING', value: pendingCount, path: '/staff/requests?status=pending_manager', icon: Clock, color: 'border-orange-100', iconColor: 'text-[#F59E0B]', labelColor: 'text-[#F59E0B]' },
-              { label: 'APPROVED', value: approvedCount, path: '/staff/requests?status=approved', icon: CheckCircle, color: 'border-emerald-100', iconColor: 'text-[#10B981]', labelColor: 'text-[#10B981]' }
+              { label: 'PENDING', value: pendingCount, path: '/staff/requests', icon: Clock, color: 'border-orange-100', iconColor: 'text-[#F59E0B]', labelColor: 'text-[#F59E0B]' },
+              { label: 'APPROVED', value: approvedCount, path: '/staff/requests', icon: CheckCircle, color: 'border-emerald-100', iconColor: 'text-[#10B981]', labelColor: 'text-[#10B981]' }
             ];
           } catch (e) { }
         } else if (user?.role === 'manager') {
@@ -110,7 +110,7 @@ export default function Dashboard() {
             if (!active) return;
             statsData = [
               { label: 'TEAM COUNT', value: managerStats?.teamSize || 0, path: '/manager/team', icon: Users, color: 'border-orange-100', iconColor: 'text-[#F59E0B]', labelColor: 'text-[#F59E0B]' },
-              { label: 'PENDING APPROVALS', value: managerStats?.pendingApprovals || 0, path: '/manager/transactions?status=pending_manager', icon: Clock, color: 'border-blue-100', iconColor: 'text-blue-600', labelColor: 'text-blue-600' },
+              { label: 'PENDING APPROVALS', value: managerStats?.pendingApprovals || 0, path: '/manager/transactions?type=Requests', icon: Clock, color: 'border-blue-100', iconColor: 'text-blue-600', labelColor: 'text-blue-600' },
               { label: 'ASSIGNED SITES', value: managerStats?.assignedSitesCount || 0, path: '/manager/sites', icon: Building, color: 'border-emerald-100', iconColor: 'text-[#10B981]', labelColor: 'text-[#10B981]' }
             ];
           } catch (e) { }
@@ -122,7 +122,7 @@ export default function Dashboard() {
             const ownerStats = await ownerService.getDashboardStats();
             if (!active) return;
             statsData = [
-              { label: 'PENDING', value: ownerStats?.pendingApprovals || 0, path: '/owner/transactions?status=pending_owner', icon: Clock, color: 'border-blue-100', iconColor: 'text-blue-600', labelColor: 'text-blue-600' },
+              { label: 'PENDING', value: ownerStats?.pendingApprovals || 0, path: '/owner/transactions?type=Requests', icon: Clock, color: 'border-blue-100', iconColor: 'text-blue-600', labelColor: 'text-blue-600' },
               { label: 'TOTAL SITES', value: ownerStats?.totalSites || fetchedSites.length, path: '/owner/sites', icon: Building, color: 'border-emerald-100', iconColor: 'text-[#10B981]', labelColor: 'text-[#10B981]' },
               { label: 'TOTAL STAFF', value: ownerStats?.totalStaff || 0, path: '/owner/users?tab=staff', icon: Users, color: 'border-orange-100', iconColor: 'text-[#F59E0B]', labelColor: 'text-[#F59E0B]' }
             ];
