@@ -20,8 +20,8 @@ const refresh = async (req, res) => {
     const isProd = process.env.NODE_ENV === 'production';
     const cookieOptions = {
       httpOnly: true,
-      secure: true, // Required for sameSite: 'none', works on localhost
-      sameSite: 'none',
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
       maxAge: 15 * 60 * 1000,
     };
     res.cookie('accessToken', newAccessToken, cookieOptions);
@@ -57,7 +57,7 @@ const logout = async (req, res) => {
     }
   }
   const isProd = process.env.NODE_ENV === 'production';
-  const cookieOpts = { httpOnly: true, secure: true, sameSite: 'none' };
+  const cookieOpts = { httpOnly: true, secure: isProd, sameSite: isProd ? 'none' : 'lax' };
   res.clearCookie('accessToken', cookieOpts);
   res.clearCookie('refreshToken', cookieOpts);
   return res.json({ message: 'Logged out' });
@@ -183,14 +183,14 @@ const login = async (req, res) => {
     const isProd = process.env.NODE_ENV === 'production';
     const cookieOptions = {
       httpOnly: true,
-      secure: true, // Required for sameSite: 'none'
-      sameSite: 'none',
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
       maxAge: 15 * 60 * 1000,
     };
     const refreshCookieOptions = {
       httpOnly: true,
-      secure: true, // Required for sameSite: 'none'
-      sameSite: 'none',
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     };
     res.cookie('accessToken', accessToken, cookieOptions);
