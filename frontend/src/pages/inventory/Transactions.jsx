@@ -24,8 +24,8 @@ export default function Transactions() {
   const [selectedSite, setSelectedSite] = useState('');
   const [selectedType, setSelectedType] = useState('All');
   const [selectedDateRange, setSelectedDateRange] = useState('All Time');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState(todayStr);
+  const [endDate, setEndDate] = useState(todayStr);
   const [searchQuery, setSearchQuery] = useState('');
 
   // Applied filters (to avoid fetching on every keypress)
