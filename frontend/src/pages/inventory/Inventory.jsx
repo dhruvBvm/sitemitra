@@ -230,7 +230,7 @@ export default function Inventory() {
                 placeholder="Search materials..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-8 pr-3 py-1.5 bg-white border border-[#E5E7EB] rounded-md text-xs focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+                className="w-full pl-9 pr-3 py-1.5 bg-white border border-[#E5E7EB] rounded-md text-xs focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
               />
             </div>
             {(user?.role === "owner" || user?.role === "manager") && (
