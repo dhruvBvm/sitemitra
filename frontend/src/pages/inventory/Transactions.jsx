@@ -278,7 +278,7 @@ export default function Transactions() {
             <select
               value={selectedSite}
               onChange={(e) => setSelectedSite(e.target.value)}
-              className="flex-1 w-full p-2 text-xs border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
+              className="flex-1 w-full p-2 text-sm border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
             >
               <option value="">All Sites</option>
               {sites.map(site => (
@@ -288,7 +288,7 @@ export default function Transactions() {
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="flex-1 w-full p-2 text-xs border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
+              className="flex-1 w-full p-2 text-sm border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
             >
               <option value="All">All Types</option>
               <option value="Requests">Requests</option>
@@ -298,7 +298,7 @@ export default function Transactions() {
             <select
               value={selectedDateRange}
               onChange={handleDateRangeChange}
-              className="flex-1 w-full p-2 text-xs border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
+              className="flex-1 w-full p-2 text-sm border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
             >
               <option value="All Time">All Time</option>
               <option value="Today">Today</option>
@@ -314,14 +314,14 @@ export default function Transactions() {
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="flex-1 w-full p-2 text-xs border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white text-[#6B7280]"
+              className="flex-1 w-full p-2 text-sm border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white text-[#6B7280]"
               title="Date From"
             />
             <input
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="flex-1 w-full p-2 text-xs border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white text-[#6B7280]"
+              className="flex-1 w-full p-2 text-sm border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white text-[#6B7280]"
               title="Date To"
             />
           </div>
@@ -337,12 +337,12 @@ export default function Transactions() {
                 placeholder="Search REQ-, RCV-, USE-"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 p-2 text-xs border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
+                className="w-full pl-9 pr-3 p-2 text-sm border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
               />
             </div>
             <button
               onClick={handleApplyFilters}
-              className="shrink-0 bg-[#2563EB] text-white px-4 py-2 rounded-md font-medium hover:bg-[#1d4ed8] transition-colors flex items-center justify-center text-xs"
+              className="shrink-0 bg-[#2563EB] text-white px-4 py-2 rounded-md font-medium hover:bg-[#1d4ed8] transition-colors flex items-center justify-center text-sm"
             >
               Apply Filters
             </button>
