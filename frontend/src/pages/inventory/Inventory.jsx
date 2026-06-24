@@ -259,7 +259,7 @@ export default function Inventory() {
             <div className="flex flex-col space-y-2">
               {Object.keys(groupedMaterials).map((category, index) => (
                 <div key={index} className="flex flex-col space-y-1">
-                  <h2 className="text-[18px] font-bold text-[#1F2937] tracking-tight">
+                  <h2 className="text-xs font-bold text-[#1F2937] tracking-tight">
                     {category === "Other" ? "Materials" : category}
                   </h2>
                   <div className="flex flex-col space-y-2.5">
@@ -270,8 +270,8 @@ export default function Inventory() {
                         onClick={() => handleMaterialClick(mat._id)}
                       >
                         <div className="flex justify-between items-start">
-                          <h3 className="font-bold text-[22px] text-[#1F2937] leading-tight group-hover:text-[#2563EB] transition-colors">{mat.materialName || mat.name}</h3>
-                          <span className="text-base font-bold text-[#1F2937]">
+                          <h3 className="font-bold text-sm text-[#1F2937] leading-tight group-hover:text-[#2563EB] transition-colors">{mat.materialName || mat.name}</h3>
+                          <span className="text-sm font-bold text-[#1F2937]">
                             {mat.quantity}
                           </span>
                         </div>

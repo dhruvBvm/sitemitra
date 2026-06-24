@@ -144,7 +144,7 @@ export default function Materials() {
           ) : (
             Object.keys(groupedMaterials).map(category => (
               <div key={category} className="flex flex-col space-y-1">
-                <h2 className="text-sm font-bold text-[#1F2937] tracking-tight">{category}</h2>
+                <h2 className="text-xs font-bold text-[#1F2937] tracking-tight">{category}</h2>
                 <div className="flex flex-col space-y-2">
                   {groupedMaterials[category].map(mat => {
                     const isActive = mat.status !== 'inactive';
@@ -152,7 +152,7 @@ export default function Materials() {
                       return (
                         <div key={mat._id} className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center justify-between gap-2">
                           <div className="flex flex-col min-w-0 flex-1">
-                            <span className="text-base font-bold text-[#1F2937] leading-tight truncate capitalize">{mat.materialName || mat.name}</span>
+                            <span className="text-sm font-bold text-[#1F2937] leading-tight truncate capitalize">{mat.materialName || mat.name}</span>
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
                             <span className="text-[10px] font-bold text-white bg-[#10B981] rounded px-1.5 py-0.5 uppercase tracking-wider">{mat.unit}</span>
@@ -181,7 +181,7 @@ export default function Materials() {
                       return (
                         <div key={mat._id} className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center justify-between gap-2 opacity-75">
                           <div className="flex flex-col min-w-0 flex-1">
-                            <span className="text-base font-bold text-[#1F2937] leading-tight truncate capitalize">{mat.materialName || mat.name}</span>
+                            <span className="text-sm font-bold text-[#1F2937] leading-tight truncate capitalize">{mat.materialName || mat.name}</span>
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
                             <span className="text-[10px] font-bold text-white bg-[#10B981] rounded px-1.5 py-0.5 uppercase tracking-wider">{mat.unit}</span>
