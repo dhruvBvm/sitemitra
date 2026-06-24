@@ -266,7 +266,7 @@ export default function Inventory() {
                     {groupedMaterials[category].map((mat) => (
                       <div
                         key={mat._id}
-                        className="bg-slate-50 rounded-lg px-2 py-1.5 shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer group active:scale-[0.98]"
+                        className="bg-slate-50 rounded-lg px-2 py-1 shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer group active:scale-[0.98]"
                         onClick={() => handleMaterialClick(mat._id)}
                       >
                         <div className="flex justify-between items-start">
@@ -275,7 +275,7 @@ export default function Inventory() {
                             {mat.quantity}
                           </span>
                         </div>
-                        <div className="flex justify-between items-center mt-1.5">
+                        <div className="flex justify-between items-center mt-1">
                           <p className="text-[8px] font-medium bg-[#10B981] text-white px-1 py-0.5 rounded shadow-sm">
                             {mat.unit}
                           </p>
@@ -292,7 +292,7 @@ export default function Inventory() {
                               }}
                               className="p-1 bg-[#2563EB] text-white rounded-md hover:bg-blue-700 transition-colors"
                             >
-                              <Plus className="w-3.5 h-3.5 stroke-[3]" />
+                              <Plus className="w-3 h-3 stroke-[3]" />
                             </button>
                             <button
                               onClick={(e) => {
@@ -306,7 +306,7 @@ export default function Inventory() {
                               }}
                               className="p-1 bg-[#EF4444] text-white rounded-md hover:bg-red-600 transition-colors"
                             >
-                              <Minus className="w-3.5 h-3.5 stroke-[3]" />
+                              <Minus className="w-3 h-3 stroke-[3]" />
                             </button>
                           </div>
                         </div>
