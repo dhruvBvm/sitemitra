@@ -169,26 +169,26 @@ export default function Inventory() {
     <>
       {/* ===== FULL-WIDTH STICKY HEADER ===== */}
       <header className="fixed-div sticky top-0 left-0 right-0 z-50 bg-white shadow-sm border-b border-[#E5E7EB] overflow-x-hidden">
-        <div className="px-4 pt-3 pb-2 flex flex-col gap-1.5">
+        <div className="px-4 pt-2 pb-1.5 flex flex-col gap-1">
           <div className="flex items-center w-full">
             <button
               onClick={() => navigate(-1)}
-              className="p-1 mr-2 rounded-full hover:bg-[#F3F4F6] transition-colors text-[#6B7280]"
+              className="p-1 mr-1 rounded-full hover:bg-[#F3F4F6] transition-colors text-[#6B7280]"
             >
-              <ArrowLeft className="w-5 h-5" />
+              <ArrowLeft className="w-4 h-4" />
             </button>
-            <h1 className="text-2xl font-bold tracking-tight text-[#1F2937]">
+            <h1 className="text-lg font-bold tracking-tight text-[#1F2937]">
               {siteDetails?.siteName || "Unknown Site"}
             </h1>
           </div>
 
-          <div className="w-full mb-1.5">
-            <div className="flex overflow-x-auto hide-scrollbar gap-2">
-              <button className="flex-1 bg-[#2563EB] text-white font-medium text-xs whitespace-nowrap py-2 px-2 rounded-md shrink-0 text-center">
+          <div className="w-full mb-1">
+            <div className="flex overflow-x-auto hide-scrollbar gap-1.5">
+              <button className="flex-1 bg-[#2563EB] text-white font-medium text-[11px] whitespace-nowrap py-1.5 px-1.5 rounded-md shrink-0 text-center">
                 Inventory
               </button>
               <button
-                className="flex-1 bg-[#F3F4F6] text-[#1F2937] font-medium text-xs whitespace-nowrap py-2 px-2 rounded-md shrink-0 hover:bg-[#E5E7EB] transition-colors text-center"
+                className="flex-1 bg-[#F3F4F6] text-[#1F2937] font-medium text-[11px] whitespace-nowrap py-1.5 px-1.5 rounded-md shrink-0 hover:bg-[#E5E7EB] transition-colors text-center"
                 onClick={() =>
                   navigate(`${getRolePrefix()}/create-order`, {
                     state: { siteId },
@@ -198,7 +198,7 @@ export default function Inventory() {
                 Request
               </button>
               <button
-                className="flex-1 bg-[#F3F4F6] text-[#1F2937] font-medium text-xs whitespace-nowrap py-2 px-2 rounded-md shrink-0 hover:bg-[#E5E7EB] transition-colors text-center"
+                className="flex-1 bg-[#F3F4F6] text-[#1F2937] font-medium text-[11px] whitespace-nowrap py-1.5 px-1.5 rounded-md shrink-0 hover:bg-[#E5E7EB] transition-colors text-center"
                 onClick={() =>
                   navigate(`${getRolePrefix()}/inventory/received/create`, {
                     state: { siteId },
@@ -208,7 +208,7 @@ export default function Inventory() {
                 Received
               </button>
               <button
-                className="flex-1 bg-[#F3F4F6] text-[#1F2937] font-medium text-xs whitespace-nowrap py-2 px-2 rounded-md shrink-0 hover:bg-[#E5E7EB] transition-colors text-center"
+                className="flex-1 bg-[#F3F4F6] text-[#1F2937] font-medium text-[11px] whitespace-nowrap py-1.5 px-1.5 rounded-md shrink-0 hover:bg-[#E5E7EB] transition-colors text-center"
                 onClick={() =>
                   navigate(`${getRolePrefix()}/inventory/used/create`, {
                     state: { siteId },
@@ -222,22 +222,22 @@ export default function Inventory() {
 
           <div className="flex gap-2 items-center w-full">
             <div className="relative flex-1">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-4 w-4 text-slate-400" />
+              <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none">
+                <Search className="h-3.5 w-3.5 text-slate-400" />
               </div>
               <input
                 type="text"
                 placeholder="Search materials..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 bg-white border border-[#E5E7EB] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+                className="w-full pl-8 pr-3 py-1.5 bg-white border border-[#E5E7EB] rounded-md text-xs focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
               />
             </div>
             {(user?.role === "owner" || user?.role === "manager") && (
               <button
                 onClick={() => navigate(`${getRolePrefix()}/materials`)}
-                className="shrink-0 bg-[#2563EB] text-white px-3 py-2 rounded-md font-medium text-sm flex items-center justify-center hover:bg-[#1D4ED8] transition-colors"
-                style={{ minHeight: "36px" }}
+                className="shrink-0 bg-[#2563EB] text-white px-2.5 py-1.5 rounded-md font-medium text-xs flex items-center justify-center hover:bg-[#1D4ED8] transition-colors"
+                style={{ minHeight: "30px" }}
               >
                 + Add
               </button>
