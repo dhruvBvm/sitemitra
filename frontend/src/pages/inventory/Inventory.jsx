@@ -272,7 +272,7 @@ export default function Inventory() {
                         <div className="flex justify-between items-center py-0.5">
                           <div className="flex items-center gap-2 overflow-hidden mr-2">
                             <h3 className="font-bold text-sm text-[#1F2937] leading-tight group-hover:text-[#2563EB] transition-colors truncate">{mat.materialName || mat.name}</h3>
-                            <p className="text-[6px] font-medium bg-[#10B981] text-white px-1 py-0.5 rounded shadow-sm shrink-0">
+                            <p className="text-[6px] font-medium bg-[#10B981] text-white px-1 py-0 rounded shadow-sm shrink-0">
                               {mat.unit}
                             </p>
                           </div>
@@ -289,7 +289,7 @@ export default function Inventory() {
                               }}
                               className="p-1 bg-[#2563EB] text-white rounded-md hover:bg-blue-700 transition-colors"
                             >
-                              <Plus className="w-2.5 h-2.5 stroke-[3]" />
+                              <Plus className="w-3.5 h-3.5 stroke-[3]" />
                             </button>
                             <span className="text-sm font-bold text-[#1F2937] min-w-[20px] text-center">
                               {mat.quantity}
@@ -306,7 +306,7 @@ export default function Inventory() {
                               }}
                               className="p-1 bg-[#EF4444] text-white rounded-md hover:bg-red-600 transition-colors"
                             >
-                              <Minus className="w-2.5 h-2.5 stroke-[3]" />
+                              <Minus className="w-3.5 h-3.5 stroke-[3]" />
                             </button>
                           </div>
                         </div>
