@@ -170,7 +170,7 @@ export default function Dashboard() {
       {/* Metrics Row - NOT STICKY */}
       {stats.length > 0 && (
         <div className="flex overflow-x-auto hide-scrollbar gap-2 w-[calc(100%+16px)] -mx-2 px-2 pb-2 mt-2">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-nowrap gap-2 w-full">
             {stats.map((stat, idx) => {
               const Icon = stat.icon;
               return (
