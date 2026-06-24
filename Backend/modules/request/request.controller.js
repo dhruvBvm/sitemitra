@@ -256,7 +256,7 @@ const getMyRequests = async (req, res) => {
       .populate('siteId', 'siteName siteCode')
       .skip(skip)
       .limit(limitNum)
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1, _id: -1 });
 
     const total = await Request.countDocuments(filter);
 
@@ -373,7 +373,7 @@ const getTeamRequests = async (req, res) => {
       .populate('createdBy', 'name email')
       .skip(skip)
       .limit(limitNum)
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1, _id: -1 });
 
     const total = await Request.countDocuments(filter);
 
@@ -517,7 +517,7 @@ const getAllRequests = async (req, res) => {
       .populate('createdBy', 'name email role')
       .skip(skip)
       .limit(limitNum)
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1, _id: -1 });
 
     const total = await Request.countDocuments(filter);
 
