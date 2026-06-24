@@ -44,12 +44,12 @@ export default function MyOrders() {
           <h1 className="text-2xl font-bold tracking-tight text-[#1F2937]">My Requests</h1>
           <p className="text-sm font-medium text-[#6B7280]">Track your material requests</p>
         </div>
-        <Button 
-          onClick={() => navigate('/staff/create-order')} 
+        <Button
+          onClick={() => navigate('/staff/create-order')}
           className="bg-[#2563EB] text-white hover:bg-[#2563EB] py-2 px-2 text-sm rounded-md flex items-center"
         >
           <Plus className="w-5 h-5 mr-1 stroke-[2.5]" />
-          New Request
+          Request
         </Button>
       </div>
 
@@ -61,8 +61,8 @@ export default function MyOrders() {
           </div>
         ) : (
           orders.map(order => (
-            <div 
-              key={order._id} 
+            <div
+              key={order._id}
               className="bg-white rounded-lg p-3 shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer active:scale-[0.98]"
               onClick={() => handleView(order)}
             >
@@ -80,22 +80,22 @@ export default function MyOrders() {
                       <span className="font-semibold text-[#1F2937]">Site:</span> {order.siteId?.siteName || '-'}
                     </div>
                     <div className="text-sm text-[#6B7280] line-clamp-2" title={
-                      order.materials?.length > 0 ? 
-                      order.materials.map(m => {
-                        const raw = m.materialName || m.name || '';
-                        const capitalized = raw.charAt(0).toUpperCase() + raw.slice(1);
-                        return `${capitalized}: ${m.quantity || m.qty} ${m.unit}`;
-                      }).join(', ') 
-                      : 'None'
-                    }>
-                      <span className="font-semibold text-[#1F2937]">Materials:</span> {
-                        order.materials?.length > 0 ? 
+                      order.materials?.length > 0 ?
                         order.materials.map(m => {
                           const raw = m.materialName || m.name || '';
                           const capitalized = raw.charAt(0).toUpperCase() + raw.slice(1);
                           return `${capitalized}: ${m.quantity || m.qty} ${m.unit}`;
-                        }).join(', ') 
+                        }).join(', ')
                         : 'None'
+                    }>
+                      <span className="font-semibold text-[#1F2937]">Materials:</span> {
+                        order.materials?.length > 0 ?
+                          order.materials.map(m => {
+                            const raw = m.materialName || m.name || '';
+                            const capitalized = raw.charAt(0).toUpperCase() + raw.slice(1);
+                            return `${capitalized}: ${m.quantity || m.qty} ${m.unit}`;
+                          }).join(', ')
+                          : 'None'
                       }
                     </div>
                   </div>
@@ -103,7 +103,7 @@ export default function MyOrders() {
 
                 <div className="flex flex-col items-end gap-2 shrink-0">
                   <span className="text-xs text-[#6B7280] font-medium">{formatDate(order.createdAt)}</span>
-                  
+
                   <div className="flex items-center">
                     <StatusBadge status={order.status} />
                   </div>
