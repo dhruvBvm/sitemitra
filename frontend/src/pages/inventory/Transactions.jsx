@@ -90,7 +90,10 @@ export default function Transactions() {
                 statusText: item.status
               }));
             })
-            .catch(() => [])
+            .catch((e) => {
+              console.error('Error fetching requests:', e);
+              return [];
+            })
         );
       } else {
         promises.push(Promise.resolve([]));

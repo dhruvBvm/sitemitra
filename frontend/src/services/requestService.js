@@ -1,15 +1,9 @@
 import api from './api';
+import { useAuthStore } from '../store/authStore';
 
 export const requestService = {
   getAllRequests: async (params = {}) => {
-    const authStorage = localStorage.getItem('auth-storage');
-    let role = 'owner';
-    if (authStorage) {
-      try {
-        const parsed = JSON.parse(authStorage);
-        if (parsed?.state?.user?.role) role = parsed.state.user.role;
-      } catch (e) {}
-    }
+    const role = useAuthStore.getState().user?.role || 'owner';
     const url = role === 'manager' ? '/manager/requests' : (role === 'staff' ? '/staff/requests' : '/requests');
     const response = await api.get(url, { params });
     // Return the array of requests directly
@@ -17,14 +11,7 @@ export const requestService = {
   },
 
   getRequestById: async (id) => {
-    const authStorage = localStorage.getItem('auth-storage');
-    let role = 'owner';
-    if (authStorage) {
-      try {
-        const parsed = JSON.parse(authStorage);
-        if (parsed?.state?.user?.role) role = parsed.state.user.role;
-      } catch (e) {}
-    }
+    const role = useAuthStore.getState().user?.role || 'owner';
     let url = `/requests/${id}`;
     if (role === 'manager') url = `/manager/requests/${id}`;
     if (role === 'staff') url = `/staff/requests/${id}`;
@@ -34,28 +21,14 @@ export const requestService = {
   },
 
   approveRequest: async (id, data) => {
-    const authStorage = localStorage.getItem('auth-storage');
-    let role = 'owner';
-    if (authStorage) {
-      try {
-        const parsed = JSON.parse(authStorage);
-        if (parsed?.state?.user?.role) role = parsed.state.user.role;
-      } catch (e) {}
-    }
+    const role = useAuthStore.getState().user?.role || 'owner';
     const url = role === 'manager' ? `/manager/requests/${id}/approve` : `/requests/${id}/approve`;
     const response = await api.put(url, data);
     return response.data;
   },
 
   rejectRequest: async (id, data) => {
-    const authStorage = localStorage.getItem('auth-storage');
-    let role = 'owner';
-    if (authStorage) {
-      try {
-        const parsed = JSON.parse(authStorage);
-        if (parsed?.state?.user?.role) role = parsed.state.user.role;
-      } catch (e) {}
-    }
+    const role = useAuthStore.getState().user?.role || 'owner';
     const url = role === 'manager' ? `/manager/requests/${id}/reject` : `/requests/${id}/reject`;
     const response = await api.put(url, data);
     return response.data;
