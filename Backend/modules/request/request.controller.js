@@ -18,9 +18,10 @@ const generateRequestNo = async () => {
 
 // @desc    Create manual request (Staff)
 // @route   POST /api/staff/requests/manual
+// @route   POST /api/staff/requests/manual
 // @access  Private/Staff
 const createManualRequest = async (req, res) => {
-  const { siteId, materials, notes, priority, userNotes } = req.body;
+  const { siteId, materials, notes, priority, userNotes, requestDate } = req.body;
   if (!siteId) {
     return res.status(400).json({ message: 'Site is required' });
   }
@@ -72,7 +73,8 @@ const createManualRequest = async (req, res) => {
       userNotes: userNotes || notes || '',
       priority: priority || 'medium',
       status: initialStatus,
-      approvalHistory
+      approvalHistory,
+      ...(requestDate && { createdAt: new Date(requestDate) })
     });
 
     await request.save();
@@ -94,7 +96,7 @@ const createManualRequest = async (req, res) => {
 };
 
 const createPhotoRequest = async (req, res) => {
-  const { siteId, notes, userNotes, priority, materials } = req.body;
+  const { siteId, notes, userNotes, priority, materials, requestDate } = req.body;
   if (!siteId) {
     return res.status(400).json({ message: 'Site is required' });
   }
@@ -203,7 +205,8 @@ const createPhotoRequest = async (req, res) => {
       priority: priority || 'medium',
       status: initialStatus,
       materials: transformedMaterials,
-      approvalHistory
+      approvalHistory,
+      ...(requestDate && { createdAt: new Date(requestDate) })
     });
 
     await request.save();
