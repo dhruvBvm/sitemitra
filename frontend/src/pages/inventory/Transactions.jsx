@@ -155,11 +155,15 @@ export default function Transactions() {
         merged = merged.filter(item => item.transactionType === 'Request' && item.status === statusFilter);
       }
 
-      // Sort by createdAt descending (latest created at top)
+      // Sort by exact creation time using MongoDB ObjectId timestamp descending (latest at top)
       merged.sort((a, b) => {
-        const timeA = new Date(a.createdAt || a.date).getTime();
-        const timeB = new Date(b.createdAt || b.date).getTime();
-        return timeB - timeA;
+        const getTime = (item) => {
+          if (item._id && typeof item._id === 'string' && item._id.length === 24) {
+            return parseInt(item._id.substring(0, 8), 16) * 1000;
+          }
+          return new Date(item.createdAt || item.date).getTime();
+        };
+        return getTime(b) - getTime(a);
       });
       setCombinedData(merged);
       setCurrentPage(1);

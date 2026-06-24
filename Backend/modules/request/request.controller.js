@@ -318,7 +318,7 @@ const getRequestById = async (req, res) => {
 // @route   GET /api/manager/requests
 // @access  Private/Manager
 const getTeamRequests = async (req, res) => {
-  const { status, priority, siteId, page = 1, limit = 10 } = req.query;
+  const { status, priority, siteId, startDate, endDate, page = 1, limit = 10 } = req.query;
   const ownerId = req.user.role === 'owner' ? req.user._id : (req.user.ownerId || req.user.parentUserId);
 
   try {
