@@ -269,17 +269,14 @@ export default function Inventory() {
                         className="bg-slate-50 rounded-lg px-2 py-0.5 shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer group active:scale-[0.98]"
                         onClick={() => handleMaterialClick(mat._id)}
                       >
-                        <div className="flex justify-between items-start">
-                          <h3 className="font-bold text-sm text-[#1F2937] leading-tight group-hover:text-[#2563EB] transition-colors">{mat.materialName || mat.name}</h3>
-                          <span className="text-sm font-bold text-[#1F2937]">
-                            {mat.quantity}
-                          </span>
-                        </div>
-                        <div className="flex justify-between items-center mt-1">
-                          <p className="text-[6px] font-medium bg-[#10B981] text-white px-1 py-0.5 rounded shadow-sm">
-                            {mat.unit}
-                          </p>
-                          <div className="flex gap-2.5">
+                        <div className="flex justify-between items-center py-0.5">
+                          <div className="flex items-center gap-2 overflow-hidden mr-2">
+                            <h3 className="font-bold text-sm text-[#1F2937] leading-tight group-hover:text-[#2563EB] transition-colors truncate">{mat.materialName || mat.name}</h3>
+                            <p className="text-[6px] font-medium bg-[#10B981] text-white px-1 py-0.5 rounded shadow-sm shrink-0">
+                              {mat.unit}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -294,6 +291,9 @@ export default function Inventory() {
                             >
                               <Plus className="w-2.5 h-2.5 stroke-[3]" />
                             </button>
+                            <span className="text-sm font-bold text-[#1F2937] min-w-[20px] text-center">
+                              {mat.quantity}
+                            </span>
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
