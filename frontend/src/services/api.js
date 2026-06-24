@@ -11,7 +11,7 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    
+
     // Do not intercept 401s from the login or refresh endpoints
     if (originalRequest.url.includes('/auth/login') || originalRequest.url.includes('/auth/refresh')) {
       return Promise.reject(error);
