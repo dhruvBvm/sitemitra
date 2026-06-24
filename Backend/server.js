@@ -68,6 +68,7 @@ dotenv.config();
     const app = express();
 
     // Middleware
+    app.set('trust proxy', 1);
     app.use(express.json());
     const allowedOrigin = [
       "http://localhost:3000",
