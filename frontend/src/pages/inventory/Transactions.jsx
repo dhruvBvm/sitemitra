@@ -326,9 +326,9 @@ export default function Transactions() {
             />
           </div>
 
-          {/* Row 3: Search */}
-          <div className="w-full">
-            <div className="relative w-full">
+          {/* Row 3: Search and Apply Filters */}
+          <div className="flex gap-2 w-full">
+            <div className="relative flex-1">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Search className="h-4 w-4 text-slate-400" />
               </div>
@@ -340,15 +340,13 @@ export default function Transactions() {
                 className="w-full pl-9 pr-3 p-2 text-xs border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
               />
             </div>
+            <button
+              onClick={handleApplyFilters}
+              className="shrink-0 bg-[#2563EB] text-white px-4 py-2 rounded-md font-medium hover:bg-[#1d4ed8] transition-colors flex items-center justify-center text-xs"
+            >
+              Apply Filters
+            </button>
           </div>
-
-          {/* Row 4: Apply Filters Button */}
-          <button
-            onClick={handleApplyFilters}
-            className="w-full bg-[#2563EB] text-white px-4 py-2 rounded-md font-medium hover:bg-[#1d4ed8] transition-colors flex items-center justify-center text-[10px]"
-          >
-            Apply Filters
-          </button>
         </div>
       </div>
 
