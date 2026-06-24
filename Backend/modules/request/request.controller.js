@@ -298,7 +298,7 @@ const getRequestById = async (req, res) => {
       const isCreator = request.createdBy?._id?.toString() === user._id.toString();
       const isSiteManager = request.siteId?.managerId?.toString() === user._id.toString();
       const isAssignedSite = Array.isArray(user.assignedSites) && user.assignedSites.some(id => id.toString() === request.siteId?._id?.toString());
-      
+
       if (!isDirectManager && !isCreator && !isSiteManager && !isAssignedSite) {
         return res.status(403).json({ message: 'Access denied' });
       }
@@ -358,7 +358,7 @@ const getTeamRequests = async (req, res) => {
     }
     if (siteId) {
       if (!allowedSiteIds.some(id => id.toString() === siteId.toString())) {
-         return res.status(403).json({ message: 'Access denied to this site' });
+        return res.status(403).json({ message: 'Access denied to this site' });
       }
       filter = { ...filter, siteId: siteId };
       delete filter.$or;
@@ -403,7 +403,7 @@ const managerApproveRequest = async (req, res) => {
     const isDirectManager = request.createdBy?.parentUserId?.toString() === req.user._id.toString();
     const isSiteManager = request.siteId?.managerId?.toString() === req.user._id.toString();
     const isAssignedSite = Array.isArray(req.user.assignedSites) && req.user.assignedSites.some(id => id.toString() === request.siteId._id.toString());
-    
+
     if (!isDirectManager && !isSiteManager && !isAssignedSite) {
       return res.status(403).json({ message: 'Not authorized to approve this request' });
     }
@@ -452,7 +452,7 @@ const managerRejectRequest = async (req, res) => {
     const isDirectManager = request.createdBy?.parentUserId?.toString() === req.user._id.toString();
     const isSiteManager = request.siteId?.managerId?.toString() === req.user._id.toString();
     const isAssignedSite = Array.isArray(req.user.assignedSites) && req.user.assignedSites.some(id => id.toString() === request.siteId._id.toString());
-    
+
     if (!isDirectManager && !isSiteManager && !isAssignedSite) {
       return res.status(403).json({ message: 'Not authorized to reject this request' });
     }
@@ -631,7 +631,7 @@ const updateRequestStatus = async (req, res) => {
       const isCreator = request.createdBy?._id?.toString() === req.user._id.toString();
       const isSiteManager = request.siteId?.managerId?.toString() === req.user._id.toString();
       const isAssignedSite = Array.isArray(req.user.assignedSites) && req.user.assignedSites.some(id => id.toString() === request.siteId?._id?.toString());
-      
+
       if (!isDirectManager && !isCreator && !isSiteManager && !isAssignedSite) {
         return res.status(403).json({ message: 'Not authorized' });
       }

@@ -1,6 +1,10 @@
 import api from './api';
 
 export const managerService = {
+  getDashboardStats: async () => {
+    const response = await api.get('/manager/dashboard-stats');
+    return response.data.data;
+  },
   getSites: async () => {
     const response = await api.get('/manager/sites');
     return response.data.data;

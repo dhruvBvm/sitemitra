@@ -149,6 +149,51 @@ const getManagerSites = async (req, res) => {
   }
 };
 
+// @desc    Get dashboard stats for manager
+// @route   GET /api/manager/dashboard-stats
+// @access  Private/Manager
+const getDashboardStats = async (req, res) => {
+  try {
+    // 1. Team Size
+    const managerSites = await Site.find({
+      managerId: req.user._id,
+      ownerId: req.user.parentUserId
+    }).select('_id');
+    const mySiteIds = managerSites.map(s => s._id);
+
+    const teamSize = await User.countDocuments({
+      role: 'staff',
+      ownerId: req.user.parentUserId,
+      assignedSites: { $in: mySiteIds }
+    });
+
+    // 2. Pending Approvals
+    // Find staff managed by this manager
+    const teamMembers = await User.find({ parentUserId: req.user._id, ownerId: req.user.parentUserId }).select('_id');
+    const teamIds = teamMembers.map(u => u._id);
+    teamIds.push(req.user._id);
+    
+    const pendingApprovals = await Order.countDocuments({
+      ownerId: req.user.parentUserId,
+      status: 'pending_manager',
+      $or: [
+        { siteId: { $in: mySiteIds } },
+        { createdBy: { $in: teamIds } }
+      ]
+    });
+
+    // 3. Assigned Sites Count
+    const assignedSitesCount = managerSites.length;
+
+    res.json({
+      success: true,
+      data: { teamSize, pendingApprovals, assignedSitesCount }
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // @desc    Get team performance reports for manager
 // @route   GET /api/manager/reports/team
 // @access  Private/Manager
@@ -387,5 +432,6 @@ module.exports = {
   deleteTeamMember,
   assignSitesToTeamStaff,
   getAllOwnerStaff,
-  getTeamMemberById
+  getTeamMemberById,
+  getDashboardStats
 };

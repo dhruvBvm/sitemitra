@@ -10,7 +10,8 @@ const {
   deleteTeamMember,
   assignSitesToTeamStaff,
   getAllOwnerStaff,
-  getTeamMemberById
+  getTeamMemberById,
+  getDashboardStats
 } = require('../manager/manager.controller');
 const { assignManagerToSite } = require('../site/site.controller');
 const { getTeamRequests, managerApproveRequest, managerRejectRequest, updateRequestStatus, getRequestById } = require('../request/request.controller');
@@ -33,6 +34,9 @@ const router = express.Router();
 
 router.use(protect);
 router.use(roleCheck('manager'));
+
+// Dashboard Stats
+router.get('/dashboard-stats', getDashboardStats);
 
 // Sites
 /**

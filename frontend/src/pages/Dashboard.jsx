@@ -106,14 +106,12 @@ export default function Dashboard() {
           if (!active) return;
           fetchedSites = data.data || [];
           try {
-            const team = await managerService.getTeam();
-            const reqs = await requestService.getAllRequests();
-            const pendingCount = reqs.filter(r => r.status === 'pending_manager').length;
+            const managerStats = await managerService.getDashboardStats();
             if (!active) return;
             statsData = [
-              { label: 'APPROVALS', value: pendingCount, path: '/manager/transactions?status=pending_manager', icon: Clock, color: 'border-blue-100', iconColor: 'text-blue-600', labelColor: 'text-blue-600' },
-              { label: 'ASSIGNED SITES', value: fetchedSites.length, path: '/manager/sites', icon: Building, color: 'border-emerald-100', iconColor: 'text-[#10B981]', labelColor: 'text-[#10B981]' },
-              { label: 'TEAM SIZE', value: team?.length || 0, path: '/manager/team', icon: Users, color: 'border-orange-100', iconColor: 'text-[#F59E0B]', labelColor: 'text-[#F59E0B]' }
+              { label: 'TEAM COUNT', value: managerStats?.teamSize || 0, path: '/manager/team', icon: Users, color: 'border-orange-100', iconColor: 'text-[#F59E0B]', labelColor: 'text-[#F59E0B]' },
+              { label: 'PENDING APPROVALS', value: managerStats?.pendingApprovals || 0, path: '/manager/transactions?status=pending_manager', icon: Clock, color: 'border-blue-100', iconColor: 'text-blue-600', labelColor: 'text-blue-600' },
+              { label: 'ASSIGNED SITES', value: managerStats?.assignedSitesCount || 0, path: '/manager/sites', icon: Building, color: 'border-emerald-100', iconColor: 'text-[#10B981]', labelColor: 'text-[#10B981]' }
             ];
           } catch (e) { }
         } else if (user?.role === 'owner') {
