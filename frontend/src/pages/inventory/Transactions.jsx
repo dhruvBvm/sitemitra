@@ -152,8 +152,12 @@ export default function Transactions() {
         merged = merged.filter(item => item.transactionType === 'Request' && item.status === statusFilter);
       }
 
-      // Sort by date descending
-      merged.sort((a, b) => new Date(b.date) - new Date(a.date));
+      // Sort by createdAt descending (latest created at top)
+      merged.sort((a, b) => {
+        const timeA = new Date(a.createdAt || a.date).getTime();
+        const timeB = new Date(b.createdAt || b.date).getTime();
+        return timeB - timeA;
+      });
       setCombinedData(merged);
       setCurrentPage(1);
     } catch (error) {
