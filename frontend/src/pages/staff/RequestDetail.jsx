@@ -64,7 +64,7 @@ export default function StaffRequestDetail() {
   }
 
   return (
-    <div className="w-full max-w-[428px] mx-auto  bg-[#f8faff] relative pb-24 font-sans min-h-screen">
+    <div className="w-full max-w-[428px] mx-auto  bg-[#f8faff] relative pb-24 font-sans min-h-[100dvh]">
       {/* Sticky Header */}
       <div className="sticky top-0 left-0 right-0 mx-auto max-w-[428px] z-40 bg-white border-b border-[#E5E7EB] overflow-x-hidden">
         <div className="max-w-[428px] mx-auto px-4 py-2 flex flex-col gap-1.5 justify-between">

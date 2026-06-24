@@ -73,7 +73,7 @@ video {
 #root {
   width: 100%;
   max-width: 428px;
-  min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--bg-color);
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
   display: flex;
