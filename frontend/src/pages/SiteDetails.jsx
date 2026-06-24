@@ -283,7 +283,7 @@ export default function SiteDetails() {
                 onClick={() => navigate(`/sites/${site._id || site.siteId}/create-staff`)}
               >
                 <Plus className="w-5 h-5 mr-2" />
-                Create New Staff
+                New Staff
               </Button>
             </div>
           )}
