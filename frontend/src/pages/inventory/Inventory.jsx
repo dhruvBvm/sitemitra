@@ -276,7 +276,7 @@ export default function Inventory() {
                           </span>
                         </div>
                         <div className="flex justify-between items-center mt-1">
-                          <p className="text-[8px] font-medium bg-[#10B981] text-white px-1 py-0.5 rounded shadow-sm">
+                          <p className="text-[6px] font-medium bg-[#10B981] text-white px-1 py-0.5 rounded shadow-sm">
                             {mat.unit}
                           </p>
                           <div className="flex gap-2.5">
