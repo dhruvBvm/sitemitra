@@ -150,7 +150,7 @@ export default function Materials() {
                     const isActive = mat.status !== 'inactive';
                     if (isActive) {
                       return (
-                        <div key={mat._id} className="bg-white rounded-lg px-2 py-1.5 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center justify-between gap-2">
+                        <div key={mat._id} className="bg-white rounded-lg px-2 py-1 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center justify-between gap-2">
                           <div className="flex flex-col min-w-0 flex-1">
                             <span className="text-sm font-bold text-[#1F2937] leading-tight truncate capitalize">{mat.materialName || mat.name}</span>
                           </div>
@@ -160,17 +160,17 @@ export default function Materials() {
                               <div className="flex items-center gap-[6px]">
                                 <button
                                   onClick={() => navigate(`/materials/edit/${mat._id}`)}
-                                  className="p-1.5 flex items-center justify-center bg-[#f8faff] text-[#2563EB] rounded-[6px] hover:bg-blue-100 transition-colors border border-[#E5E7EB]"
+                                  className="p-1 flex items-center justify-center bg-[#f8faff] text-[#2563EB] rounded-[6px] hover:bg-blue-100 transition-colors border border-[#E5E7EB]"
                                   title="Edit"
                                 >
-                                  <Pencil className="w-4 h-4" />
+                                  <Pencil className="w-3.5 h-3.5" />
                                 </button>
                                 <button
                                   onClick={() => toggleStatus(mat)}
-                                  className="p-1.5 flex items-center justify-center bg-[#f8faff] text-[#EF4444] rounded-[6px] hover:bg-red-50 transition-colors border border-[#E5E7EB]"
+                                  className="p-1 flex items-center justify-center bg-[#f8faff] text-[#EF4444] rounded-[6px] hover:bg-red-50 transition-colors border border-[#E5E7EB]"
                                   title="Deactivate"
                                 >
-                                  <Ban className="w-4 h-4" />
+                                  <Ban className="w-3.5 h-3.5" />
                                 </button>
                               </div>
                             )}
@@ -179,7 +179,7 @@ export default function Materials() {
                       );
                     } else {
                       return (
-                        <div key={mat._id} className="bg-white rounded-lg px-2 py-1.5 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center justify-between gap-2 opacity-75">
+                        <div key={mat._id} className="bg-white rounded-lg px-2 py-1 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center justify-between gap-2 opacity-75">
                           <div className="flex flex-col min-w-0 flex-1">
                             <span className="text-sm font-bold text-[#1F2937] leading-tight truncate capitalize">{mat.materialName || mat.name}</span>
                           </div>
@@ -189,10 +189,10 @@ export default function Materials() {
                               <div className="flex items-center gap-[6px]">
                                 <button
                                   onClick={() => toggleStatus(mat)}
-                                  className="p-1.5 flex items-center justify-center bg-[#f8faff] text-[#10B981] rounded-[6px] hover:bg-green-50 transition-colors border border-[#E5E7EB]"
+                                  className="p-1 flex items-center justify-center bg-[#f8faff] text-[#10B981] rounded-[6px] hover:bg-green-50 transition-colors border border-[#E5E7EB]"
                                   title="Activate"
                                 >
-                                  <CheckCircle className="w-4 h-4" />
+                                  <CheckCircle className="w-3.5 h-3.5" />
                                 </button>
                               </div>
                             )}
