@@ -49,7 +49,7 @@ export default function Login() {
             Sign in to access your ERP dashboard
           </p>
         </div>
-        
+
         <form className="mt-8 space-y-6 animate-in fade-in duration-1000 delay-150" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4">
             <div>
@@ -97,10 +97,7 @@ export default function Login() {
               Sign In
             </Button>
           </div>
-          
-          <div className="text-center text-xs text-[#6B7280] mt-4">
-            <p>Demo accounts: owner@ / manager@ / staff@ (any password)</p>
-          </div>
+
         </form>
       </div>
     </div>

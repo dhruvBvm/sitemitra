@@ -228,13 +228,22 @@ const createPhotoRequest = async (req, res) => {
 // @route   GET /api/staff/requests
 // @access  Private/Staff
 const getMyRequests = async (req, res) => {
-  const { status, priority, page = 1, limit = 10 } = req.query;
+  const { status, priority, startDate, endDate, page = 1, limit = 10 } = req.query;
   const ownerId = req.user.role === 'owner' ? req.user._id : (req.user.ownerId || req.user.parentUserId);
 
   try {
     const filter = { createdBy: req.user._id, ownerId };
     if (status) filter.status = status;
     if (priority) filter.priority = priority;
+    if (startDate || endDate) {
+      filter.createdAt = {};
+      if (startDate) filter.createdAt.$gte = new Date(startDate);
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        filter.createdAt.$lte = end;
+      }
+    }
 
     const pageNum = parseInt(page, 10);
     const limitNum = parseInt(limit, 10);
@@ -335,6 +344,15 @@ const getTeamRequests = async (req, res) => {
 
     if (status) filter.status = status;
     if (priority) filter.priority = priority;
+    if (startDate || endDate) {
+      filter.createdAt = {};
+      if (startDate) filter.createdAt.$gte = new Date(startDate);
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        filter.createdAt.$lte = end;
+      }
+    }
     if (siteId) {
       if (!allowedSiteIds.some(id => id.toString() === siteId.toString())) {
          return res.status(403).json({ message: 'Access denied to this site' });
@@ -480,7 +498,11 @@ const getAllRequests = async (req, res) => {
     if (startDate || endDate) {
       filter.createdAt = {};
       if (startDate) filter.createdAt.$gte = new Date(startDate);
-      if (endDate) filter.createdAt.$lte = new Date(endDate);
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        filter.createdAt.$lte = end;
+      }
     }
 
     const pageNum = parseInt(page, 10);

@@ -350,12 +350,12 @@ exports.listReceivedEntries = async (req, res) => {
     }
 
     if (startDate || endDate) {
-      filter.createdAt = {};
-      if (startDate) filter.createdAt.$gte = new Date(startDate);
+      filter.date = {};
+      if (startDate) filter.date.$gte = new Date(startDate);
       if (endDate) {
         const end = new Date(endDate);
         end.setHours(23, 59, 59, 999);
-        filter.createdAt.$lte = end;
+        filter.date.$lte = end;
       }
     }
     
@@ -541,12 +541,12 @@ exports.listUsedEntries = async (req, res) => {
     }
 
     if (startDate || endDate) {
-      filter.createdAt = {};
-      if (startDate) filter.createdAt.$gte = new Date(startDate);
+      filter.date = {};
+      if (startDate) filter.date.$gte = new Date(startDate);
       if (endDate) {
         const end = new Date(endDate);
         end.setHours(23, 59, 59, 999);
-        filter.createdAt.$lte = end;
+        filter.date.$lte = end;
       }
     }
     

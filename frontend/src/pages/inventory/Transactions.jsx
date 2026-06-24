@@ -186,7 +186,7 @@ export default function Transactions() {
       end = today.toISOString().split('T')[0];
     } else if (range === 'Last Month') {
       const lastMonth = new Date(today);
-      lastMonth.setMonth(lastMonth.getMonth() - 1);
+      lastMonth.setDate(lastMonth.getDate() - 30);
       start = lastMonth.toISOString().split('T')[0];
       end = today.toISOString().split('T')[0];
     }
