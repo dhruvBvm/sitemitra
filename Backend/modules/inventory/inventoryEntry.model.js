@@ -20,7 +20,7 @@ const InventoryEntrySchema = new mongoose.Schema({
   challanNo: { type: String },    // specific to received
   vehicleNo: { type: String },    // specific to received
   imageUrls: { type: [String], default: [] },
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   createdAt: { type: Date, default: Date.now }
 });
 

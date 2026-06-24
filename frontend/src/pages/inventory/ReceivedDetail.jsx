@@ -126,6 +126,12 @@ export default function ReceivedDetail() {
               <Truck className="w-4 h-4 text-slate-400" /> {entry.vehicleNo || '-'}
             </p>
           </div>
+          <div>
+            <p className="text-xs font-bold text-[#1F2937] uppercase tracking-wider mb-1">Created By</p>
+            <p className="text-sm font-semibold text-[#1F2937] flex items-center gap-1">
+              {entry.createdBy?.name || '-'}
+            </p>
+          </div>
         </div>
       </div>
 

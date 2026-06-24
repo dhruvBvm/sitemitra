@@ -109,6 +109,12 @@ export default function StaffRequestDetail() {
                 {request.siteId?.siteName || '-'}
               </p>
             </div>
+            <div>
+              <p className="text-xs font-bold text-[#1F2937] uppercase tracking-wider mb-1">Created By</p>
+              <p className="text-sm font-semibold text-[#1F2937] flex items-center gap-1">
+                {request.createdBy?.name || '-'}
+              </p>
+            </div>
           </div>
         </div>
 
