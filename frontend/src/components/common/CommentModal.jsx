@@ -29,7 +29,7 @@ export default function CommentModal({ isOpen, onClose, onConfirm, title, confir
             onChange={(e) => setComment(e.target.value)}
           />
         </div>
-        <div className="flex gap-3 pt-2">
+        <div className="flex justify-end gap-2 pt-3 border-t border-[#E5E7EB] mt-4">
           <Button 
             type="button" 
             variant="outline" 

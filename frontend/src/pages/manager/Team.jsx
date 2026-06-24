@@ -5,13 +5,14 @@ import { managerService } from '../../services/manager';
 import toast from 'react-hot-toast';
 import StatusBadge from '../../components/common/StatusBadge';
 import Button from '../../components/common/Button';
-import { Plus } from 'lucide-react';
+import { Plus, Pencil, Ban, CheckCircle } from 'lucide-react';
 import Modal from '../../components/common/Modal';
 import ConfirmModal from '../../components/common/ConfirmModal';
 import { useForm } from 'react-hook-form';
 import SiteMultiSelect from '../../components/common/SiteMultiSelect';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useNavigate } from 'react-router-dom';
 
 const createStaffSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
@@ -27,6 +28,7 @@ const createStaffSchema = yup.object().shape({
 });
 
 export default function Team() {
+  const navigate = useNavigate();
   const user = useAuthStore(state => state.user);
   const [team, setTeam] = useState([]);
   const [sites, setSites] = useState([]);
@@ -129,16 +131,19 @@ export default function Team() {
   if (loading) return <Loader size="lg" className="mt-20" />;
 
   return (
-    <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-1">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold text-[#1F2937] tracking-tight">My Team</h1>
-        <Button className="flex items-center py-2.5 px-2 rounded-md" onClick={() => setIsCreateModalOpen(true)}>
-          <Plus className="w-4 h-4 mr-2" />
-          Add Staff
-        </Button>
+    <div className="flex flex-col h-full max-w-[428px] mx-auto min-h-0">
+      <div className="px-4 pt-3 flex-shrink-0">
+        <div className="flex justify-between items-center mb-4 mt-2">
+          <h1 className="text-2xl font-bold text-[#1F2937] tracking-tight">My Team</h1>
+          <Button className="flex items-center py-2.5 px-2 rounded-md" onClick={() => navigate('/manager/team/create-staff')}>
+            <Plus className="w-4 h-4 mr-2" />
+            Add Staff
+          </Button>
+        </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="flex-1 overflow-y-auto px-4 pb-4">
+        <div className="space-y-4">
         {team.length === 0 ? (
           <div className="text-center py-10 bg-[#f8faff] rounded-lg border border-dashed border-[#E5E7EB]">
             <p className="text-sm font-medium text-[#6B7280]">No team members found.</p>
@@ -146,127 +151,50 @@ export default function Team() {
         ) : (
           <div className="flex flex-col space-y-2">
             {team.map((member) => (
-              <div key={member._id} className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow relative flex flex-col gap-1.5">
+              <div key={member._id} onClick={() => navigate(`/users/${member._id}`)} className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer active:scale-[0.98] relative flex flex-col gap-1.5">
                 <div className="flex justify-between items-start">
-                  <div>
+                  <div className="flex-1 min-w-0 pr-2">
                     <h3 className="text-base font-bold text-[#1F2937] leading-tight">{member.name}</h3>
                     <p className="text-sm font-medium text-[#6B7280]">{member.email}</p>
+                    <p className="text-sm font-medium text-[#6B7280]">Mobile: {member.mobile}</p>
                   </div>
-                  <StatusBadge status={member.status} />
-                </div>
-                <div className="text-sm font-medium text-[#6B7280]">
-                  <span className="font-medium text-[#6B7280]">Mobile:</span> {member.mobile}
-                </div>
-                <div className="flex flex-col border-t border-slate-100 pt-1.5 mt-0.5 gap-2">
-                  <div className="text-sm font-normal text-[#1F2937]">
-                    <span className="font-medium text-[#6B7280]">Sites:</span> {member.assignedSites?.length || 0}
-                  </div>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="text-[#6B7280] border-[#E5E7EB] hover:bg-[#f8faff] px-2 py-2 rounded-md font-medium"
-                      onClick={() => window.location.href = `/manager/team/edit/${member._id}`}
-                    >
-                      Assign Sites
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="text-[#2563EB] border-[#2563EB] hover:bg-blue-50 px-2 py-2 rounded-md font-medium"
-                      onClick={() => window.location.href = `/users/${member._id}`}
-                    >
-                      View Profile
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="text-[#2563EB] border-[#2563EB] hover:bg-blue-50 px-2 py-2 rounded-md font-medium"
-                      onClick={() => {
-                        window.location.href = `/manager/team/edit/${member._id}`;
-                      }}
-                    >
-                      Edit
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="text-[#EF4444] border-[#EF4444] hover:bg-red-50 px-2 py-2 rounded-md font-medium" 
-                      onClick={async () => {
-                        setStaffToDeactivate(member);
-                      }}
-                    >
-                      Delete
-                    </Button>
+                  
+                  {/* Top Right Controls */}
+                  <div className="flex flex-col items-end gap-[8px] py-1 shrink-0">
+                    <StatusBadge status={member.status} />
+                    <div className="flex gap-[6px]">
+                      <button onClick={(e) => { e.stopPropagation(); navigate(`/manager/team/edit/${member._id}`); }} className="p-2 rounded-[6px] flex items-center justify-center bg-[#f8faff] text-[#2563EB] hover:bg-blue-100 transition-colors border border-[#E5E7EB]">
+                      <Pencil className="w-[18px] h-[18px]" />
+                    </button>
+                    {member.status !== 'inactive' ? (
+                      <button onClick={(e) => { e.stopPropagation(); setStaffToDeactivate(member); }} className="p-2 rounded-[6px] flex items-center justify-center bg-[#f8faff] text-[#EF4444] hover:bg-red-50 transition-colors border border-[#E5E7EB]">
+                        <Ban className="w-[18px] h-[18px]" />
+                      </button>
+                    ) : (
+                      <button onClick={async (e) => { 
+                        e.stopPropagation(); 
+                        try {
+                          await managerService.updateStaffStatus(member._id, 'active');
+                          toast.success('Staff activated');
+                          fetchTeam();
+                        } catch(err) {
+                          toast.error('Failed to activate staff');
+                        }
+                      }} className="p-2 rounded-[6px] flex items-center justify-center bg-[#f8faff] text-[#10B981] hover:bg-green-50 transition-colors border border-[#E5E7EB]">
+                        <CheckCircle className="w-[18px] h-[18px]" />
+                      </button>
+                    )}
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
         )}
+        </div>
       </div>
 
 
-
-      {/* Create Modal */}
-      <Modal
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        title="Add Staff Member"
-      >
-        <form onSubmit={handleCreateSubmit(onCreateSubmit)} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-[#1F2937]">Name *</label>
-            <input
-              type="text"
-              {...registerCreate('name')}
-              className="mt-1 block w-full rounded-md border-[#E5E7EB] shadow-sm focus:border-[#2563EB] focus:ring-[#2563EB] sm:text-sm p-2 border"
-            />
-            {errorsCreate.name && <p className="mt-1 text-sm text-[#EF4444] font-medium">{errorsCreate.name.message}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-[#1F2937]">Email *</label>
-            <input
-              type="email"
-              {...registerCreate('email')}
-              className="mt-1 block w-full rounded-md border-[#E5E7EB] shadow-sm focus:border-[#2563EB] focus:ring-[#2563EB] sm:text-sm p-2 border"
-            />
-            {errorsCreate.email && <p className="mt-1 text-sm text-[#EF4444] font-medium">{errorsCreate.email.message}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-[#1F2937]">Mobile *</label>
-            <input
-              type="text"
-              {...registerCreate('mobile')}
-              className="mt-1 block w-full rounded-md border-[#E5E7EB] shadow-sm focus:border-[#2563EB] focus:ring-[#2563EB] sm:text-sm p-2 border"
-            />
-            {errorsCreate.mobile && <p className="mt-1 text-sm text-[#EF4444] font-medium">{errorsCreate.mobile.message}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-[#1F2937]">Password *</label>
-            <input
-              type="password"
-              {...registerCreate('password')}
-              className="mt-1 block w-full rounded-md border-[#E5E7EB] shadow-sm focus:border-[#2563EB] focus:ring-[#2563EB] sm:text-sm p-2 border"
-            />
-            {errorsCreate.password && <p className="mt-1 text-sm text-[#EF4444] font-medium">{errorsCreate.password.message}</p>}
-          </div>
-
-          <SiteMultiSelect role="manager" register={registerCreate} error={errorsCreate.assignedSites} availableSites={sites} />
-
-          <div className="pt-4 flex justify-end space-x-3">
-            <Button variant="outline" type="button" onClick={() => setIsCreateModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isCreateSubmitting}>
-              {isCreateSubmitting ? 'Creating...' : 'Create Staff'}
-            </Button>
-          </div>
-        </form>
-      </Modal>
 
       <ConfirmModal
         isOpen={!!staffToDeactivate}

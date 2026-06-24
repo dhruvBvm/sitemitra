@@ -64,7 +64,7 @@ export default function RequestDetail() {
 
   if (loading) {
     return (
-      <div className="w-full max-w-[428px] mx-auto min-h-screen bg-[#f8faff] relative pb-24">
+      <div className="w-full max-w-[428px] mx-auto  bg-[#f8faff] relative pb-24">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <button onClick={() => navigate(-1)} className="flex items-center justify-center w-[44px] h-[44px] bg-blue-50 text-[#2563EB] rounded-full hover:bg-blue-100 transition-colors shrink-0">
@@ -87,7 +87,7 @@ export default function RequestDetail() {
 
   if (!request) {
     return (
-      <div className="w-full max-w-[428px] mx-auto min-h-screen bg-[#f8faff] relative pb-24">
+      <div className="w-full max-w-[428px] mx-auto  bg-[#f8faff] relative pb-24">
         <div className="flex items-center mb-4">
           <button onClick={() => navigate(-1)} className="flex items-center justify-center w-[44px] h-[44px] bg-blue-50 text-[#2563EB] rounded-full hover:bg-blue-100 transition-colors">
             <ArrowLeft className="w-5 h-5" />
@@ -99,13 +99,13 @@ export default function RequestDetail() {
   }
 
   const showApproveReject = (user?.role === 'manager' && request.status === 'pending_manager') ||
-                            (user?.role === 'owner' && (request.status === 'pending_admin' || request.status === 'pending_owner'));
+    (user?.role === 'owner' && (request.status === 'pending_admin' || request.status === 'pending_owner'));
 
   return (
-    <div className="w-full max-w-[428px] mx-auto min-h-screen bg-[#f8faff] relative pb-24 font-sans">
+    <div className="w-full max-w-[428px] mx-auto  bg-[#f8faff] relative pb-24 font-sans">
       {/* Sticky Header */}
-      <div className="w-full bg-white shadow-sm sticky top-[56px] z-30 border-b border-gray-200">
-        <div className="max-w-[428px] mx-auto px-3 py-2 flex flex-col gap-1.5 justify-between">
+      <div className="sticky top-0 left-0 right-0 mx-auto max-w-[428px] z-40 bg-white border-b border-[#E5E7EB] overflow-x-hidden">
+        <div className="max-w-[428px] mx-auto px-4 py-2 flex flex-col gap-1.5 justify-between">
           {/* FULL-WIDTH STICKY HEADER – DO NOT REMOVE OR WRAP IN CONTAINER */}
           <div className="flex items-center gap-2">
             <button onClick={() => navigate(-1)} className="p-1.5 bg-[#f8faff] text-[#6B7280] rounded-full hover:bg-[#F3F4F6] transition-colors shrink-0">
@@ -118,163 +118,164 @@ export default function RequestDetail() {
           </div>
         </div>
       </div>
-      
+
       <div className="max-w-[428px] mx-auto px-4 space-y-4 pt-4">
 
-      {showApproveReject && (
-        <div className="fixed bottom-[64px] left-0 right-0 bg-white border-t border-[#E5E7EB] p-2 flex justify-between gap-2 z-40 max-w-[428px] mx-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-          <Button className="flex-1 bg-[#2563EB] hover:bg-[#2563EB] text-white py-2.5 px-2 rounded-md" onClick={() => openModal('approve')}>
-            Approve
-          </Button>
-          <Button className="flex-1 text-[#EF4444] border-[#EF4444] hover:bg-red-50 py-2.5 px-2 rounded-md" variant="outline" onClick={() => openModal('reject')}>
-            Reject
-          </Button>
-        </div>
-      )}
+        {showApproveReject && (
+          <div className="fixed bottom-[56px] left-0 right-0 z-40 flex justify-center pointer-events-none">
+            <div className="w-full bg-white border-t border-[#E5E7EB] px-3 pt-3 pb-0 flex justify-between gap-3 pointer-events-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]" style={{ maxWidth: '428px' }}>
+              <Button className="flex-1 bg-[#2563EB] hover:bg-[#2563EB] text-white py-3 px-2 rounded-md font-bold text-sm" onClick={() => openModal('approve')}>
+                Approve
+              </Button>
+              <Button className="flex-1 text-[#EF4444] border-[#EF4444] hover:bg-red-50 py-3 px-2 rounded-md font-bold text-sm" variant="outline" onClick={() => openModal('reject')}>
+                Reject
+              </Button>
+            </div>
+          </div>
+        )}
 
-      <div className="bg-white rounded-md shadow-sm border border-transparent p-5 space-y-4">
-        <div className="flex justify-between items-start">
-          <StatusBadge status={request.status} />
-          {request.priority && (
-            <span className={`px-2 py-1 rounded text-xs font-bold uppercase tracking-wider ${
-              request.priority.toLowerCase() === 'high' ? 'bg-red-100 text-[#EF4444]' :
-              request.priority.toLowerCase() === 'medium' ? 'bg-orange-100 text-orange-700' :
-              'bg-blue-100 text-blue-700'
-            }`}>
-              {request.priority} Priority
-            </span>
+        <div className="bg-white rounded-md shadow-sm border border-transparent p-5 space-y-4">
+          <div className="flex justify-between items-start">
+            <StatusBadge status={request.status} />
+            {request.priority && (
+              <span className={`px-2 py-1 rounded text-xs font-bold uppercase tracking-wider ${request.priority.toLowerCase() === 'high' ? 'bg-red-100 text-[#EF4444]' :
+                request.priority.toLowerCase() === 'medium' ? 'bg-orange-100 text-orange-700' :
+                  'bg-blue-100 text-blue-700'
+                }`}>
+                {request.priority} Priority
+              </span>
+            )}
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 pt-2">
+            <div>
+              <p className="text-xs font-bold text-[#1F2937] uppercase tracking-wider mb-1">Date</p>
+              <p className="text-sm font-semibold text-[#1F2937] flex items-center gap-1">
+                <Calendar className="w-4 h-4 text-slate-400" /> {formatDate(request.createdAt)}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-bold text-[#1F2937] uppercase tracking-wider mb-1">Site</p>
+              <p className="text-sm font-semibold text-[#1F2937] flex items-center gap-1">
+                {request.siteId?.siteName || '-'}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-bold text-[#1F2937] uppercase tracking-wider mb-1">Created By</p>
+              <p className="text-sm font-semibold text-[#1F2937] flex items-center gap-1">
+                <User className="w-4 h-4 text-slate-400" /> {request.createdBy?.name || '-'}
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <div className="bg-white rounded-md shadow-sm border border-transparent p-5">
+          <h2 className="text-sm font-bold text-green-800 uppercase tracking-wider mb-4">Notes</h2>
+          {request.userNotes || request.notes ? (
+            <div className="space-y-2">
+              {request.userNotes && (
+                <div>
+                  <p className="text-xs font-bold text-[#1F2937] uppercase tracking-wider mb-1">Creator Notes</p>
+                  <p className="text-sm text-[#1F2937] bg-[#f8faff] p-2 rounded-md flex items-start gap-2 border border-transparent">
+                    <AlignLeft className="w-4 h-4 text-slate-400 mt-0.5 shrink-0" />
+                    <span>{request.userNotes}</span>
+                  </p>
+                </div>
+              )}
+              {request.notes && (
+                <div>
+                  <p className="text-xs font-bold text-[#1F2937] uppercase tracking-wider mb-1">Additional Notes</p>
+                  <p className="text-sm text-[#1F2937] bg-[#f8faff] p-2 rounded-md flex items-start gap-2 border border-transparent">
+                    <AlignLeft className="w-4 h-4 text-slate-400 mt-0.5 shrink-0" />
+                    <span>{request.notes}</span>
+                  </p>
+                </div>
+              )}
+            </div>
+          ) : (
+            <p className="text-sm text-[#6B7280] italic bg-[#f8faff] p-2 rounded-md border border-transparent text-center">No notes provided</p>
           )}
         </div>
 
-        <div className="grid grid-cols-2 gap-2 pt-2">
-          <div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Date</p>
-            <p className="text-sm font-semibold text-[#1F2937] flex items-center gap-1">
-              <Calendar className="w-4 h-4 text-slate-400" /> {formatDate(request.createdAt)}
-            </p>
-          </div>
-          <div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Site</p>
-            <p className="text-sm font-semibold text-[#1F2937] flex items-center gap-1">
-              {request.siteId?.siteName || '-'}
-            </p>
-          </div>
-          <div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Created By</p>
-            <p className="text-sm font-semibold text-[#1F2937] flex items-center gap-1">
-              <User className="w-4 h-4 text-slate-400" /> {request.createdBy?.name || '-'}
-            </p>
-          </div>
-        </div>
-
-      </div>
-
-      <div className="bg-white rounded-md shadow-sm border border-transparent p-5">
-        <h2 className="text-sm font-bold text-[#1F2937] uppercase tracking-wider mb-4">Notes</h2>
-        {request.userNotes || request.notes ? (
-          <div className="space-y-2">
-            {request.userNotes && (
-              <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Creator Notes</p>
-                <p className="text-sm text-[#1F2937] bg-[#f8faff] p-2 rounded-md flex items-start gap-2 border border-transparent">
-                  <AlignLeft className="w-4 h-4 text-slate-400 mt-0.5 shrink-0" />
-                  <span>{request.userNotes}</span>
-                </p>
-              </div>
-            )}
-            {request.notes && (
-              <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Additional Notes</p>
-                <p className="text-sm text-[#1F2937] bg-[#f8faff] p-2 rounded-md flex items-start gap-2 border border-transparent">
-                  <AlignLeft className="w-4 h-4 text-slate-400 mt-0.5 shrink-0" />
-                  <span>{request.notes}</span>
-                </p>
-              </div>
-            )}
-          </div>
-        ) : (
-          <p className="text-sm text-[#6B7280] italic bg-[#f8faff] p-2 rounded-md border border-transparent text-center">No notes provided</p>
-        )}
-      </div>
-
-      <div className="bg-white rounded-md shadow-sm border border-transparent p-5">
-        <h2 className="text-sm font-bold text-[#1F2937] uppercase tracking-wider mb-4">Materials Requested</h2>
-        <div className="space-y-4">
-          {request.materials?.map((mat, i) => (
-            <div key={i} className="flex flex-col p-2 bg-[#f8faff] rounded-md border border-transparent">
-              <div className="flex justify-between items-center mb-2">
-                <span className="capitalize text-sm font-bold text-[#1F2937]">{mat.materialName || mat.name}</span>
-                <span className="text-sm font-bold text-[#2563EB] bg-blue-50 px-2 py-0.5 rounded">{mat.quantity || mat.qty} <span className="text-xs text-[#2563EB] font-medium">{mat.unit}</span></span>
-              </div>
-              
-              <div className="mt-2">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Images</span>
-                {mat.imageUrls && mat.imageUrls.length > 0 ? (
-                  <div className="flex flex-wrap gap-2">
-                    {mat.imageUrls.map((img, idx) => (
-                      <a key={idx} href={img} target="_blank" rel="noreferrer" className="w-16 h-16 rounded border border-transparent overflow-hidden hover:scale-105 transition-transform block">
-                        <img src={img} alt="material" className="w-full h-full object-cover" />
-                      </a>
-                    ))}
-                  </div>
-                ) : (
-                  <span className="text-xs text-slate-400 italic">No images</span>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {request.imageUrls && request.imageUrls.length > 0 && (
         <div className="bg-white rounded-md shadow-sm border border-transparent p-5">
-          <h2 className="text-sm font-bold text-[#1F2937] uppercase tracking-wider mb-4">Order Documents</h2>
-          <div className="flex flex-wrap gap-2">
-            {request.imageUrls.map((img, idx) => (
-              <a key={idx} href={img} target="_blank" rel="noreferrer" className="w-20 h-20 rounded-md border border-transparent overflow-hidden hover:scale-105 transition-transform block">
-                <img src={img} alt="attachment" className="w-full h-full object-cover" />
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
-
-      <div className="bg-white rounded-md shadow-sm border border-transparent p-5">
-        <h2 className="text-sm font-bold text-[#1F2937] uppercase tracking-wider mb-4">Approval History</h2>
-        {request.approvalHistory && request.approvalHistory.length > 0 ? (
-          <div className="space-y-0">
-            {request.approvalHistory.map((h, i) => (
-              <div key={i} className="flex gap-2 items-start">
-                <div className="flex flex-col items-center mt-1.5 self-stretch">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#2563EB] ring-4 ring-blue-50 shrink-0"></div>
-                  {i !== request.approvalHistory.length - 1 && <div className="w-px h-full bg-[#F3F4F6] mt-1.5 min-h-[20px]"></div>}
+          <h2 className="text-sm font-bold text-green-800 uppercase tracking-wider mb-4">Materials Requested</h2>
+          <div className="space-y-4">
+            {request.materials?.map((mat, i) => (
+              <div key={i} className="flex flex-col p-3 rounded-lg border border-slate-100 bg-gray-100">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="capitalize text-lg font-bold text-[#1F2937]">{mat.materialName || mat.name}</span>
+                  <span className="text-sm font-bold text-white bg-green-700 px-2 py-0.5 rounded">{mat.quantity || mat.qty} <span className="text-xs text-green-100 font-medium">{mat.unit}</span></span>
                 </div>
-                <div className="flex-1 pb-4">
-                  <div className="bg-[#f8faff] border border-transparent rounded-md p-2 w-full">
-                    <div className="flex justify-between items-start mb-1">
-                      <div className="font-bold text-[#1F2937] text-sm capitalize">{h.action?.replace(/_/g, ' ')}</div>
-                      <time className="text-xs font-medium text-[#6B7280] shrink-0 ml-2">{formatDate(h.timestamp || h.date)}</time>
+
+                <div className="mt-2">
+                  <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-2 block">Images</span>
+                  {mat.imageUrls && mat.imageUrls.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {mat.imageUrls.map((img, idx) => (
+                        <a key={idx} href={img} target="_blank" rel="noreferrer" className="w-16 h-16 rounded border border-transparent overflow-hidden hover:scale-105 transition-transform block">
+                          <img src={img} alt="material" className="w-full h-full object-cover" />
+                        </a>
+                      ))}
                     </div>
-                    {h.comment && <div className="text-sm text-[#6B7280] my-1.5">{h.comment}</div>}
-                    <div className="text-xs font-medium text-[#6B7280]">- {h.by?.name || h.author || 'System'} {h.by?.role && `(${h.by.role})`}</div>
-                  </div>
+                  ) : (
+                    <span className="text-xs text-slate-400 italic">No images</span>
+                  )}
                 </div>
               </div>
             ))}
           </div>
-        ) : (
-          <p className="text-sm text-[#6B7280] italic bg-[#f8faff] p-2 rounded-md border border-transparent text-center">Pending approvals</p>
-        )}
-      </div>
+        </div>
 
-      <CommentModal 
-        isOpen={modalOpen} 
-        onClose={() => setModalOpen(false)} 
-        onConfirm={handleAction} 
-        title={modalConfig.title} 
-        confirmText={modalConfig.confirmText} 
-        actionLoading={actionLoading} 
-      />
+        {request.imageUrls && request.imageUrls.length > 0 && (
+          <div className="bg-white rounded-md shadow-sm border border-transparent p-5">
+            <h2 className="text-sm font-bold text-green-800 uppercase tracking-wider mb-4">Order Documents</h2>
+            <div className="flex flex-wrap gap-2">
+              {request.imageUrls.map((img, idx) => (
+                <a key={idx} href={img} target="_blank" rel="noreferrer" className="w-20 h-20 rounded-md border border-transparent overflow-hidden hover:scale-105 transition-transform block">
+                  <img src={img} alt="attachment" className="w-full h-full object-cover" />
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="bg-white rounded-md shadow-sm border border-transparent p-5">
+          <h2 className="text-sm font-bold text-green-800 uppercase tracking-wider mb-4">Approval History</h2>
+          {request.approvalHistory && request.approvalHistory.length > 0 ? (
+            <div className="space-y-0">
+              {request.approvalHistory.map((h, i) => (
+                <div key={i} className="flex gap-2 items-start">
+                  <div className="flex flex-col items-center mt-1.5 self-stretch">
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#2563EB] ring-4 ring-blue-50 shrink-0"></div>
+                    {i !== request.approvalHistory.length - 1 && <div className="w-px h-full bg-[#F3F4F6] mt-1.5 min-h-[20px]"></div>}
+                  </div>
+                  <div className="flex-1 pb-4">
+                    <div className="bg-[#f8faff] border border-transparent rounded-md p-2 w-full">
+                      <div className="flex justify-between items-start mb-1">
+                        <div className="font-bold text-[#1F2937] text-sm capitalize">{h.action?.replace(/_/g, ' ')}</div>
+                        <time className="text-xs font-medium text-[#6B7280] shrink-0 ml-2">{formatDate(h.timestamp || h.date)}</time>
+                      </div>
+                      {h.comment && <div className="text-sm text-[#6B7280] my-1.5">{h.comment}</div>}
+                      <div className="text-xs font-medium text-[#6B7280]">- {h.by?.name || h.author || 'System'} {h.by?.role && `(${h.by.role})`}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-[#6B7280] italic bg-[#f8faff] p-2 rounded-md border border-transparent text-center">Pending approvals</p>
+          )}
+        </div>
+
+        <CommentModal
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          onConfirm={handleAction}
+          title={modalConfig.title}
+          confirmText={modalConfig.confirmText}
+          actionLoading={actionLoading}
+        />
       </div>
     </div>
   );

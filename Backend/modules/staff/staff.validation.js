@@ -1,11 +1,11 @@
 const { check, param } = require('express-validator');
 
 const getSiteDetailsValidation = [
-  param('siteId').isMongoId()
+  param('siteId').isMongoId().withMessage('Valid site ID is required')
 ];
 
 const createManualRequestValidation = [
-  check('siteId').isMongoId(),
+  check('siteId').isMongoId().withMessage('Valid site ID is required'),
   check('notes').optional().trim().escape(),
   check('userNotes').optional().trim().escape(),
   check('materials').custom((value) => {
@@ -19,13 +19,13 @@ const createManualRequestValidation = [
 ];
 
 const createPhotoRequestValidation = [
-  check('siteId').isMongoId(),
+  check('siteId').isMongoId().withMessage('Valid site ID is required'),
   check('notes').optional().trim().escape(),
   check('userNotes').optional().trim().escape()
 ];
 
 const getRequestByIdValidation = [
-  param('requestId').isMongoId()
+  param('requestId').isMongoId().withMessage('Valid request ID is required')
 ];
 
 module.exports = {

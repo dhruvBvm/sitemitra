@@ -76,7 +76,7 @@ export default function Dashboard() {
       authService.getBookmarkedSite().then((res) => {
         const sId = res?.site?._id || res?.site || null;
         updateBookmark(sId);
-      }).catch(() => {});
+      }).catch(() => { });
     }, 30000);
     return () => clearInterval(interval);
   }, [updateBookmark]);
@@ -167,7 +167,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-1">
+    <div className="flex flex-col  space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-3">
 
       {/* Metrics Row - NOT STICKY */}
       {stats.length > 0 && (
@@ -196,8 +196,8 @@ export default function Dashboard() {
                   </div>
                   {/* Value and label left‑aligned */}
                   <div className="flex flex-col justify-between h-full w-full">
-                      <div className="text-[24px] font-bold text-[#1F2937] leading-none">{stat.value}</div>
-                      <div className="text-[11px] font-bold text-[#6B7280] mt-3 uppercase tracking-wide">{stat.label}</div>
+                    <div className="text-[24px] font-bold text-[#1F2937] leading-none">{stat.value}</div>
+                    <div className="text-[11px] font-bold text-[#6B7280] mt-3 uppercase tracking-wide">{stat.label}</div>
                   </div>
                 </div>);
             })}
@@ -232,32 +232,31 @@ export default function Dashboard() {
                           <MapPin className="h-3.5 w-3.5 mr-1" />
                           {site.address || 'Location not specified'}
                         </div>
-                        {site.siteCode && (
-                          <div className="flex items-center text-xs text-slate-400 font-mono">
-                            <Hash className="h-3 w-3 mr-1" />
-                            {site.siteCode}
+                        <div className="flex items-center gap-3">
+                          {site.siteCode && (
+                            <div className="flex items-center text-xs text-slate-400 font-mono">
+                              <Hash className="h-3 w-3 mr-1" />
+                              {site.siteCode}
+                            </div>
+                          )}
+                          <div className="text-xs text-[#6B7280]">
+                            Manager: <span className="font-medium text-[#1F2937]">{site.manager?.name || site.managerId?.name || 'Unassigned'}</span>
                           </div>
-                        )}
+                        </div>
                       </div>
-                      <div className="flex flex-col items-end gap-2">
+                      <div className="flex items-center gap-2">
+                        <StatusBadge status={site.status || 'active'} />
                         <button
                           onClick={(e) => toggleBookmark(e, site.siteId || site._id)}
                           className="p-1 rounded-full hover:bg-slate-100 transition-colors"
                         >
-                          <Star 
-                            className={`w-5 h-5 ${(bookmarkedSiteId === (site.siteId || site._id)) ? 'fill-[#F59E0B] text-[#F59E0B]' : 'text-slate-400'}`} 
+                          <Star
+                            className={`w-5 h-5 ${(bookmarkedSiteId === (site.siteId || site._id)) ? 'fill-[#F59E0B] text-[#F59E0B]' : 'text-slate-400'}`}
                           />
                         </button>
-                        <StatusBadge status={site.status || 'active'} />
-                      </div>
-                    </div>
-                    <div className="mt-2 pt-2 border-t border-slate-100 flex justify-between items-center text-sm font-normal text-[#1F2937]">
-                      <div>
-                        <span className="font-medium text-[#6B7280]">Manager:</span> <span>{site.manager?.name || 'Unassigned'}</span>
                       </div>
                     </div>
                   </div>
-                  <ChevronRight className="h-5 w-5 text-slate-400 ml-2 group-hover:text-[#2563EB] transition-colors" />
                 </div>
               </div>
             ))}

@@ -1,8 +1,8 @@
 const { check } = require('express-validator');
 
 const createReceivedEntryValidator = [
-  check('siteId').isMongoId(),
-  check('date').optional().isISO8601(),
+  check('siteId').isMongoId().withMessage('Valid site ID is required'),
+  check('date').optional().isISO8601().withMessage('Date must be in ISO8601 format'),
   check('supplierName').optional().trim().escape(),
   check('challanNo').optional().trim().escape(),
   check('vehicleNo').optional().trim().escape(),
@@ -21,8 +21,8 @@ const createReceivedEntryValidator = [
 ];
 
 const createUsedEntryValidator = [
-  check('siteId').isMongoId(),
-  check('usedDate').optional().isISO8601(),
+  check('siteId').isMongoId().withMessage('Valid site ID is required'),
+  check('usedDate').optional().isISO8601().withMessage('Date must be in ISO8601 format'),
   check('notes').optional().trim().escape(),
   check('materials').custom((value) => {
     const mongoose = require('mongoose');

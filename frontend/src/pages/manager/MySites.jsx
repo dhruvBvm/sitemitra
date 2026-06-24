@@ -118,7 +118,7 @@ export default function MySites() {
       header: 'Actions',
       cell: () => (
         <Button variant="ghost" size="sm">
-          <Eye className="w-4 h-4 mr-1" /> View Details
+          <Eye className="w-5 h-5 mr-1" /> View Details
         </Button>
       )
     }
@@ -127,12 +127,15 @@ export default function MySites() {
   if (loading) return <Loader size="lg" className="mt-20" />;
 
   return (
-    <div className="p-2 max-w-[428px] mx-auto px-4 pb-24 space-y-4">
-      <div className="flex justify-between items-center mt-2 mb-4">
-        <h1 className="text-[20px] font-bold text-[#1F2937]">My Assigned Sites</h1>
+    <div className="flex flex-col h-full max-w-[428px] mx-auto min-h-0">
+      <div className="px-4 pt-3 flex-shrink-0">
+        <div className="flex justify-between items-center mb-4 mt-2">
+          <h1 className="text-[20px] font-bold text-[#1F2937]">My Assigned Sites</h1>
+        </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="flex-1 overflow-y-auto px-4 pb-4">
+        <div className="space-y-4">
         {sites.length === 0 ? (
           <div className="text-center py-10 bg-[#f8faff] rounded-md border border-dashed border-[#E5E7EB]">
             <p className="text-sm font-medium text-[#6B7280]">No sites assigned to you.</p>
@@ -162,30 +165,20 @@ export default function MySites() {
                     <StatusBadge status={site.status} />
                   </div>
                 </div>
-                <div className="text-sm text-[#6B7280] mb-2 flex items-start">
-                  <MapPin className="w-4 h-4 mr-1 mt-0.5 text-slate-400 shrink-0" />
-                  <span className="line-clamp-2">{site.address || 'Location not specified'}</span>
-                </div>
-                <div className="flex justify-between items-center border-t border-slate-100 pt-3">
-                  <div className="text-sm">
+                <div className="flex justify-between items-start mt-1">
+                  <div className="text-sm text-[#6B7280] flex items-start flex-1 pr-2">
+                    <MapPin className="w-4 h-4 mr-1 mt-0.5 text-slate-400 shrink-0" />
+                    <span className="line-clamp-2">{site.address || 'Location not specified'}</span>
+                  </div>
+                  <div className="text-sm shrink-0 text-right">
                     <span className="font-medium text-[#6B7280]">Manager:</span> <span className="text-[#1F2937] font-medium">{site.manager?.name || site.managerId?.name || 'You'}</span>
                   </div>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="text-[#2563EB] border-[#2563EB] hover:bg-blue-50 px-2 py-2 rounded-md font-medium mt-1"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/manager/inventory/${site.siteId || site._id}`);
-                    }}
-                  >
-                    <Eye className="w-4 h-4 mr-1" /> View Inventory
-                  </Button>
                 </div>
               </div>
             ))}
           </div>
         )}
+        </div>
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import { useAuthStore } from '../../store/authStore';
 import Button from '../../components/common/Button';
 import Modal from '../../components/common/Modal';
 import { Card, CardContent } from '../../components/common/Card';
-import { Plus, Pencil, Trash2, Box, Search, Check } from 'lucide-react';
+import { Plus, Pencil, Ban, CheckCircle, Box, Search } from 'lucide-react';
 import { ownerService } from '../../services/owner';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -98,15 +98,24 @@ export default function Materials() {
   if (loading) return <Loader size="lg" className="mt-20" />;
 
   return (
-    <>
-      <div className="sticky top-[56px] left-0 right-0 mx-auto max-w-[428px] z-40 bg-white border-b border-[#E5E7EB] overflow-x-hidden">
-        <div className="max-w-[428px] mx-auto px-4 py-2 flex flex-col gap-1.5">
-          {/* FULL-WIDTH STICKY HEADER – DO NOT REMOVE OR WRAP IN CONTAINER */}
-          <div className="flex justify-between items-center mb-2 w-full">
+    <div className="flex flex-col h-full max-w-[428px] mx-auto min-h-0">
+      <div className="flex-shrink-0 z-40 bg-white border-b border-[#E5E7EB] overflow-x-hidden">
+        <div className="px-4 pt-3 pb-2 flex flex-col gap-1.5">
+          {/* FULL-WIDTH STICKY HEADER */}
+          <div className="flex justify-between items-center mb-2 w-full mt-2">
             <div>
               <h1 className="text-[18px] font-bold tracking-tight text-[#1F2937]">Materials</h1>
               <p className="text-[13px] font-medium text-[#6B7280]">{materials.length} total</p>
             </div>
+            {isOwnerOrManager && (
+              <button
+                onClick={() => navigate('/materials/create')}
+                className="flex items-center justify-center bg-[#2563EB] text-white px-4 py-2 rounded-md font-medium text-sm hover:bg-blue-700 transition-colors shadow-sm shrink-0"
+              >
+                <Plus className="w-4 h-4 mr-1" />
+                New Material
+              </button>
+            )}
           </div>
 
           <div className="w-full">
@@ -126,80 +135,78 @@ export default function Materials() {
         </div>
       </div>
 
-      <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-1">
-        {filteredMaterials.length === 0 ? (
-          <div className="text-center py-10 bg-[#f8faff] rounded-lg border border-dashed border-[#E5E7EB]">
-            <p className="text-sm font-medium text-[#6B7280]">No materials found.</p>
-          </div>
-        ) : (
-          Object.keys(groupedMaterials).map(category => (
-            <div key={category} className="flex flex-col space-y-1">
-                <h2 className="text-lg font-bold text-[#1F2937] tracking-tight">{category}</h2>
-              <div className="flex flex-col space-y-2">
-                {groupedMaterials[category].map(mat => {
-                  const isActive = mat.status !== 'inactive';
-                  if (isActive) {
-                    return (
-                      <div key={mat._id} className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center justify-between gap-2">
-                        <div className="flex flex-col min-w-0 flex-1">
-                          <span className="text-sm font-bold text-[#1F2937] leading-tight truncate">{mat.materialName || mat.name}</span>
-                          <div className="flex items-center gap-2 mt-[2px]">
-                            <span className="text-sm font-medium text-[#6B7280]">{mat.category || 'Uncategorized'}</span>
-                                                         <span className="text-xs font-medium text-[#10B981] bg-[#10B981]/10 rounded px-1.5 py-0.5 uppercase tracking-wider">{mat.unit}</span>
-                          </div>
-                        </div>
-                        {isOwnerOrManager && (
-                          <div className="flex items-center gap-[6px] shrink-0">
-                            <button
-                              onClick={() => navigate(`/materials/edit/${mat._id}`)}
-                              className="w-[36px] h-[36px] flex items-center justify-center bg-[#f8faff] text-[#2563EB] rounded-[6px] hover:bg-blue-100 transition-colors border border-[#E5E7EB]"
-                              title="Edit"
-                            >
-                                                            <Pencil className="w-6 h-6" />
-                            </button>
-                            <button
-                              onClick={() => toggleStatus(mat)}
-                              className="w-[36px] h-[36px] flex items-center justify-center bg-[#f8faff] text-[#EF4444] rounded-[6px] hover:bg-red-50 transition-colors border border-[#E5E7EB]"
-                              title="Deactivate"
-                            >
-                                                             <Trash2 className="w-6 h-6" />
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  } else {
-                    return (
-                      <div key={mat._id} className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center justify-between gap-2 opacity-75">
-                        <div className="flex flex-col min-w-0 flex-1">
-                          <span className="text-sm font-bold text-[#1F2937] leading-tight truncate">{mat.materialName || mat.name}</span>
-                          <div className="flex items-center gap-2 mt-[2px]">
-                            <span className="text-sm font-medium text-[#6B7280]">{mat.category || 'Uncategorized'}</span>
-                                                         <span className="text-xs font-medium text-[#10B981] bg-[#10B981]/10 rounded px-1.5 py-0.5 uppercase tracking-wider">{mat.unit}</span>
-                          </div>
-                        </div>
-                        {isOwnerOrManager && (
-                          <div className="flex items-center gap-[6px] shrink-0">
-                            <button
-                              onClick={() => toggleStatus(mat)}
-                              className="w-[28px] h-[28px] flex items-center justify-center bg-[#f8faff] text-[#10B981] rounded-[6px] hover:bg-green-50 transition-colors border border-[#E5E7EB]"
-                              title="Activate"
-                            >
-                              <Check className="w-[14px] h-[14px]" />
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  }
-                })}
-              </div>
+      <div className="flex-1 overflow-y-auto px-4 pb-4 pt-3">
+        <div className="flex flex-col space-y-4">
+          {filteredMaterials.length === 0 ? (
+            <div className="text-center py-10 bg-[#f8faff] rounded-lg border border-dashed border-[#E5E7EB]">
+              <p className="text-sm font-medium text-[#6B7280]">No materials found.</p>
             </div>
-          ))
-        )}
+          ) : (
+            Object.keys(groupedMaterials).map(category => (
+              <div key={category} className="flex flex-col space-y-1">
+                <h2 className="text-sm font-bold text-[#1F2937] tracking-tight">{category}</h2>
+                <div className="flex flex-col space-y-2">
+                  {groupedMaterials[category].map(mat => {
+                    const isActive = mat.status !== 'inactive';
+                    if (isActive) {
+                      return (
+                        <div key={mat._id} className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center justify-between gap-2">
+                          <div className="flex flex-col min-w-0 flex-1">
+                            <span className="text-base font-bold text-[#1F2937] leading-tight truncate capitalize">{mat.materialName || mat.name}</span>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <span className="text-[10px] font-bold text-white bg-[#10B981] rounded px-1.5 py-0.5 uppercase tracking-wider">{mat.unit}</span>
+                            {isOwnerOrManager && (
+                              <div className="flex items-center gap-[6px]">
+                                <button
+                                  onClick={() => navigate(`/materials/edit/${mat._id}`)}
+                                  className="p-2 flex items-center justify-center bg-[#f8faff] text-[#2563EB] rounded-[6px] hover:bg-blue-100 transition-colors border border-[#E5E7EB]"
+                                  title="Edit"
+                                >
+                                  <Pencil className="w-[18px] h-[18px]" />
+                                </button>
+                                <button
+                                  onClick={() => toggleStatus(mat)}
+                                  className="p-2 flex items-center justify-center bg-[#f8faff] text-[#EF4444] rounded-[6px] hover:bg-red-50 transition-colors border border-[#E5E7EB]"
+                                  title="Deactivate"
+                                >
+                                  <Ban className="w-[18px] h-[18px]" />
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <div key={mat._id} className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center justify-between gap-2 opacity-75">
+                          <div className="flex flex-col min-w-0 flex-1">
+                            <span className="text-base font-bold text-[#1F2937] leading-tight truncate capitalize">{mat.materialName || mat.name}</span>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <span className="text-[10px] font-bold text-white bg-[#10B981] rounded px-1.5 py-0.5 uppercase tracking-wider">{mat.unit}</span>
+                            {isOwnerOrManager && (
+                              <div className="flex items-center gap-[6px]">
+                                <button
+                                  onClick={() => toggleStatus(mat)}
+                                  className="p-2 flex items-center justify-center bg-[#f8faff] text-[#10B981] rounded-[6px] hover:bg-green-50 transition-colors border border-[#E5E7EB]"
+                                  title="Activate"
+                                >
+                                  <CheckCircle className="w-[18px] h-[18px]" />
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    }
+                  })}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </div>
-
-
-    </>
+    </div>
   );
 }

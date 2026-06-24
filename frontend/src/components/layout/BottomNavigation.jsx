@@ -47,13 +47,14 @@ export default function BottomNavigation() {
 
     // Special cases mappings
     if (itemName === 'Dashboard') {
-      return currentPath.includes('/dashboard') || currentPath.includes('/inventory');
+      return currentPath.includes('/dashboard') || currentPath.includes('/inventory') || currentPath.includes('/create-order');
     }
     if (itemName === 'Sites' || itemName === 'Site View') {
       return currentPath.includes('/sites');
     }
     if (itemName === 'Transactions' || itemName === 'Requests') {
-      return currentPath.includes('/transactions') || currentPath.includes('/requests') || currentPath.includes('/received') || currentPath.includes('/used') || currentPath.includes('create-order') || currentPath.includes('/entries');
+      if (currentPath.includes('/create')) return false;
+      return currentPath.includes('/transactions') || currentPath.includes('/requests') || currentPath.includes('/received') || currentPath.includes('/used') || currentPath.includes('/entries');
     }
     if (itemName === 'Materials') {
       return currentPath.includes('/materials');
@@ -66,7 +67,7 @@ export default function BottomNavigation() {
   };
 
   return <div className="sticky w-full bottom-0 left-0 right-0 mx-auto max-w-[428px] z-50 bg-white border-t border-[#E5E7EB] overflow-x-hidden">
-    <div className="mx-auto max-w-[428px] flex justify-around items-center h-14 px-3">
+    <div className="mx-auto max-w-[428px] flex justify-around items-center h-14 px-1">
       {navItems.map((item) => {
         const isActive = checkActive(item.path, item.name);
 

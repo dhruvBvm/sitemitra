@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Search, ArrowLeft } from "lucide-react";
+import { Search, ArrowLeft, Plus, Minus } from "lucide-react";
 import { inventoryService } from "../../services/inventory";
 import { ownerService } from "../../services/owner";
 import { useAuthStore } from "../../store/authStore";
@@ -168,8 +168,8 @@ export default function Inventory() {
   return (
     <>
       {/* ===== FULL-WIDTH STICKY HEADER ===== */}
-      <header className="fixed-div sticky top-[56px] left-0 right-0 z-50 bg-white shadow-sm border-b border-[#E5E7EB] overflow-x-hidden">
-        <div className="px-4 py-2 flex flex-col gap-1.5">
+      <header className="fixed-div sticky top-0 left-0 right-0 z-50 bg-white shadow-sm border-b border-[#E5E7EB] overflow-x-hidden">
+        <div className="px-4 pt-3 pb-2 flex flex-col gap-1.5">
           <div className="flex items-center w-full">
             <button
               onClick={() => navigate(-1)}
@@ -182,13 +182,13 @@ export default function Inventory() {
             </h1>
           </div>
 
-          <div className="w-full">
+          <div className="w-full mb-1.5">
             <div className="flex overflow-x-auto hide-scrollbar gap-2">
-              <button className="flex-1 bg-[#2563EB] text-white font-medium text-sm whitespace-nowrap py-2 px-2 rounded-md shrink-0 text-center">
+              <button className="flex-1 bg-[#2563EB] text-white font-medium text-xs whitespace-nowrap py-2 px-2 rounded-md shrink-0 text-center">
                 Inventory
               </button>
               <button
-                className="flex-1 bg-[#F3F4F6] text-[#1F2937] font-medium text-sm whitespace-nowrap py-2 px-2 rounded-md shrink-0 hover:bg-[#E5E7EB] transition-colors text-center"
+                className="flex-1 bg-[#F3F4F6] text-[#1F2937] font-medium text-xs whitespace-nowrap py-2 px-2 rounded-md shrink-0 hover:bg-[#E5E7EB] transition-colors text-center"
                 onClick={() =>
                   navigate(`${getRolePrefix()}/create-order`, {
                     state: { siteId },
@@ -198,7 +198,7 @@ export default function Inventory() {
                 Request
               </button>
               <button
-                className="flex-1 bg-[#F3F4F6] text-[#1F2937] font-medium text-sm whitespace-nowrap py-2 px-2 rounded-md shrink-0 hover:bg-[#E5E7EB] transition-colors text-center"
+                className="flex-1 bg-[#F3F4F6] text-[#1F2937] font-medium text-xs whitespace-nowrap py-2 px-2 rounded-md shrink-0 hover:bg-[#E5E7EB] transition-colors text-center"
                 onClick={() =>
                   navigate(`${getRolePrefix()}/inventory/received/create`, {
                     state: { siteId },
@@ -208,7 +208,7 @@ export default function Inventory() {
                 Received
               </button>
               <button
-                className="flex-1 bg-[#F3F4F6] text-[#1F2937] font-medium text-sm whitespace-nowrap py-2 px-2 rounded-md shrink-0 hover:bg-[#E5E7EB] transition-colors text-center"
+                className="flex-1 bg-[#F3F4F6] text-[#1F2937] font-medium text-xs whitespace-nowrap py-2 px-2 rounded-md shrink-0 hover:bg-[#E5E7EB] transition-colors text-center"
                 onClick={() =>
                   navigate(`${getRolePrefix()}/inventory/used/create`, {
                     state: { siteId },
@@ -236,7 +236,7 @@ export default function Inventory() {
             {(user?.role === "owner" || user?.role === "manager") && (
               <button
                 onClick={() => navigate(`${getRolePrefix()}/materials`)}
-                className="shrink-0 bg-blue-50 text-[#2563EB] px-3 py-2 rounded-md font-medium text-sm flex items-center justify-center hover:bg-blue-100 transition-colors"
+                className="shrink-0 bg-[#2563EB] text-white px-3 py-2 rounded-md font-medium text-sm flex items-center justify-center hover:bg-[#1D4ED8] transition-colors"
                 style={{ minHeight: "36px" }}
               >
                 + Add
@@ -247,7 +247,7 @@ export default function Inventory() {
       </header>
 
       {/* ===== MAIN CONTENT – EXACTLY MATCHES DASHBOARD ===== */}
-      <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-1">
+      <div className="flex flex-col  space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-3">
         <div className="pt-0">
           {Object.keys(groupedMaterials).length === 0 ? (
             <div className="text-center py-10 bg-[#f8faff] rounded-lg border border-dashed border-[#E5E7EB]">
@@ -259,28 +259,56 @@ export default function Inventory() {
             <div className="flex flex-col space-y-2">
               {Object.keys(groupedMaterials).map((category, index) => (
                 <div key={index} className="flex flex-col space-y-1">
-                  <h2 className="text-2xl font-bold text-[#1F2937] tracking-tight">
+                  <h2 className="text-[18px] font-bold text-[#1F2937] tracking-tight">
                     {category === "Other" ? "Materials" : category}
                   </h2>
-                  <div className="flex flex-col space-y-2">
+                  <div className="flex flex-col space-y-2.5">
                     {groupedMaterials[category].map((mat) => (
                       <div
                         key={mat._id}
-                        className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer group active:scale-[0.98]"
+                        className="bg-slate-50 rounded-lg px-2 py-1.5 shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer group active:scale-[0.98]"
                         onClick={() => handleMaterialClick(mat._id)}
                       >
                         <div className="flex justify-between items-start">
-                          <h3 className="text-base font-bold text-[#1F2937] leading-tight">
-                            {mat.materialName || mat.name}
-                          </h3>
+                          <h3 className="font-bold text-[22px] text-[#1F2937] leading-tight group-hover:text-[#2563EB] transition-colors">{mat.materialName || mat.name}</h3>
                           <span className="text-base font-bold text-[#1F2937]">
                             {mat.quantity}
                           </span>
                         </div>
-                        <div className="flex justify-between items-center mt-0.5">
-                          <p className="text-sm font-medium text-[#6B7280]">
+                        <div className="flex justify-between items-center mt-1.5">
+                          <p className="text-[8px] font-medium bg-[#10B981] text-white px-1 py-0.5 rounded shadow-sm">
                             {mat.unit}
                           </p>
+                          <div className="flex gap-2.5">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setAdjustModal({
+                                  isOpen: true,
+                                  type: "received",
+                                  material: mat,
+                                  quantity: ""
+                                });
+                              }}
+                              className="p-1 bg-[#2563EB] text-white rounded-md hover:bg-blue-700 transition-colors"
+                            >
+                              <Plus className="w-3.5 h-3.5 stroke-[3]" />
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setAdjustModal({
+                                  isOpen: true,
+                                  type: "used",
+                                  material: mat,
+                                  quantity: ""
+                                });
+                              }}
+                              className="p-1 bg-[#EF4444] text-white rounded-md hover:bg-red-600 transition-colors"
+                            >
+                              <Minus className="w-3.5 h-3.5 stroke-[3]" />
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -293,35 +321,37 @@ export default function Inventory() {
       </div>
 
       {/* ===== FIXED ACTION BUTTONS ===== */}
-      <div className="fixed bottom-[56px] left-0 right-0 mx-auto max-w-[428px] bg-white border-t border-[#E5E7EB] p-2 z-40 shadow-sm flex gap-2">
-        <button
-          className="flex-1 bg-gray-200 text-gray-700 font-medium py-2 px-2.5 rounded-md hover:bg-gray-300 transition-colors flex justify-center items-center text-sm whitespace-nowrap"
-          onClick={() =>
-            navigate(`${getRolePrefix()}/create-order`, { state: { siteId } })
-          }
-        >
-          + REQUEST
-        </button>
-        <button
-          className="flex-1 bg-[#2563EB] text-white font-medium py-2 px-2.5 rounded-md hover:bg-blue-700 transition-colors flex justify-center items-center text-sm whitespace-nowrap"
-          onClick={() =>
-            navigate(`${getRolePrefix()}/inventory/received/create`, {
-              state: { siteId },
-            })
-          }
-        >
-          + RECEIVED
-        </button>
-        <button
-          className="flex-1 bg-[#EF4444] text-white font-medium py-2 px-2.5 rounded-md hover:bg-red-700 transition-colors flex justify-center items-center text-sm whitespace-nowrap"
-          onClick={() =>
-            navigate(`${getRolePrefix()}/inventory/used/create`, {
-              state: { siteId },
-            })
-          }
-        >
-          - USED
-        </button>
+      <div className="fixed bottom-[56px] left-0 right-0 z-40 flex justify-center pointer-events-none">
+        <div className="w-full bg-white border-t border-[#E5E7EB] px-3 pt-3 pb-3 flex justify-between gap-2 pointer-events-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]" style={{ maxWidth: '428px' }}>
+          <button
+            className="flex-1 bg-[#10B981] text-white font-bold py-3 px-1 rounded-md hover:bg-emerald-600 transition-colors flex justify-center items-center whitespace-nowrap border border-[#10B981]"
+            onClick={() =>
+              navigate(`${getRolePrefix()}/create-order`, { state: { siteId } })
+            }
+          >
+            <span className="text-[12px] tracking-wider">REQUEST</span>
+          </button>
+          <button
+            className="flex-1 bg-[#2563EB] text-white font-bold py-3 px-1 rounded-md hover:bg-blue-700 transition-colors flex justify-center items-center whitespace-nowrap"
+            onClick={() =>
+              navigate(`${getRolePrefix()}/inventory/received/create`, {
+                state: { siteId },
+              })
+            }
+          >
+            <span className="text-[12px] tracking-wider">RECEIVED</span>
+          </button>
+          <button
+            className="flex-1 bg-[#EF4444] text-white font-bold py-3 px-1 rounded-md hover:bg-red-700 transition-colors flex justify-center items-center whitespace-nowrap"
+            onClick={() =>
+              navigate(`${getRolePrefix()}/inventory/used/create`, {
+                state: { siteId },
+              })
+            }
+          >
+            <span className="text-[12px] tracking-wider">USED</span>
+          </button>
+        </div>
       </div>
 
       {/* Modal */}

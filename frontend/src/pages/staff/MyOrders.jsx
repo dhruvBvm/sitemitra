@@ -38,7 +38,7 @@ export default function MyOrders() {
   if (loading) return <Loader size="lg" className="mt-20" />;
 
   return (
-    <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-1">
+    <div className="flex flex-col  space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-3">
       <div className="flex justify-between items-center mt-2 pb-2">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-[#1F2937]">My Requests</h1>
@@ -48,7 +48,7 @@ export default function MyOrders() {
           onClick={() => navigate('/staff/create-order')} 
           className="bg-[#2563EB] text-white hover:bg-[#2563EB] py-2 px-2 text-sm rounded-md flex items-center"
         >
-          <Plus className="w-4 h-4 mr-1 stroke-[2.5]" />
+          <Plus className="w-5 h-5 mr-1 stroke-[2.5]" />
           New Request
         </Button>
       </div>
@@ -56,50 +56,57 @@ export default function MyOrders() {
       <div className="flex flex-col space-y-2">
         {orders.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-md border border-dashed border-[#E5E7EB]">
-            <FileText className="w-10 h-10 text-slate-300 mx-auto mb-2" />
+            <FileText className="w-9 h-9 text-slate-300 mx-auto mb-2" />
             <p className="text-sm font-medium text-[#6B7280]">You haven't created any requests yet.</p>
           </div>
         ) : (
           orders.map(order => (
             <div 
               key={order._id} 
-              className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer active:scale-[0.98]"
+              className="bg-white rounded-lg p-3 shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer active:scale-[0.98]"
               onClick={() => handleView(order)}
             >
-              <div className="flex flex-col space-y-1">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <span className="inline-flex px-2 py-1 rounded text-xs font-bold mb-1.5 bg-[#FFC107]/20 text-[#FFC107] uppercase tracking-wider">
+              <div className="flex justify-between items-start">
+                <div className="flex-1 min-w-0 pr-2">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="inline-flex px-2 py-0.5 rounded text-xs font-bold bg-[#2563EB] text-white">
                       Request
                     </span>
-                    <h3 className="font-bold text-[#1F2937] text-base">{order.requestNo || order.orderNo}</h3>
+                    <span className="text-sm font-bold text-[#1F2937] truncate">{order.requestNo || order.orderNo}</span>
                   </div>
-                  <div className="text-right">
-                    <span className="text-xs font-medium text-slate-400 block mb-1.5">{formatDate(order.createdAt)}</span>
-                    <StatusBadge status={order.status} />
-                  </div>
-                </div>
-                <div className="text-sm text-[#6B7280] border-t border-slate-100 pt-2 grid grid-cols-2 gap-2">
-                  <div>
-                    <span className="text-xs text-[#6B7280] block uppercase font-bold tracking-wider mb-0.5">Site</span>
-                    <span className="font-medium text-[#1F2937]">{order.siteId?.siteName || '-'}</span>
-                  </div>
-                  <div>
-                    <span className="text-xs text-[#6B7280] block uppercase font-bold tracking-wider mb-0.5">Priority</span>
-                    <span className={`font-bold capitalize ${order.priority === 'high' ? 'text-red-500' : 'text-[#1F2937]'}`}>{order.priority || 'Normal'}</span>
-                  </div>
-                </div>
-                <div className="text-sm text-[#6B7280] border-t border-slate-100 pt-2">
-                  <span className="text-xs text-[#6B7280] block mb-1 uppercase font-bold tracking-wider">Materials</span>
-                  <p className="line-clamp-2">
-                    {order.materials?.length > 0 ? 
+
+                  <div className="space-y-1">
+                    <div className="text-sm text-[#6B7280]">
+                      <span className="font-semibold text-[#1F2937]">Site:</span> {order.siteId?.siteName || '-'}
+                    </div>
+                    <div className="text-sm text-[#6B7280] line-clamp-2" title={
+                      order.materials?.length > 0 ? 
                       order.materials.map(m => {
                         const raw = m.materialName || m.name || '';
                         const capitalized = raw.charAt(0).toUpperCase() + raw.slice(1);
                         return `${capitalized}: ${m.quantity || m.qty} ${m.unit}`;
                       }).join(', ') 
-                      : 'None'}
-                  </p>
+                      : 'None'
+                    }>
+                      <span className="font-semibold text-[#1F2937]">Materials:</span> {
+                        order.materials?.length > 0 ? 
+                        order.materials.map(m => {
+                          const raw = m.materialName || m.name || '';
+                          const capitalized = raw.charAt(0).toUpperCase() + raw.slice(1);
+                          return `${capitalized}: ${m.quantity || m.qty} ${m.unit}`;
+                        }).join(', ') 
+                        : 'None'
+                      }
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-end gap-2 shrink-0">
+                  <span className="text-xs text-[#6B7280] font-medium">{formatDate(order.createdAt)}</span>
+                  
+                  <div className="flex items-center">
+                    <StatusBadge status={order.status} />
+                  </div>
                 </div>
               </div>
             </div>

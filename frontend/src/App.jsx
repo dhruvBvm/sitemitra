@@ -15,6 +15,8 @@ import Dashboard from './pages/Dashboard';
 import SiteDetails from './pages/SiteDetails';
 import UserProfile from './pages/UserProfile';
 import CreateStaffForSite from './pages/CreateStaffForSite';
+import AddStaffToSite from './pages/AddStaffToSite';
+import AssignSites from './pages/AssignSites';
 
 // Owner Pages
 import OwnerUsers from './pages/owner/Users';
@@ -25,10 +27,13 @@ import EditMaterial from './pages/owner/EditMaterial';
 import CreateSite from './pages/owner/CreateSite';
 import EditSite from './pages/owner/EditSite';
 import EditUser from './pages/owner/EditUser';
+import OwnerCreateManager from './pages/owner/CreateManager';
+import OwnerCreateStaff from './pages/owner/CreateStaff';
 
 // Manager Pages
 import ManagerSites from './pages/manager/MySites';
 import ManagerTeam from './pages/manager/Team';
+import ManagerCreateStaff from './pages/manager/CreateStaff';
 
 import EditTeamMember from './pages/manager/EditTeamMember';
 
@@ -93,6 +98,8 @@ function App() {
               <Route path="/owner/sites/create" element={<CreateSite />} />
               <Route path="/owner/sites/edit/:id" element={<EditSite />} />
               <Route path="/owner/users" element={<OwnerUsers />} />
+              <Route path="/owner/users/create-manager" element={<OwnerCreateManager />} />
+              <Route path="/owner/users/create-staff" element={<OwnerCreateStaff />} />
               <Route path="/owner/inventory/:siteId" element={<Inventory />} />
               <Route path="/owner/create-order" element={<CreateOrder />} />
               <Route path="/owner/inventory/received/create" element={<CreateReceivedEntry />} />
@@ -109,6 +116,7 @@ function App() {
               <Route path="/manager/dashboard" element={<Dashboard />} />
               <Route path="/manager/sites" element={<ManagerSites />} />
               <Route path="/manager/team" element={<ManagerTeam />} />
+              <Route path="/manager/team/create-staff" element={<ManagerCreateStaff />} />
 
               <Route path="/manager/create-order" element={<CreateOrder />} />
 
@@ -160,6 +168,8 @@ function App() {
               <Route path="/owner/users/edit/:id" element={<EditUser />} />
               <Route path="/manager/team/edit/:id" element={<EditTeamMember />} />
               <Route path="/sites/:siteId/create-staff" element={<CreateStaffForSite />} />
+              <Route path="/sites/:siteId/add-staff" element={<AddStaffToSite />} />
+              <Route path="/users/:userId/assign-sites" element={<AssignSites />} />
             </Route>
           </Route>
 

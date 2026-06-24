@@ -26,14 +26,14 @@ export default function EntriesList() {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   const [appliedFilters, setAppliedFilters] = useState({
     siteId: '',
     startDate: '',
     endDate: '',
     search: ''
   });
-  
+
   // We'll fetch a larger limit and let DataTable handle pagination
   const [limit] = useState(500);
   const [entries, setEntries] = useState([]);
@@ -82,10 +82,10 @@ export default function EntriesList() {
         }
 
         let fetchedEntries = response?.data || [];
-        
+
         if (appliedFilters.search) {
           const query = appliedFilters.search.toLowerCase();
-          fetchedEntries = fetchedEntries.filter(item => 
+          fetchedEntries = fetchedEntries.filter(item =>
             item.entryNo?.toLowerCase().includes(query)
           );
         }
@@ -142,13 +142,13 @@ export default function EntriesList() {
 
 
   return (
-    <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-1">
+    <div className="flex flex-col  space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-3">
       <div className="flex justify-between items-center mt-2 mb-2">
         <h1 className="text-2xl font-bold text-[#1F2937] tracking-tight">
           {activeTab === 'received' ? 'Received Entries' : 'Used Entries'}
         </h1>
         <Button className="flex items-center py-2.5 px-2 rounded-md" onClick={() => navigate(activeTab === 'received' ? '/inventory/received/create' : '/inventory/used/create')}>
-          <Plus className="w-4 h-4 mr-1" />
+          <Plus className="w-5 h-5 mr-1" />
           {activeTab === 'received' ? 'Received' : 'Used'}
         </Button>
       </div>
@@ -158,21 +158,19 @@ export default function EntriesList() {
           <nav className="flex -mb-px px-4" aria-label="Tabs">
             <button
               onClick={() => setActiveTab('received')}
-              className={`flex-1 whitespace-nowrap py-3 px-2 border-b-2 font-bold text-[13px] transition-colors ${
-                activeTab === 'received'
+              className={`flex-1 whitespace-nowrap py-3 px-2 border-b-2 font-bold text-[13px] transition-colors ${activeTab === 'received'
                   ? 'border-[#2563EB] text-[#2563EB]'
                   : 'border-transparent text-[#6B7280] hover:text-[#1F2937] hover:border-[#E5E7EB]'
-              }`}
+                }`}
             >
               Received Stock
             </button>
             <button
               onClick={() => setActiveTab('used')}
-              className={`flex-1 whitespace-nowrap py-3 px-2 border-b-2 font-bold text-[13px] transition-colors ${
-                activeTab === 'used'
+              className={`flex-1 whitespace-nowrap py-3 px-2 border-b-2 font-bold text-[13px] transition-colors ${activeTab === 'used'
                   ? 'border-[#2563EB] text-[#2563EB]'
                   : 'border-transparent text-[#6B7280] hover:text-[#1F2937] hover:border-[#E5E7EB]'
-              }`}
+                }`}
             >
               Used Stock
             </button>
@@ -183,124 +181,128 @@ export default function EntriesList() {
           {/* Filters */}
           <div className="sticky z-10 bg-white p-4 border-b border-[#E5E7EB]" style={{ top: '56px' }}>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4">
-            <div>
-              <label className="block text-sm font-medium text-[#1F2937] mb-1">Site</label>
-              <select
-                value={selectedSite}
-                onChange={(e) => setSelectedSite(e.target.value)}
-                className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
-              >
-                <option value="">All Sites</option>
-                {sites.map(site => (
-                  <option key={site.siteId || site._id} value={site.siteId || site._id}>
-                    {site.siteName} ({site.siteCode})
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-[#1F2937] mb-1">Start Date</label>
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-[#1F2937] mb-1">End Date</label>
-              <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-[#1F2937] mb-1">Search</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Search className="h-4 w-4 text-slate-400" />
-                </div>
+              <div>
+                <label className="block text-sm font-medium text-[#1F2937] mb-1">Site</label>
+                <select
+                  value={selectedSite}
+                  onChange={(e) => setSelectedSite(e.target.value)}
+                  className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+                >
+                  <option value="">All Sites</option>
+                  {sites.map(site => (
+                    <option key={site.siteId || site._id} value={site.siteId || site._id}>
+                      {site.siteName} ({site.siteCode})
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#1F2937] mb-1">Start Date</label>
                 <input
-                  type="text"
-                  placeholder="Search entry no..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
                 />
               </div>
+              <div>
+                <label className="block text-sm font-medium text-[#1F2937] mb-1">End Date</label>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#1F2937] mb-1">Search</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Search className="h-4 w-4 text-slate-400" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search entry no..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-9 pr-3 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-          
+
             <div className="flex justify-end">
               <Button onClick={handleApplyFilters} className="flex items-center gap-2 rounded-md">
-                <Filter className="w-4 h-4" /> Apply Filters
+                <Filter className="w-5 h-5" /> Apply Filters
               </Button>
             </div>
           </div>
 
           <div className="p-3">
 
-          {loading ? (
-            <Loader size="md" className="my-10" />
-          ) : (
-            <div className="flex flex-col space-y-2">
-              {entries.length === 0 ? (
-                <div className="text-center py-10 bg-[#f8faff] rounded-lg border border-dashed border-[#E5E7EB]">
-                  <p className="text-sm font-medium text-[#6B7280]">No entries found.</p>
-                </div>
-              ) : (
-                entries.map((entry) => (
-                  <div 
-                    key={entry._id} 
-                    className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer active:scale-[0.98]"
-                    onClick={() => openDetails(entry._id)}
-                  >
-                    <div className="flex flex-col space-y-1">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="text-base font-bold text-[#1F2937] leading-tight">{entry.entryNo}</h3>
-                          <div className="text-xs text-[#6B7280] mt-0.5">{entry.siteId?.siteName || '-'}</div>
+            {loading ? (
+              <Loader size="md" className="my-10" />
+            ) : (
+              <div className="flex flex-col space-y-2">
+                {entries.length === 0 ? (
+                  <div className="text-center py-10 bg-[#f8faff] rounded-lg border border-dashed border-[#E5E7EB]">
+                    <p className="text-sm font-medium text-[#6B7280]">No entries found.</p>
+                  </div>
+                ) : (
+                  entries.map((entry) => (
+                    <div
+                      key={entry._id}
+                      className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer active:scale-[0.98]"
+                      onClick={() => openDetails(entry._id)}
+                    >
+                      <div className="flex flex-col space-y-1">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h3 className="text-base font-bold text-[#1F2937] leading-tight">{entry.entryNo}</h3>
+                            <div className="text-xs text-[#6B7280] mt-0.5">{entry.siteId?.siteName || '-'}</div>
+                          </div>
+                          <div className="text-right">
+                            <span className="text-xs font-medium text-slate-400 block mb-1.5">
+                              {new Date(entry.date || entry.createdAt).toLocaleDateString()}
+                            </span>
+                          </div>
                         </div>
-                        <div className="text-right">
-                          <span className="text-xs font-medium text-slate-400 block mb-1.5">
-                            {new Date(entry.date || entry.createdAt).toLocaleDateString()}
-                          </span>
+                        <div className="text-sm text-[#6B7280] border-t border-slate-100 pt-2 grid grid-cols-2 gap-2">
+                          <div>
+                            <span className="text-xs text-[#6B7280] block uppercase font-bold tracking-wider mb-0.5">Created By</span>
+                            <span className="font-medium text-[#1F2937]">{entry.createdBy?.name || 'Unknown'}</span>
+                          </div>
+                          <div>
+                            <span className="text-xs text-[#6B7280] block uppercase font-bold tracking-wider mb-0.5">Notes</span>
+                            <span className="truncate font-medium text-[#1F2937] block">{entry.notes || '-'}</span>
+                          </div>
                         </div>
-                      </div>
-                      <div className="text-sm text-[#6B7280] border-t border-slate-100 pt-2 grid grid-cols-2 gap-2">
-                        <div>
-                          <span className="text-xs text-[#6B7280] block uppercase font-bold tracking-wider mb-0.5">Created By</span>
-                          <span className="font-medium text-[#1F2937]">{entry.createdBy?.name || 'Unknown'}</span>
+                        <div className="text-sm text-[#6B7280] border-t border-slate-100 pt-2">
+                          <span className="text-[10px] text-slate-400 block mb-1 uppercase font-bold tracking-wider">Materials</span>
+                          <p className="line-clamp-2">
+                            {getMaterialsSummary(entry.materials)}
+                          </p>
                         </div>
-                        <div>
-                          <span className="text-xs text-[#6B7280] block uppercase font-bold tracking-wider mb-0.5">Notes</span>
-                          <span className="truncate font-medium text-[#1F2937] block">{entry.notes || '-'}</span>
-                        </div>
-                      </div>
-                      <div className="text-sm text-[#6B7280] border-t border-slate-100 pt-2">
-                        <span className="text-[10px] text-slate-400 block mb-1 uppercase font-bold tracking-wider">Materials</span>
-                        <p className="line-clamp-2">
-                          {getMaterialsSummary(entry.materials)}
-                        </p>
                       </div>
                     </div>
-                  </div>
-                ))
-              )}
-            </div>
-          )}
+                  ))
+                )}
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
 
       {/* Details Modal */}
       {selectedEntry && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50" onClick={() => setSelectedEntry(null)}>
-          <div 
+        <div 
+          className="fixed top-0 bottom-0 left-1/2 -translate-x-1/2 w-full z-[100] flex items-center justify-center bg-black/50" 
+          style={{ maxWidth: '428px' }}
+          onClick={() => setSelectedEntry(null)}
+        >
+          <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-md w-[90%] max-w-[400px] max-h-[80vh] flex flex-col mx-auto overflow-hidden shadow-xl animate-in zoom-in-95 duration-200"
+            className="bg-white rounded-[12px] w-[92%] max-w-sm max-h-[80vh] flex flex-col mx-auto overflow-hidden shadow-xl animate-in zoom-in-95 duration-200"
           >
             <div className="flex items-center justify-between p-[16px] border-b border-[#eee] sticky top-0 bg-white z-10">
               <h2 className="text-lg font-bold text-[#1F2937] break-words">

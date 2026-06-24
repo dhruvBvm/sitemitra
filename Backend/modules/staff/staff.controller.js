@@ -26,7 +26,7 @@ const getAssignedSites = async (req, res) => {
     } else {
       query._id = { $in: user.assignedSites };
     }
-    const sites = await Site.find(query).select('siteName siteCode address');
+    const sites = await Site.find(query).select('siteName siteCode address managerId').populate('managerId', 'name email');
 
     if (req.user && req.user.bookmarkedSiteId) {
       const bId = req.user.bookmarkedSiteId.toString();

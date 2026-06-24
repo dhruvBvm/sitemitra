@@ -54,7 +54,7 @@ export default function Notifications() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-1">
+    <div className="flex flex-col  space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-3">
       <div className="flex justify-between items-center mt-2 mb-4 border-b border-[#E5E7EB] pb-2">
         <h1 className="text-2xl font-bold text-[#1F2937] flex items-center tracking-tight">
           <Bell className="w-6 h-6 mr-2 text-[#6B7280]" />

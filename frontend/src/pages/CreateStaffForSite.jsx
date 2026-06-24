@@ -59,69 +59,73 @@ export default function CreateStaffForSite() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f8faff] font-sans max-w-[428px] mx-auto relative pb-24">
+    <div className="flex flex-col h-full bg-[#f8faff] font-sans max-w-[428px] mx-auto relative min-h-0">
       {/* Sticky Header */}
-      <div className="fixed top-[56px] left-0 right-0 w-full z-40 bg-white shadow-sm px-2 py-2 flex items-center justify-between border-b border-[#E5E7EB]">
-        <div className="flex items-center gap-2">
-          <button onClick={() => navigate(-1)} className="p-1.5 bg-[#F3F4F6] text-[#6B7280] rounded-full hover:bg-[#F3F4F6] transition-colors">
+      <div className="sticky top-0 z-30 bg-white border-b border-[#E5E7EB]">
+        <div className="flex items-center gap-3 px-4 py-3">
+          <button onClick={() => navigate(-1)} className="p-1.5 bg-[#F3F4F6] text-[#6B7280] rounded-full hover:bg-[#F3F4F6] transition-colors shrink-0">
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <h1 className="text-[1.1rem] font-bold tracking-tight text-[#1F2937]">Create New Staff</h1>
+          <h1 className="text-[20px] font-bold tracking-tight text-[#1F2937]">Create New Staff</h1>
         </div>
       </div>
 
-      <div className="p-2 space-y-4 pt-[72px]">
-        <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-md shadow-sm border border-transparent p-2 space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="px-4 flex-1 overflow-y-auto pt-3 pb-24">
+        <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-[#1F2937] mb-1">Name</label>
+            <label className="block text-sm font-bold text-[#1F2937] mb-1">Name</label>
             <input
               type="text"
               {...register('name')}
-              className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+              className="mt-1 block w-full rounded-md border-[#E5E7EB] shadow-sm focus:border-[#2563EB] focus:ring-[#2563EB] sm:text-sm p-2 border"
               placeholder="Full Name"
             />
             {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#1F2937] mb-1">Email</label>
+            <label className="block text-sm font-bold text-[#1F2937] mb-1">Email</label>
             <input
               type="email"
               {...register('email')}
-              className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+              className="mt-1 block w-full rounded-md border-[#E5E7EB] shadow-sm focus:border-[#2563EB] focus:ring-[#2563EB] sm:text-sm p-2 border"
               placeholder="email@example.com"
             />
             {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#1F2937] mb-1">Mobile</label>
+            <label className="block text-sm font-bold text-[#1F2937] mb-1">Mobile</label>
             <input
               type="tel"
               {...register('mobile')}
-              className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+              className="w-full px-2 py-2 border border-[#E5E7EB] shadow-sm rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] sm:text-sm"
               placeholder="Mobile Number"
             />
             {errors.mobile && <p className="text-red-500 text-xs mt-1">{errors.mobile.message}</p>}
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#1F2937] mb-1">Password</label>
+            <label className="block text-sm font-bold text-[#1F2937] mb-1">Password</label>
             <input
               type="password"
               {...register('password')}
-              className="w-full px-2 py-2 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+              className="mt-1 block w-full rounded-md border-[#E5E7EB] shadow-sm focus:border-[#2563EB] focus:ring-[#2563EB] sm:text-sm p-2 border"
               placeholder="Password"
             />
             {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
           </div>
-          
-          <Button 
-            type="submit" 
-            disabled={isSubmitting} 
-            className="w-full mt-4 py-2 font-bold"
-          >
-            {isSubmitting ? 'Creating...' : 'Create and Add to Site'}
-          </Button>
-        </form>
-      </div>
+        </div>
+        
+        <div className="fixed bottom-[56px] left-0 right-0 z-30 flex justify-center pointer-events-none">
+          <div className="w-full bg-white border-t border-[#E5E7EB] p-3 pointer-events-auto" style={{ maxWidth: '428px' }}>
+            <Button 
+              type="submit" 
+              disabled={isSubmitting} 
+              className="w-full bg-[#2563EB] text-white font-medium py-3 rounded-md hover:bg-blue-700 transition-colors"
+            >
+              {isSubmitting ? 'Creating...' : 'Create and Add to Site'}
+            </Button>
+          </div>
+        </div>
+      </form>
     </div>
   );
 }

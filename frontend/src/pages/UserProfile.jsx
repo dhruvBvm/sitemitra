@@ -20,10 +20,6 @@ export default function UserProfile() {
 
   const [profileUser, setProfileUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isAssignSitesModalOpen, setIsAssignSitesModalOpen] = useState(false);
-  const [availableSites, setAvailableSites] = useState([]);
-  const [selectedSiteIds, setSelectedSiteIds] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [siteToRemove, setSiteToRemove] = useState(null);
 
   const fetchData = async () => {
@@ -48,9 +44,6 @@ export default function UserProfile() {
         return;
       }
       setProfileUser(userData);
-
-      const allSites = sitesData?.sites || sitesData || [];
-      setAvailableSites(allSites);
     } catch (error) {
       toast.error('Failed to load user details');
     } finally {
@@ -79,54 +72,15 @@ export default function UserProfile() {
     }
   };
 
-  const handleAssignSitesSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      setIsSubmitting(true);
-
-      const availableSiteIds = availableSites.map(s => s._id || s.siteId);
-
-      let idsToSubmit = selectedSiteIds;
-      if (!isOwner) {
-        idsToSubmit = selectedSiteIds.filter(id => availableSiteIds.includes(id));
-      }
-
-      if (isOwner) {
-        await ownerService.assignUserSites(profileUser._id, idsToSubmit);
-      } else {
-        await managerService.assignSitesToTeamStaff(profileUser._id, idsToSubmit);
-      }
-
-      toast.success('Sites assigned successfully');
-      setIsAssignSitesModalOpen(false);
-      fetchData();
-    } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to assign sites');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const toggleSiteSelection = (id) => {
-    setSelectedSiteIds(prev =>
-      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
-    );
-  };
-
   if (loading) return <Loader size="lg" className="mt-20" />;
   if (!profileUser) return null;
 
   const currentAssignedSiteIds = profileUser.assignedSites?.map(s => s._id || s.siteId) || [];
-  const availableSiteIds = availableSites.map(s => s._id || s.siteId);
-  const sitesAssignedByOthers = isOwner ? [] : (profileUser.assignedSites || []).filter(
-    s => !availableSiteIds.includes(s._id || s.siteId)
-  );
-  const displaySites = [...availableSites, ...sitesAssignedByOthers];
 
   return (
     <>
       {/* ===== FULL-WIDTH STICKY HEADER ===== */}
-      <div className="sticky top-[56px] left-0 right-0 z-40 bg-white border-b border-[#E5E7EB] overflow-x-hidden">
+      <div className="sticky top-0 left-0 right-0 z-40 bg-white border-b border-[#E5E7EB] overflow-x-hidden">
         <div className="max-w-[428px] mx-auto px-4 py-2 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <button onClick={() => navigate(-1)} className="p-1.5 bg-[#F3F4F6] text-[#6B7280] rounded-full hover:bg-[#F3F4F6] transition-colors">
@@ -139,7 +93,7 @@ export default function UserProfile() {
       </div>
 
       {/* ===== MAIN CONTENT ===== */}
-      <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto px-4 pb-24 pt-4">
+      <div className="flex flex-col space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-3">
         {/* User Info Card */}
         <div className="bg-white rounded-lg p-2 shadow-sm border border-slate-200">
           <div className="mb-2">
@@ -176,7 +130,7 @@ export default function UserProfile() {
                       onClick={() => setSiteToRemove(siteId)}
                       className="p-1.5 text-red-500 hover:bg-red-50 rounded-md transition-colors"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-5 h-5" />
                     </button>
                   )}
                 </div>
@@ -193,12 +147,9 @@ export default function UserProfile() {
 
           <Button
             className="w-full mt-3 flex items-center justify-center py-2 bg-[#2563EB]/10 text-[#2563EB] hover:bg-[#2563EB]/20 border border-transparent rounded-md"
-            onClick={() => {
-              setSelectedSiteIds(profileUser.assignedSites?.map(s => s._id || s.siteId) || []);
-              setIsAssignSitesModalOpen(true);
-            }}
+            onClick={() => navigate(`/users/${profileUser._id}/assign-sites`)}
           >
-            <Settings className="w-4 h-4 mr-2" />
+            <Settings className="w-5 h-5 mr-2" />
             Assign Sites
           </Button>
         </div>
@@ -215,54 +166,7 @@ export default function UserProfile() {
         confirmVariant="danger"
       />
 
-      <Modal
-        isOpen={isAssignSitesModalOpen}
-        onClose={() => {
-          setIsAssignSitesModalOpen(false);
-          setSelectedSiteIds([]);
-        }}
-        title="Assign Sites"
-      >
-        <form onSubmit={handleAssignSitesSubmit} className="space-y-4">
-          <div className="max-h-[50vh] overflow-y-auto space-y-2 pr-1">
-            {displaySites.length === 0 ? (
-              <p className="text-sm text-center text-[#6B7280] py-4">No available sites to assign.</p>
-            ) : (
-              displaySites.map(s => {
-                const siteId = s._id || s.siteId;
-                const isManagedByOther = sitesAssignedByOthers.some(otherSite => (otherSite._id || otherSite.siteId) === siteId);
-                const isSelected = selectedSiteIds.includes(siteId);
-
-                return (
-                  <label key={siteId} className={`flex items-center gap-2 p-2 rounded-md border transition-colors ${isManagedByOther ? 'bg-[#F3F4F6] border-[#E5E7EB] opacity-70 cursor-not-allowed' : isSelected ? 'border-[#2563EB] bg-blue-50 cursor-pointer' : 'border-[#E5E7EB] bg-white hover:bg-[#f8faff] cursor-pointer'}`}>
-                    <input
-                      type="checkbox"
-                      checked={isSelected || isManagedByOther}
-                      disabled={isManagedByOther}
-                      onChange={() => !isManagedByOther && toggleSiteSelection(siteId)}
-                      className="w-4 h-4 text-[#2563EB] rounded border-[#E5E7EB] focus:ring-[#2563EB] disabled:opacity-50"
-                    />
-                    <div>
-                      <h4 className="font-bold text-[#1F2937] text-sm">{s.siteName}</h4>
-                      <span className="text-xs text-[#6B7280]">{s.siteCode}</span>
-                      {isManagedByOther && <span className="ml-2 text-[10px] bg-[#F3F4F6] text-[#6B7280] px-1.5 py-0.5 rounded font-bold uppercase">Managed by Others</span>}
-                    </div>
-                  </label>
-                );
-              })
-            )}
-          </div>
-
-          <div className="pt-4 border-t border-[#E5E7EB] flex justify-end gap-2">
-            <Button variant="outline" type="button" onClick={() => setIsAssignSitesModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isSubmitting || selectedSiteIds.length === 0} className="px-6">
-              {isSubmitting ? 'Assigning...' : 'Assign'}
-            </Button>
-          </div>
-        </form>
-      </Modal>
+      
     </>
   );
 }

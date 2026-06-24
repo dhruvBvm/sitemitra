@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 import Loader from '../../components/common/Loader';
 import StatusBadge from '../../components/common/StatusBadge';
 import { formatDate } from '../../utils/helpers';
-import { Search, Calendar, Filter, Eye, X, FileText, CheckCircle2, ArrowLeft } from 'lucide-react';
+import { Search, Calendar, Filter, Eye, X, FileText, CheckCircle2, ArrowLeft, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import CommentModal from '../../components/common/CommentModal';
 
@@ -20,8 +20,10 @@ export default function Transactions() {
   const [sites, setSites] = useState([]);
 
   // Filters
+  const todayStr = new Date().toISOString().split('T')[0];
   const [selectedSite, setSelectedSite] = useState('');
   const [selectedType, setSelectedType] = useState('All');
+  const [selectedDateRange, setSelectedDateRange] = useState('All Time');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -161,6 +163,38 @@ export default function Transactions() {
     }
   };
 
+  const handleDateRangeChange = (e) => {
+    const range = e.target.value;
+    setSelectedDateRange(range);
+    
+    const today = new Date();
+    let start = '';
+    let end = '';
+
+    if (range === 'Today') {
+      start = today.toISOString().split('T')[0];
+      end = start;
+    } else if (range === 'Yesterday') {
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      start = yesterday.toISOString().split('T')[0];
+      end = start;
+    } else if (range === 'Last Week') {
+      const lastWeek = new Date(today);
+      lastWeek.setDate(lastWeek.getDate() - 7);
+      start = lastWeek.toISOString().split('T')[0];
+      end = today.toISOString().split('T')[0];
+    } else if (range === 'Last Month') {
+      const lastMonth = new Date(today);
+      lastMonth.setMonth(lastMonth.getMonth() - 1);
+      start = lastMonth.toISOString().split('T')[0];
+      end = today.toISOString().split('T')[0];
+    }
+
+    setStartDate(start);
+    setEndDate(end);
+  };
+
   const handleApplyFilters = () => {
     setAppliedFilters({
       siteId: selectedSite,
@@ -231,8 +265,8 @@ export default function Transactions() {
   return (
     <>
       {/* Filter Bar Wrapper */}
-      <div className="sticky top-[56px] left-0 right-0 z-40 bg-white   border-[#E5E7EB] overflow-x-hidden fixed-div">
-        <div className="max-w-[428px] mx-auto px-4 py-2 flex flex-col gap-1.5">
+      <div className="sticky top-0 left-0 right-0 z-40 bg-white   border-[#E5E7EB] overflow-x-hidden fixed-div">
+        <div className="max-w-[428px] mx-auto px-4 pt-3 pb-2 flex flex-col gap-1.5">
           {/* FULL-WIDTH STICKY HEADER – DO NOT REMOVE OR WRAP IN CONTAINER */}
           <div className="fixed-div"></div>
           {/* Row 1: Site and Type */}
@@ -240,7 +274,7 @@ export default function Transactions() {
             <select
               value={selectedSite}
               onChange={(e) => setSelectedSite(e.target.value)}
-              className="flex-1 w-full p-2 text-sm border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
+              className="flex-1 w-full p-2 text-xs border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
             >
               <option value="">All Sites</option>
               {sites.map(site => (
@@ -250,12 +284,23 @@ export default function Transactions() {
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="flex-1 w-full p-2 text-sm border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
+              className="flex-1 w-full p-2 text-xs border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
             >
               <option value="All">All Types</option>
               <option value="Requests">Requests</option>
               <option value="Received">Received</option>
               <option value="Used">Used</option>
+            </select>
+            <select
+              value={selectedDateRange}
+              onChange={handleDateRangeChange}
+              className="flex-1 w-full p-2 text-xs border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
+            >
+              <option value="All Time">All Time</option>
+              <option value="Today">Today</option>
+              <option value="Yesterday">Yesterday</option>
+              <option value="Last Week">Last Week</option>
+              <option value="Last Month">Last Month</option>
             </select>
           </div>
 
@@ -265,14 +310,14 @@ export default function Transactions() {
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="flex-1 w-full p-2 text-sm border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white text-[#6B7280]"
+              className="flex-1 w-full p-2 text-xs border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white text-[#6B7280]"
               title="Date From"
             />
             <input
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="flex-1 w-full p-2 text-sm border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white text-[#6B7280]"
+              className="flex-1 w-full p-2 text-xs border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white text-[#6B7280]"
               title="Date To"
             />
           </div>
@@ -288,7 +333,7 @@ export default function Transactions() {
                 placeholder="Search REQ-, RCV-, USE-"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 p-2 text-sm border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
+                className="w-full pl-9 pr-3 p-2 text-xs border border-[#E5E7EB] rounded-md focus:outline-none focus:ring-2 focus:ring-[#2563EB] bg-white"
               />
             </div>
           </div>
@@ -296,7 +341,7 @@ export default function Transactions() {
           {/* Row 4: Apply Filters Button */}
           <button
             onClick={handleApplyFilters}
-            className="w-full bg-[#2563EB] text-white px-4 py-2 rounded-md font-medium hover:bg-[#1d4ed8] transition-colors flex items-center justify-center text-sm"
+            className="w-full bg-[#2563EB] text-white px-4 py-2 rounded-md font-medium hover:bg-[#1d4ed8] transition-colors flex items-center justify-center text-[10px]"
           >
             Apply Filters
           </button>
@@ -304,7 +349,7 @@ export default function Transactions() {
       </div>
 
       {/* Main Content */}
-      <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-1">
+      <div className="flex flex-col  space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-3">
         {loading ? (
           <div className="py-20 flex justify-center items-center">
             <Loader size="md" />
@@ -316,70 +361,66 @@ export default function Transactions() {
                 paginatedData.map(row => (
                   <div
                     key={row._id + '-' + row.transactionType}
-                    className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer active:scale-[0.98]"
+                    className="bg-white rounded-lg p-3 shadow-sm border border-slate-200 hover:shadow-md transition-shadow cursor-pointer active:scale-[0.98]"
                     onClick={() => openDetails(row)}
                   >
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className={`inline-flex px-2 py-0.5 rounded text-xs font-bold ${row.transactionType === 'Request' ? 'bg-blue-100 text-blue-800' :
-                            row.transactionType === 'Received' ? 'bg-[#10B981] text-white' :
-                              'bg-orange-100 text-orange-800'
-                          }`}>
-                          {row.transactionType}
-                        </span>
-                        <span className="text-sm font-bold text-[#1F2937]">{row.number}</span>
-                      </div>
-                      <span className="text-xs text-[#6B7280] font-medium">{formatDate(row.date)}</span>
-                    </div>
-
-                    <div className="mb-2 space-y-1">
-                      <div className="text-sm text-[#6B7280]">
-                        <span className="font-semibold text-[#1F2937]">Site:</span> {row.siteId?.siteName || '-'}
-                      </div>
-                      <div className="text-sm text-[#6B7280] line-clamp-2" title={getMaterialsSummary(row.materials)}>
-                        <span className="font-semibold text-[#1F2937]">Materials:</span> {getMaterialsSummary(row.materials)}
-                      </div>
-                      {row.notes && (
-                        <div className="text-sm text-[#6B7280] line-clamp-1 italic">
-                          <span className="font-semibold text-[#1F2937] not-italic">Notes:</span> {row.notes}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex justify-between items-center pt-3 border-t border-slate-100">
-                      <div className="flex items-center gap-2">
-                        {row.transactionType === 'Request' ? (
-                          <StatusBadge status={row.statusText} />
-                        ) : (
-                          <span className="inline-flex items-center gap-1 text-xs font-bold text-[#10B981]">
-                            <CheckCircle2 className="w-3.5 h-3.5" /> Completed
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1 min-w-0 pr-2">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className={`inline-flex px-2 py-0.5 rounded text-xs font-bold ${row.transactionType === 'Request' ? 'bg-[#2563EB] text-white' :
+                              row.transactionType === 'Received' ? 'bg-[#10B981] text-white' :
+                                'bg-[#F97316] text-white'
+                            }`}>
+                            {row.transactionType}
                           </span>
-                        )}
+                          <span className="text-sm font-bold text-[#1F2937] truncate">{row.number}</span>
+                        </div>
+
+                        <div className="space-y-1">
+                          <div className="text-sm text-[#6B7280]">
+                            <span className="font-semibold text-[#1F2937]">Site:</span> {row.siteId?.siteName || '-'}
+                          </div>
+                          <div className="text-sm text-[#6B7280] line-clamp-2" title={getMaterialsSummary(row.materials)}>
+                            <span className="font-semibold text-[#1F2937]">Materials:</span> {getMaterialsSummary(row.materials)}
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex gap-2 items-center">
-                        {row.transactionType === 'Request' && user?.role === 'manager' && row.status === 'pending_manager' && (
-                          <>
-                            <Button size="sm" className="bg-[#2563EB] text-white px-2 py-2.5 h-auto text-xs hover:bg-[#2563EB] rounded-md" onClick={(e) => openModal(e, 'approve', row._id)} disabled={actionLoading === row._id}>
-                              {actionLoading === row._id ? '...' : 'Approve'}
-                            </Button>
-                            <Button size="sm" variant="outline" className="text-[#EF4444] border-[#EF4444] hover:bg-red-50 px-2 py-2.5 h-auto text-xs rounded-md" onClick={(e) => openModal(e, 'reject', row._id)} disabled={actionLoading === row._id}>
-                              {actionLoading === row._id ? '...' : 'Reject'}
-                            </Button>
-                          </>
-                        )}
-                        {row.transactionType === 'Request' && user?.role === 'owner' && (row.status === 'pending_admin' || row.status === 'pending_owner') && (
-                          <>
-                            <Button size="sm" className="bg-[#2563EB] text-white px-2 py-2.5 h-auto text-xs hover:bg-[#2563EB] rounded-md" onClick={(e) => openModal(e, 'approve', row._id)} disabled={actionLoading === row._id}>
-                              {actionLoading === row._id ? '...' : 'Approve'}
-                            </Button>
-                            <Button size="sm" variant="outline" className="text-[#EF4444] border-[#EF4444] hover:bg-red-50 px-2 py-2.5 h-auto text-xs rounded-md" onClick={(e) => openModal(e, 'reject', row._id)} disabled={actionLoading === row._id}>
-                              {actionLoading === row._id ? '...' : 'Reject'}
-                            </Button>
-                          </>
-                        )}
-                        <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); openDetails(row); }} className="text-[#2563EB] hover:bg-blue-50 py-2.5 px-2 h-auto text-xs rounded-md">
-                          <Eye className="w-3 h-3 mr-1" /> View
-                        </Button>
+
+                      <div className="flex flex-col items-end gap-2 shrink-0">
+                        <span className="text-xs text-[#6B7280] font-medium">{formatDate(row.date)}</span>
+                        
+                        <div className="flex items-center">
+                          {row.transactionType === 'Request' ? (
+                            <StatusBadge status={row.statusText} />
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-xs font-bold text-[#10B981]">
+                              <CheckCircle2 className="w-3.5 h-3.5" /> Completed
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="flex gap-2 items-center">
+                          {row.transactionType === 'Request' && user?.role === 'manager' && row.status === 'pending_manager' && (
+                            <>
+                              <button onClick={(e) => { e.stopPropagation(); openModal(e, 'approve', row._id); }} disabled={actionLoading === row._id} className="p-2 flex items-center justify-center bg-[#f8faff] text-[#2563EB] rounded-[6px] hover:bg-blue-100 transition-colors border border-[#E5E7EB]" title="Approve">
+                                {actionLoading === row._id ? '...' : <ThumbsUp className="w-[18px] h-[18px]" />}
+                              </button>
+                              <button onClick={(e) => { e.stopPropagation(); openModal(e, 'reject', row._id); }} disabled={actionLoading === row._id} className="p-2 flex items-center justify-center bg-[#f8faff] text-[#EF4444] rounded-[6px] hover:bg-red-50 transition-colors border border-[#E5E7EB]" title="Reject">
+                                {actionLoading === row._id ? '...' : <ThumbsDown className="w-[18px] h-[18px]" />}
+                              </button>
+                            </>
+                          )}
+                          {row.transactionType === 'Request' && user?.role === 'owner' && (row.status === 'pending_admin' || row.status === 'pending_owner') && (
+                            <>
+                              <button onClick={(e) => { e.stopPropagation(); openModal(e, 'approve', row._id); }} disabled={actionLoading === row._id} className="p-2 flex items-center justify-center bg-[#f8faff] text-[#2563EB] rounded-[6px] hover:bg-blue-100 transition-colors border border-[#E5E7EB]" title="Approve">
+                                {actionLoading === row._id ? '...' : <ThumbsUp className="w-[18px] h-[18px]" />}
+                              </button>
+                              <button onClick={(e) => { e.stopPropagation(); openModal(e, 'reject', row._id); }} disabled={actionLoading === row._id} className="p-2 flex items-center justify-center bg-[#f8faff] text-[#EF4444] rounded-[6px] hover:bg-red-50 transition-colors border border-[#E5E7EB]" title="Reject">
+                                {actionLoading === row._id ? '...' : <ThumbsDown className="w-[18px] h-[18px]" />}
+                              </button>
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>

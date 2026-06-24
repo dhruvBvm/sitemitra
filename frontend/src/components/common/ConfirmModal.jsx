@@ -24,7 +24,7 @@ export default function ConfirmModal({
       <div className="py-4">
         <p className="text-[#4B5563]">{message}</p>
       </div>
-      <div className="flex justify-end gap-3 mt-4">
+      <div className="flex justify-end gap-2 px-4 py-3 border-t border-[#E5E7EB] mt-4">
         <Button 
           variant="outline" 
           onClick={onCancel}

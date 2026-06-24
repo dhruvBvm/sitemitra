@@ -227,24 +227,16 @@ label {
   font-weight: 700;
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar - Invisible */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  display: none;
+  width: 0;
+  height: 0;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--text-secondary);
-  border-radius: 4px;
-  opacity: 0.5;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-main);
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 }
 
 /* Card hover shadow and transition effects */

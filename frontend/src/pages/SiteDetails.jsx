@@ -21,13 +21,9 @@ export default function SiteDetails() {
 
   const [site, setSite] = useState(null);
   const [assignedUsers, setAssignedUsers] = useState([]);
-  const [unassignedUsers, setUnassignedUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [managerSites, setManagerSites] = useState([]);
 
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [selectedUserIds, setSelectedUserIds] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [removingUserId, setRemovingUserId] = useState(null);
   const [userToRemove, setUserToRemove] = useState(null);
 
@@ -38,7 +34,6 @@ export default function SiteDetails() {
         const data = await staffService.getSiteDetails(siteId);
         setSite(data.site);
         setAssignedUsers(data.assignedStaff || []);
-        setUnassignedUsers([]);
         setLoading(false);
         return;
       }
@@ -65,12 +60,11 @@ export default function SiteDetails() {
       }
       setSite(currentSite);
 
-      const allUsers = [...(usersData?.users || usersData || [])];
+      const usersArray = [...(usersData?.users || usersData || [])];
 
       const assigned = [];
-      const unassigned = [];
 
-      allUsers.forEach(u => {
+      usersArray.forEach(u => {
         // Skip admins
         if (u.role === 'owner') return;
 
@@ -80,13 +74,9 @@ export default function SiteDetails() {
 
         if (isAssigned && u.role === 'staff') {
           assigned.push(u);
-        } else if (u.role === 'staff') {
-          // Only staff can be added via the Add Staff modal
-          unassigned.push(u);
         }
       });
       setAssignedUsers(assigned);
-      setUnassignedUsers(unassigned);
     } catch (error) {
       toast.error('Failed to load site details');
     } finally {
@@ -124,54 +114,13 @@ export default function SiteDetails() {
     }
   };
 
-  const handleAddSubmit = async (e) => {
-    e.preventDefault();
-    if (selectedUserIds.length === 0) {
-      toast.error('Please select at least one user');
-      return;
-    }
-
-    try {
-      setIsSubmitting(true);
-      const updatePromises = selectedUserIds.map(userId => {
-        const u = unassignedUsers.find(x => x._id === userId);
-        const currentAssigned = u.assignedSites ? u.assignedSites.map(s => s._id || s) : [];
-        const newAssigned = [...currentAssigned, site._id || site.siteId];
-
-        if (isOwner) {
-          return ownerService.updateUser(userId, { assignedSites: newAssigned });
-        } else {
-          const managerAssigned = currentAssigned.filter(id => managerSites.includes(id));
-          const newManagerAssigned = [...managerAssigned, site._id || site.siteId];
-          return managerService.assignSitesToTeamStaff(userId, newManagerAssigned);
-        }
-      });
-
-      await Promise.all(updatePromises);
-      toast.success('Users successfully added to site');
-      setIsAddModalOpen(false);
-      setSelectedUserIds([]);
-      fetchData();
-    } catch (error) {
-      toast.error('Failed to add users to site');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const toggleUserSelection = (id) => {
-    setSelectedUserIds(prev =>
-      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
-    );
-  };
-
   if (loading) return <Loader size="lg" className="mt-20" />;
   if (!site) return null;
 
   return (
     <>
       {/* Sticky Header & Site Info */}
-      <div className="sticky top-[56px] left-0 right-0 z-40 bg-white   border-[#E5E7EB] overflow-x-hidden">
+      <div className="sticky top-0 left-0 right-0 z-40 bg-white   border-[#E5E7EB] overflow-x-hidden">
         <div className="max-w-[428px] mx-auto px-4 py-2 flex flex-col gap-1.5">
           {/* FULL-WIDTH STICKY HEADER – DO NOT REMOVE OR WRAP IN CONTAINER */}
           {/* Header Bar */}
@@ -222,7 +171,7 @@ export default function SiteDetails() {
         </div>
       </div>
 
-      <div className="flex flex-col min-h-screen space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-4">
+      <div className="flex flex-col  space-y-4 max-w-[428px] mx-auto px-4 pb-4 pt-4">
 
         {/* Assigned Users Section */}
         <div>
@@ -324,16 +273,16 @@ export default function SiteDetails() {
             <div className="flex gap-2 mt-4">
               <Button
                 className="flex-1 flex items-center justify-center py-2 bg-[#2563EB]/10 text-[#2563EB] hover:bg-[#2563EB]/20 border border-transparent"
-                onClick={() => setIsAddModalOpen(true)}
+                onClick={() => navigate(`/sites/${site._id || site.siteId}/add-staff`)}
               >
-                <Plus className="w-4 h-4 mr-2" />
+                <Plus className="w-5 h-5 mr-2" />
                 Assign Staff
               </Button>
               <Button
                 className="flex-1 flex items-center justify-center py-2 bg-[#2563EB] text-white hover:bg-[#2563EB] border border-transparent shadow-sm"
                 onClick={() => navigate(`/sites/${site._id || site.siteId}/create-staff`)}
               >
-                <Plus className="w-4 h-4 mr-2" />
+                <Plus className="w-5 h-5 mr-2" />
                 Create New Staff
               </Button>
             </div>
@@ -352,53 +301,6 @@ export default function SiteDetails() {
           )}
         </div>
       </div>
-
-      {/* Add Staff Modal */}
-      <Modal
-        isOpen={isAddModalOpen}
-        onClose={() => {
-          setIsAddModalOpen(false);
-          setSelectedUserIds([]);
-        }}
-        title="Add Team to Site"
-      >
-        <form onSubmit={handleAddSubmit} className="space-y-4">
-          <div className="max-h-[50vh] overflow-y-auto space-y-2 pr-1 hide-scrollbar">
-            {unassignedUsers.length === 0 ? (
-              <p className="text-sm text-center text-[#6B7280] py-4">No available users to add.</p>
-            ) : (
-              unassignedUsers.map(u => (
-                <label key={u._id} className={`flex items-center gap-2 p-2 rounded-md border cursor-pointer transition-colors ${selectedUserIds.includes(u._id) ? 'border-[#2563EB] bg-blue-50' : 'border-[#E5E7EB] bg-white hover:bg-[#f8faff]'}`}>
-                  <input
-                    type="checkbox"
-                    checked={selectedUserIds.includes(u._id)}
-                    onChange={() => toggleUserSelection(u._id)}
-                    className="w-4 h-4 text-[#2563EB] rounded border-[#E5E7EB] focus:ring-[#2563EB]"
-                  />
-                  <div>
-                    <h4 className="font-bold text-[#1F2937] text-sm">{u.name}</h4>
-                    <div className="flex gap-2 items-center mt-0.5">
-                      <span className="text-xs text-[#6B7280]">{u.email}</span>
-                      <span className="bg-[#F3F4F6] text-[#6B7280] text-[10px] uppercase font-bold px-1.5 py-0.5 rounded">
-                        {u.role}
-                      </span>
-                    </div>
-                  </div>
-                </label>
-              ))
-            )}
-          </div>
-
-          <div className="pt-4 border-t border-slate-100 flex justify-end gap-2">
-            <Button variant="outline" type="button" onClick={() => setIsAddModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" disabled={isSubmitting || selectedUserIds.length === 0} className="px-6">
-              {isSubmitting ? 'Adding...' : 'Add to Site'}
-            </Button>
-          </div>
-        </form>
-      </Modal>
 
       <ConfirmModal
         isOpen={!!userToRemove}

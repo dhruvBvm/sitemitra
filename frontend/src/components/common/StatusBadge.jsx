@@ -21,7 +21,7 @@ export default function StatusBadge({ status, className }) {
   }
 
   return (
-    <span className={cn("inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border", styles, className)}>
+    <span className={cn("inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-semibold border", styles, className)}>
       {label}
     </span>
   );
