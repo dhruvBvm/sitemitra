@@ -140,13 +140,16 @@ export default function UserProfile() {
           <div className="space-y-2">
             {profileUser.assignedSites?.map(s => {
               const siteId = s._id || s.siteId;
+              const managerSiteIds = currentUser?.assignedSites?.map(ms => ms._id || ms.siteId || ms) || [];
+              const canDelete = isOwner || (currentUser?.role === 'manager' && managerSiteIds.includes(siteId));
+              
               return (
                 <div key={siteId} className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 flex items-center justify-between">
                   <div>
                     <h4 className="text-base font-bold text-[#1F2937] leading-tight">{s.siteName || 'Unknown Site'}</h4>
                     <p className="text-xs text-slate-400 font-mono mt-0.5">{s.siteCode || ''}</p>
                   </div>
-                  {(isOwner || currentUser?.role === 'manager') && profileUser.role !== 'manager' && (
+                  {canDelete && profileUser.role !== 'manager' && (
                     <button
                       onClick={() => setSiteToRemove(siteId)}
                       className="p-1.5 text-red-500 hover:bg-red-50 rounded-md transition-colors"
