@@ -140,16 +140,18 @@ export default function EditUser() {
             {errors.password && <p className="mt-1 text-sm text-[#EF4444]">{errors.password.message}</p>}
           </div>
 
-          <div className="pt-2">
-            <SiteMultiSelect
-              role="owner"
-              register={register}
-              error={errors.assignedSites}
-              availableSites={null}
-              disabled={false}
-              required={userRole === 'staff'}
-            />
-          </div>
+          {userRole === 'staff' && (
+            <div className="pt-2">
+              <SiteMultiSelect
+                role="owner"
+                register={register}
+                error={errors.assignedSites}
+                availableSites={null}
+                disabled={false}
+                required={true}
+              />
+            </div>
+          )}
 
           <div>
             <label className="block text-sm font-bold text-[#1F2937] mb-1">Status</label>

@@ -220,6 +220,25 @@ export default function SiteDetails() {
 
           {/* Staff List */}
           {user?.role !== 'staff' && (
+            <div className="flex gap-2 mb-6">
+              <Button
+                className="flex-1 flex items-center justify-center py-2 bg-[#2563EB]/10 text-[#2563EB] hover:bg-[#2563EB]/20 border border-transparent"
+                onClick={() => navigate(`/sites/${site._id || site.siteId}/add-staff`)}
+              >
+                <Plus className="w-5 h-5 mr-2" />
+                Assign Staff
+              </Button>
+              <Button
+                className="flex-1 flex items-center justify-center py-2 bg-[#2563EB] text-white hover:bg-[#2563EB] border border-transparent shadow-sm"
+                onClick={() => navigate(`/sites/${site._id || site.siteId}/create-staff`)}
+              >
+                <Plus className="w-5 h-5 mr-2" />
+                New Staff
+              </Button>
+            </div>
+          )}
+
+          {user?.role !== 'staff' && (
             <div>
               <div className="flex justify-between items-center mb-2">
                 <h3 className="text-base font-bold text-[#1F2937]">Staff (assigned workers) ({assignedUsers.filter(u => u.role === 'staff').length})</h3>
@@ -266,25 +285,6 @@ export default function SiteDetails() {
                   </div>
                 )}
               </div>
-            </div>
-          )}
-
-          {user?.role !== 'staff' && (
-            <div className="flex gap-2 mt-4">
-              <Button
-                className="flex-1 flex items-center justify-center py-2 bg-[#2563EB]/10 text-[#2563EB] hover:bg-[#2563EB]/20 border border-transparent"
-                onClick={() => navigate(`/sites/${site._id || site.siteId}/add-staff`)}
-              >
-                <Plus className="w-5 h-5 mr-2" />
-                Assign Staff
-              </Button>
-              <Button
-                className="flex-1 flex items-center justify-center py-2 bg-[#2563EB] text-white hover:bg-[#2563EB] border border-transparent shadow-sm"
-                onClick={() => navigate(`/sites/${site._id || site.siteId}/create-staff`)}
-              >
-                <Plus className="w-5 h-5 mr-2" />
-                New Staff
-              </Button>
             </div>
           )}
 

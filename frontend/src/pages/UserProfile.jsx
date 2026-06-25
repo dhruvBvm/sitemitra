@@ -133,6 +133,16 @@ export default function UserProfile() {
 
         {/* Assigned Sites Section */}
         <div>
+          {(isOwner || currentUser?.role === 'manager') && profileUser.role !== 'manager' && (
+            <Button
+              className="w-full mb-6 flex items-center justify-center py-2 bg-[#2563EB]/10 text-[#2563EB] hover:bg-[#2563EB]/20 border border-transparent rounded-md"
+              onClick={() => navigate(`/users/${profileUser._id}/assign-sites`)}
+            >
+              <Settings className="w-5 h-5 mr-2" />
+              Assign Sites
+            </Button>
+          )}
+
           <div className="flex justify-between items-center mb-2">
             <h3 className="text-base font-bold text-[#1F2937]">Assigned Sites ({profileUser.assignedSites?.length || 0})</h3>
           </div>
@@ -169,15 +179,6 @@ export default function UserProfile() {
             )}
           </div>
 
-          {(isOwner || currentUser?.role === 'manager') && profileUser.role !== 'manager' && (
-            <Button
-              className="w-full mt-3 flex items-center justify-center py-2 bg-[#2563EB]/10 text-[#2563EB] hover:bg-[#2563EB]/20 border border-transparent rounded-md"
-              onClick={() => navigate(`/users/${profileUser._id}/assign-sites`)}
-            >
-              <Settings className="w-5 h-5 mr-2" />
-              Assign Sites
-            </Button>
-          )}
         </div>
       </div>
 
