@@ -24,8 +24,17 @@ router.use(protect); // Available to all authenticated users
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Successful operation
- *       400:
+ *         description: A list of notifications
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean }
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Notification'
  *         description: Bad request
  *       401:
  *         description: Unauthorized
@@ -72,6 +81,14 @@ router.put('/read-all', markAllRead);
  *     responses:
  *       200:
  *         description: Notification marked as read
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean }
+ *                 data:
+ *                   $ref: '#/components/schemas/Notification'
  *       401:
  *         description: Unauthorized
  *       404:

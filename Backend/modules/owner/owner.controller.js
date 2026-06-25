@@ -178,7 +178,7 @@ const updateUser = async (req, res) => {
   try {
     const user = await User.findOne({ _id: userId, ownerId: req.user._id });
     if (!user) return res.status(404).json({ message: 'User not found or not authorized' });
-    
+
     // Prevent role change
     if (updateData.role && updateData.role !== user.role) {
       return res.status(400).json({ message: 'Cannot change role of user' });
@@ -189,12 +189,12 @@ const updateUser = async (req, res) => {
       const orConditions = [];
       if (updateData.email) orConditions.push({ email: updateData.email });
       if (updateData.mobile) orConditions.push({ mobile: updateData.mobile });
-      
+
       const existingUser = await User.findOne({
         _id: { $ne: userId },
         $or: orConditions
       });
-      
+
       if (existingUser) {
         return res.status(400).json({ message: 'User with this email or mobile already exists' });
       }
@@ -268,42 +268,42 @@ const getDashboardStats = async (req, res) => {
   }
 };
 
-  // @desc    Get monthly orders data for a given year
-  // @route   GET /api/owner/reports/monthly?year=2026
-  // @access  Private/Owner
-  const getMonthlyOrders = async (req, res) => {
-    try {
-      const year = parseInt(req.query.year) || new Date().getFullYear();
-      // Aggregate orders by month
-      const monthly = await Request.aggregate([
-        { $match: { ownerId: req.user._id, createdAt: { $gte: new Date(`${year}-01-01`), $lt: new Date(`${year + 1}-01-01`) } } },
-        { $group: { _id: { $month: "$createdAt" }, count: { $sum: 1 } } },
-        { $project: { _id: 0, month: "$_id", count: 1 } },
-        { $sort: { month: 1 } }
-      ]);
-      res.json({ success: true, data: monthly });
-    } catch (error) {
-      console.error('Monthly orders error:', error);
-      res.status(500).json({ message: error.message });
-    }
-  };
+// @desc    Get monthly orders data for a given year
+// @route   GET /api/owner/reports/monthly?year=2026
+// @access  Private/Owner
+const getMonthlyOrders = async (req, res) => {
+  try {
+    const year = parseInt(req.query.year) || new Date().getFullYear();
+    // Aggregate orders by month
+    const monthly = await Request.aggregate([
+      { $match: { ownerId: req.user._id, createdAt: { $gte: new Date(`${year}-01-01`), $lt: new Date(`${year + 1}-01-01`) } } },
+      { $group: { _id: { $month: "$createdAt" }, count: { $sum: 1 } } },
+      { $project: { _id: 0, month: "$_id", count: 1 } },
+      { $sort: { month: 1 } }
+    ]);
+    res.json({ success: true, data: monthly });
+  } catch (error) {
+    console.error('Monthly orders error:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
 
-  // @desc    Get order status breakdown
-  // @route   GET /api/owner/reports/status-breakdown
-  // @access  Private/Owner
-  const getStatusBreakdown = async (req, res) => {
-    try {
-      const breakdown = await Request.aggregate([
-        { $match: { ownerId: req.user._id } },
-        { $group: { _id: "$status", count: { $sum: 1 } } },
-        { $project: { _id: 0, status: "$_id", count: 1 } }
-      ]);
-      res.json({ success: true, data: breakdown });
-    } catch (error) {
-      console.error('Status breakdown error:', error);
-      res.status(500).json({ message: error.message });
-    }
-  };
+// @desc    Get order status breakdown
+// @route   GET /api/owner/reports/status-breakdown
+// @access  Private/Owner
+const getStatusBreakdown = async (req, res) => {
+  try {
+    const breakdown = await Request.aggregate([
+      { $match: { ownerId: req.user._id } },
+      { $group: { _id: "$status", count: { $sum: 1 } } },
+      { $project: { _id: 0, status: "$_id", count: 1 } }
+    ]);
+    res.json({ success: true, data: breakdown });
+  } catch (error) {
+    console.error('Status breakdown error:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
   createManager,
