@@ -102,7 +102,7 @@ export default function RequestDetail() {
     (user?.role === 'owner' && (request.status === 'pending_admin' || request.status === 'pending_owner'));
 
   return (
-    <div className="w-full max-w-[428px] mx-auto bg-[#f8faff] relative pb-6 font-sans flex flex-col min-h-full">
+    <div className={`w-full max-w-[428px] mx-auto bg-[#f8faff] relative ${showApproveReject ? 'pb-36' : 'pb-24'} font-sans`}>
       {/* Sticky Header */}
       <div className="sticky top-0 left-0 right-0 mx-auto max-w-[428px] z-40 bg-white border-b border-[#E5E7EB] overflow-x-hidden">
         <div className="max-w-[428px] mx-auto px-4 py-2 flex flex-col gap-1.5 justify-between">
@@ -119,7 +119,20 @@ export default function RequestDetail() {
         </div>
       </div>
 
-      <div className="max-w-[428px] mx-auto px-4 space-y-4 pt-4 pb-4">
+      <div className="max-w-[428px] mx-auto px-4 space-y-4 pt-4">
+
+        {showApproveReject && (
+          <div className="fixed bottom-[55px] left-0 right-0 z-40 flex justify-center pointer-events-none">
+            <div className="w-full bg-white border-t border-[#E5E7EB] px-3 pt-3 pb-3 flex justify-between gap-3 pointer-events-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]" style={{ maxWidth: '428px' }}>
+              <Button className="flex-1 bg-[#2563EB] hover:bg-[#2563EB] text-white py-3 px-2 rounded-md font-bold text-sm" onClick={() => openModal('approve')}>
+                Approve
+              </Button>
+              <Button className="flex-1 text-[#EF4444] border-[#EF4444] hover:bg-red-50 py-3 px-2 rounded-md font-bold text-sm" variant="outline" onClick={() => openModal('reject')}>
+                Reject
+              </Button>
+            </div>
+          </div>
+        )}
         {/* Approve/Reject container moved to the bottom of the component for sticky to work correctly */}
 
         <div className="bg-white rounded-md shadow-sm border border-transparent p-5 space-y-4">
@@ -266,17 +279,6 @@ export default function RequestDetail() {
         confirmText={modalConfig.confirmText}
         actionLoading={actionLoading}
       />
-
-      {showApproveReject && (
-        <div className="sticky bottom-0 w-full z-40 bg-white border-t border-[#E5E7EB] px-3 pt-3 pb-3 mt-4 flex justify-between gap-3 pointer-events-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-          <Button className="flex-1 bg-[#2563EB] hover:bg-[#2563EB] text-white py-3 px-2 rounded-md font-bold text-sm" onClick={() => openModal('approve')}>
-            Approve
-          </Button>
-          <Button className="flex-1 text-[#EF4444] border-[#EF4444] hover:bg-red-50 py-3 px-2 rounded-md font-bold text-sm" variant="outline" onClick={() => openModal('reject')}>
-            Reject
-          </Button>
-        </div>
-      )}
     </div>
   );
 }
