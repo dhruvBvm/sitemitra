@@ -447,7 +447,10 @@ export default function Transactions() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
+                    onClick={() => {
+                      setCurrentPage(p => Math.max(p - 1, 1));
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
                     disabled={currentPage === 1}
                     className="bg-white border-[#E5E7EB] text-[#1F2937] hover:bg-[#f8faff]"
                   >
@@ -456,7 +459,10 @@ export default function Transactions() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
+                    onClick={() => {
+                      setCurrentPage(p => Math.min(p + 1, totalPages));
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
                     disabled={currentPage === totalPages}
                     className="bg-white border-[#E5E7EB] text-[#1F2937] hover:bg-[#f8faff]"
                   >
