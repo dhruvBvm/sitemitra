@@ -72,7 +72,20 @@ export default function UserProfile() {
       const currentAssigned = profileUser.assignedSites.map(s => s._id || s.siteId);
       const newAssigned = currentAssigned.filter(id => id !== siteToRemoveId);
 
-      await ownerService.assignUserSites(profileUser._id, newAssigned);
+      if (isOwner) {
+        await ownerService.assignUserSites(profileUser._id, newAssigned);
+      } else {
+        // Find which sites the manager has access to
+        const managerSitesData = await managerService.getSites();
+        const managerSiteIds = managerSitesData.map(s => s._id || s.siteId);
+        
+        // Ensure the manager only affects sites they actually manage
+        const managerCurrentAssigned = profileUser.assignedSites ? profileUser.assignedSites.map(s => s._id || s.siteId) : [];
+        const managerAssigned = managerCurrentAssigned.filter(id => managerSiteIds.includes(id));
+        const newManagerAssigned = managerAssigned.filter(id => id !== siteToRemoveId);
+        
+        await managerService.assignSitesToTeamStaff(profileUser._id, newManagerAssigned);
+      }
       toast.success('Removed from site');
       fetchData();
     } catch (error) {
@@ -133,7 +146,7 @@ export default function UserProfile() {
                     <h4 className="text-base font-bold text-[#1F2937] leading-tight">{s.siteName || 'Unknown Site'}</h4>
                     <p className="text-xs text-slate-400 font-mono mt-0.5">{s.siteCode || ''}</p>
                   </div>
-                  {isOwner && profileUser.role !== 'manager' && (
+                  {(isOwner || currentUser?.role === 'manager') && profileUser.role !== 'manager' && (
                     <button
                       onClick={() => setSiteToRemove(siteId)}
                       className="p-1.5 text-red-500 hover:bg-red-50 rounded-md transition-colors"
@@ -153,7 +166,7 @@ export default function UserProfile() {
             )}
           </div>
 
-          {isOwner && profileUser.role !== 'manager' && (
+          {(isOwner || currentUser?.role === 'manager') && profileUser.role !== 'manager' && (
             <Button
               className="w-full mt-3 flex items-center justify-center py-2 bg-[#2563EB]/10 text-[#2563EB] hover:bg-[#2563EB]/20 border border-transparent rounded-md"
               onClick={() => navigate(`/users/${profileUser._id}/assign-sites`)}
