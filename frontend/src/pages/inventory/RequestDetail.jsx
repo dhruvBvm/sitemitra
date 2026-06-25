@@ -122,7 +122,7 @@ export default function RequestDetail() {
       <div className="max-w-[428px] mx-auto px-4 space-y-4 pt-4">
 
         {showApproveReject && (
-          <div className="fixed bottom-[46px] left-0 right-0 z-40 flex justify-center pointer-events-none">
+          <div className="fixed bottom-[40px] left-0 right-0 z-40 flex justify-center pointer-events-none">
             <div className="w-full bg-white border-t border-[#E5E7EB] px-3 pt-3 pb-3 flex justify-between gap-3 pointer-events-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]" style={{ maxWidth: '428px' }}>
               <Button className="flex-1 bg-[#2563EB] hover:bg-[#2563EB] text-white py-3 px-2 rounded-md font-bold text-sm" onClick={() => openModal('approve')}>
                 Approve
