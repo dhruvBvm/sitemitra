@@ -79,8 +79,12 @@ const createManualRequest = async (req, res) => {
 
     await request.save();
     // Notifications
-    if (user.role === 'staff' && user.parentUserId) {
-      await createNotification(user.parentUserId, 'New Request Submitted', `Request ${requestNo} needs your approval.`);
+    if (user.role === 'staff') {
+      const site = await Site.findById(siteId);
+      const targetUserId = site?.managerId || user.parentUserId;
+      if (targetUserId) {
+        await createNotification(targetUserId, 'New Request Submitted', `Request ${requestNo} needs your approval.`);
+      }
     } else if (user.role === 'manager') {
       const owner = await User.findOne({ role: 'owner', _id: ownerId });
       if (owner) {
@@ -211,8 +215,12 @@ const createPhotoRequest = async (req, res) => {
 
     await request.save();
     // Notifications
-    if (user.role === 'staff' && user.parentUserId) {
-      await createNotification(user.parentUserId, 'New Photo Request Submitted', `Photo Request ${requestNo} needs your approval.`);
+    if (user.role === 'staff') {
+      const site = await Site.findById(siteId);
+      const targetUserId = site?.managerId || user.parentUserId;
+      if (targetUserId) {
+        await createNotification(targetUserId, 'New Photo Request Submitted', `Photo Request ${requestNo} needs your approval.`);
+      }
     } else if (user.role === 'manager') {
       const owner = await User.findOne({ role: 'owner', _id: ownerId });
       if (owner) {
