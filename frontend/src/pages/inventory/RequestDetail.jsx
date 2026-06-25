@@ -102,7 +102,7 @@ export default function RequestDetail() {
     (user?.role === 'owner' && (request.status === 'pending_admin' || request.status === 'pending_owner'));
 
   return (
-    <div className="w-full max-w-[428px] mx-auto  bg-[#f8faff] relative pb-24 font-sans">
+    <div className={`w-full max-w-[428px] mx-auto bg-[#f8faff] relative ${showApproveReject ? 'pb-36' : 'pb-24'} font-sans`}>
       {/* Sticky Header */}
       <div className="sticky top-0 left-0 right-0 mx-auto max-w-[428px] z-40 bg-white border-b border-[#E5E7EB] overflow-x-hidden">
         <div className="max-w-[428px] mx-auto px-4 py-2 flex flex-col gap-1.5 justify-between">
@@ -122,8 +122,8 @@ export default function RequestDetail() {
       <div className="max-w-[428px] mx-auto px-4 space-y-4 pt-4">
 
         {showApproveReject && (
-          <div className="fixed bottom-14 left-0 right-0 z-40 flex justify-center pointer-events-none">
-            <div className="w-full bg-white border-t border-[#E5E7EB] px-3 pt-3 pb-3 flex justify-between gap-3 pointer-events-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]" style={{ maxWidth: '428px' }}>
+          <div className="fixed bottom-0 left-0 right-0 z-40 flex justify-center pointer-events-none">
+            <div className="w-full bg-white border-t border-[#E5E7EB] px-3 pt-3 pb-[68px] flex justify-between gap-3 pointer-events-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]" style={{ maxWidth: '428px' }}>
               <Button className="flex-1 bg-[#2563EB] hover:bg-[#2563EB] text-white py-3 px-2 rounded-md font-bold text-sm" onClick={() => openModal('approve')}>
                 Approve
               </Button>
@@ -210,7 +210,7 @@ export default function RequestDetail() {
 
                 <div className="mt-2">
                   <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-2 block">Images</span>
-                  {mat.imageUrls && mat.imageUrls.length > 0 ? (
+                  {Array.isArray(mat.imageUrls) && mat.imageUrls.length > 0 ? (
                     <div className="flex flex-wrap gap-2">
                       {mat.imageUrls.map((img, idx) => (
                         <a key={idx} href={img} target="_blank" rel="noreferrer" className="w-16 h-16 rounded border border-transparent overflow-hidden hover:scale-105 transition-transform block">
@@ -227,7 +227,7 @@ export default function RequestDetail() {
           </div>
         </div>
 
-        {request.imageUrls && request.imageUrls.length > 0 && (
+        {Array.isArray(request.imageUrls) && request.imageUrls.length > 0 && (
           <div className="bg-white rounded-md shadow-sm border border-transparent p-5">
             <h2 className="text-sm font-bold text-green-800 uppercase tracking-wider mb-4">Order Documents</h2>
             <div className="flex flex-wrap gap-2">
@@ -242,7 +242,7 @@ export default function RequestDetail() {
 
         <div className="bg-white rounded-md shadow-sm border border-transparent p-5">
           <h2 className="text-sm font-bold text-green-800 uppercase tracking-wider mb-4">Approval History</h2>
-          {request.approvalHistory && request.approvalHistory.length > 0 ? (
+          {Array.isArray(request.approvalHistory) && request.approvalHistory.length > 0 ? (
             <div className="space-y-0">
               {request.approvalHistory.map((h, i) => (
                 <div key={i} className="flex gap-2 items-start">
