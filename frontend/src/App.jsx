@@ -17,6 +17,7 @@ import UserProfile from './pages/UserProfile';
 import CreateStaffForSite from './pages/CreateStaffForSite';
 import AddStaffToSite from './pages/AddStaffToSite';
 import AssignSites from './pages/AssignSites';
+import MyProfile from './pages/MyProfile';
 
 // Owner Pages
 import OwnerUsers from './pages/owner/Users';
@@ -149,6 +150,7 @@ function App() {
           {/* Shared Routes */}
           <Route element={<ProtectedRoute allowedRoles={['owner', 'manager', 'staff']} />}>
             <Route element={<Layout />}>
+              <Route path="/profile" element={<MyProfile />} />
               <Route path="/requests/:id" element={<RequestDetail />} />
               <Route path="/received/:id" element={<ReceivedDetail />} />
               <Route path="/used/:id" element={<UsedDetail />} />

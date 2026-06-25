@@ -1,9 +1,11 @@
-import { LogOut } from 'lucide-react';
+import { LogOut, User } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import NotificationBell from '../common/NotificationBell';
 
 export default function Navbar() {
   const { logout, user } = useAuthStore();
+  const navigate = useNavigate();
 
   return (
     <header className="sticky w-full top-0 left-0 right-0 mx-auto max-w-[428px] z-50 bg-white shadow-sm border-b border-[#E5E7EB] overflow-x-hidden">
@@ -15,6 +17,15 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center space-x-3">
+          {user && (
+            <button
+              onClick={() => navigate('/profile')}
+              className="flex items-center justify-center p-2 rounded-md text-[#6B7280] hover:bg-blue-50 hover:text-[#2563EB] transition-colors"
+            >
+              <User className="h-5 w-5" />
+            </button>
+          )}
+
           {user && <NotificationBell />}
 
           <div className="h-6 w-px bg-[#F3F4F6] mx-1"></div>
