@@ -11,6 +11,7 @@ export default function UsedDetail() {
   const navigate = useNavigate();
   const [entry, setEntry] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [carouselModal, setCarouselModal] = useState({ isOpen: false, images: [], index: 0 });
 
   // Fetch used entry details
   useEffect(() => {

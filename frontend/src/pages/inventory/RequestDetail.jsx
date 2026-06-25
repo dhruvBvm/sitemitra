@@ -15,6 +15,7 @@ export default function RequestDetail() {
   const navigate = useNavigate();
   const [request, setRequest] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [carouselModal, setCarouselModal] = useState({ isOpen: false, images: [], index: 0 });
   const user = useAuthStore(state => state.user);
   const [actionLoading, setActionLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);

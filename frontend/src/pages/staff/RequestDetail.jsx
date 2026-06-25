@@ -12,6 +12,7 @@ export default function StaffRequestDetail() {
   const navigate = useNavigate();
   const [request, setRequest] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [carouselModal, setCarouselModal] = useState({ isOpen: false, images: [], index: 0 });
 
   useEffect(() => {
     const fetchRequest = async () => {

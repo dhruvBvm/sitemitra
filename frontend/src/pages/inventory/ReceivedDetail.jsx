@@ -12,6 +12,7 @@ export default function ReceivedDetail() {
   const navigate = useNavigate();
   const [entry, setEntry] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [carouselModal, setCarouselModal] = useState({ isOpen: false, images: [], index: 0 });
 
   useEffect(() => {
     const fetchDetails = async () => {
