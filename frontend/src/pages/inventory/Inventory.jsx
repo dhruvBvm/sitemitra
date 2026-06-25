@@ -190,9 +190,7 @@ export default function Inventory() {
               <button
                 className="flex-1 bg-[#F3F4F6] text-[#1F2937] font-medium text-[8px] whitespace-nowrap py-1.5 px-1.5 rounded-md shrink-0 hover:bg-[#E5E7EB] transition-colors text-center"
                 onClick={() =>
-                  navigate(`${getRolePrefix()}/create-order`, {
-                    state: { siteId },
-                  })
+                  navigate(`${getRolePrefix()}/transactions?siteId=${siteId}&type=Requests`)
                 }
               >
                 Request
@@ -200,9 +198,7 @@ export default function Inventory() {
               <button
                 className="flex-1 bg-[#F3F4F6] text-[#1F2937] font-medium text-[8px] whitespace-nowrap py-1.5 px-1.5 rounded-md shrink-0 hover:bg-[#E5E7EB] transition-colors text-center"
                 onClick={() =>
-                  navigate(`${getRolePrefix()}/inventory/received/create`, {
-                    state: { siteId },
-                  })
+                  navigate(`${getRolePrefix()}/transactions?siteId=${siteId}&type=Received`)
                 }
               >
                 Received
@@ -210,9 +206,7 @@ export default function Inventory() {
               <button
                 className="flex-1 bg-[#F3F4F6] text-[#1F2937] font-medium text-[8px] whitespace-nowrap py-1.5 px-1.5 rounded-md shrink-0 hover:bg-[#E5E7EB] transition-colors text-center"
                 onClick={() =>
-                  navigate(`${getRolePrefix()}/inventory/used/create`, {
-                    state: { siteId },
-                  })
+                  navigate(`${getRolePrefix()}/transactions?siteId=${siteId}&type=Used`)
                 }
               >
                 Used

@@ -20,7 +20,7 @@ export default function Transactions() {
 
   // Filters
   const todayStr = new Date().toISOString().split('T')[0];
-  const [selectedSite, setSelectedSite] = useState('');
+  const [selectedSite, setSelectedSite] = useState(searchParams.get('siteId') || '');
   const [selectedType, setSelectedType] = useState(searchParams.get('type') || 'All');
   const [selectedDateRange, setSelectedDateRange] = useState('All Time');
   const [startDate, setStartDate] = useState(todayStr);
@@ -29,7 +29,7 @@ export default function Transactions() {
 
   // Applied filters (to avoid fetching on every keypress)
   const [appliedFilters, setAppliedFilters] = useState({
-    siteId: '',
+    siteId: searchParams.get('siteId') || '',
     type: searchParams.get('type') || 'All',
     startDate: '',
     endDate: '',
