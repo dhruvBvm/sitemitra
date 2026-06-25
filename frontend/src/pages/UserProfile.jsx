@@ -29,6 +29,8 @@ export default function UserProfile() {
   }, [userId, currentUser, navigate]);
 
   const fetchData = async () => {
+    if (userId === currentUser?._id) return; // Prevent fetch if redirecting to /profile
+
     try {
       setLoading(true);
       let userData;
