@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ImageCarouselModal from '../../components/common/ImageCarouselModal';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Loader, Calendar, AlignLeft, Truck } from 'lucide-react';
 import { inventoryService } from '../../services/inventory';

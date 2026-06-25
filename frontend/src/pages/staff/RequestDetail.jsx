@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import ImageCarouselModal from '../../components/common/ImageCarouselModal';
 import { useParams, useNavigate } from 'react-router-dom';
 import { staffService } from '../../services/staff';
 import StatusBadge from '../../components/common/StatusBadge';

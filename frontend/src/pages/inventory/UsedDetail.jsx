@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ImageCarouselModal from '../../components/common/ImageCarouselModal';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Loader, Calendar, AlignLeft } from 'lucide-react';
 import { inventoryService } from '../../services/inventory';
@@ -150,7 +151,7 @@ export default function UsedDetail() {
                   {mat.imageUrls && mat.imageUrls.length > 0 ? (
                     <div className="flex flex-wrap gap-2">
                       {mat.imageUrls.map((img, idx) => (
-                        <div key={idx} className="w-16 h-16 rounded border border-transparent overflow-hidden hover:scale-105 transition-transform block" onClick={() => setCarouselModal({ isOpen: true, images: [img], index: 0 })}>
+                        <div key={idx} className="w-16 h-16 rounded border border-transparent overflow-hidden hover:scale-105 transition-transform block" onClick={() => setCarouselModal({ isOpen: true, images: mat.imageUrls, index: idx })}>
                           <img src={img} alt="material" className="w-full h-full object-cover" />
                         </div>
                       ))}
@@ -170,7 +171,7 @@ export default function UsedDetail() {
             <h2 className="text-sm font-bold text-green-800 uppercase tracking-wider mb-4">Attached Documents</h2>
             <div className="flex flex-wrap gap-2">
               {entry.imageUrls.map((img, idx) => (
-                <div key={idx} className="w-20 h-20 rounded-md border border-transparent overflow-hidden hover:scale-105 transition-transform block" onClick={() => setCarouselModal({ isOpen: true, images: [img], index: 0 })}>
+                <div key={idx} className="w-20 h-20 rounded-md border border-transparent overflow-hidden hover:scale-105 transition-transform block" onClick={() => setCarouselModal({ isOpen: true, images: entry.imageUrls, index: idx })}>
                   <img src={img} alt="attachment" className="w-full h-full object-cover" />
                 </div>
               ))}
