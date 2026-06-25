@@ -343,10 +343,10 @@ export default function CreateReceivedEntry() {
                       {materialImages[field.id]?.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-3 w-full">
                           {materialImages[field.id].map((url, i) => (
-                            <div key={i} className="relative w-16 h-16 rounded-md border border-gray-200 shrink-0">
-                              <img src={url} alt="spec" className="w-full h-full object-cover rounded-md cursor-pointer" onClick={() => setCarouselModal({ isOpen: true, images: materialImages[field.id], index: i })} />
-                              <button type="button" onClick={() => handleRemoveMaterialImage(field.id, i)} className="absolute -top-1.5 -right-1.5 bg-[#EF4444] text-white rounded-full p-0.5 shadow z-10">
-                                <X className="w-5 h-5" />
+                            <div key={i} className="relative w-16 h-16 rounded-md border border-gray-200 shrink-0 overflow-hidden">
+                              <img src={url} alt="spec" className="w-full h-full object-cover cursor-pointer" onClick={() => setCarouselModal({ isOpen: true, images: materialImages[field.id], index: i })} />
+                              <button type="button" onClick={() => handleRemoveMaterialImage(field.id, i)} className="absolute top-0.5 right-0.5 bg-[#EF4444] text-white rounded-full p-0.5 shadow z-10">
+                                <X className="w-4 h-4" />
                               </button>
                             </div>
                           ))}
@@ -402,10 +402,10 @@ export default function CreateReceivedEntry() {
               {imageFiles.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-3 w-full">
                   {imageFiles.map((f, i) => (
-                    <div key={i} className="relative w-16 h-16 bg-[#F3F4F6] rounded-md border border-gray-200 shrink-0">
-                       <img src={URL.createObjectURL(f)} alt="uploaded" className="w-full h-full object-cover rounded-md cursor-pointer" onClick={() => setCarouselModal({ isOpen: true, images: imageFiles.map(file => URL.createObjectURL(file)), index: i })} />
-                       <button type="button" onClick={() => handleRemoveOrderImage(i)} className="absolute -top-1.5 -right-1.5 bg-[#EF4444] text-white rounded-full p-0.5 shadow z-10">
-                        <X className="w-5 h-5" />
+                    <div key={i} className="relative w-16 h-16 bg-[#F3F4F6] rounded-md border border-gray-200 shrink-0 overflow-hidden">
+                       <img src={URL.createObjectURL(f)} alt="uploaded" className="w-full h-full object-cover cursor-pointer" onClick={() => setCarouselModal({ isOpen: true, images: imageFiles.map(file => URL.createObjectURL(file)), index: i })} />
+                       <button type="button" onClick={() => handleRemoveOrderImage(i)} className="absolute top-0.5 right-0.5 bg-[#EF4444] text-white rounded-full p-0.5 shadow z-10">
+                        <X className="w-4 h-4" />
                       </button>
                     </div>
                   ))}
