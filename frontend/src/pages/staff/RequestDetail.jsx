@@ -165,7 +165,7 @@ export default function StaffRequestDetail() {
                   {mat.imageUrls && mat.imageUrls.length > 0 ? (
                     <div className="flex flex-wrap gap-2">
                       {mat.imageUrls.map((img, idx) => (
-                        <div key={idx} className="w-16 h-16 rounded border border-transparent overflow-hidden hover:scale-105 transition-transform block">
+                        <div key={idx} className="w-16 h-16 rounded border border-transparent overflow-hidden hover:scale-105 transition-transform block cursor-pointer" onClick={() => setCarouselModal({ isOpen: true, images: mat.imageUrls, index: idx })}>
                           <img src={img} alt="material" className="w-full h-full object-cover" />
                         </div>
                       ))}
@@ -185,7 +185,7 @@ export default function StaffRequestDetail() {
             <h2 className="text-sm font-bold text-green-800 uppercase tracking-wider mb-4">Order Documents</h2>
             <div className="flex flex-wrap gap-2">
               {request.imageUrls.map((img, idx) => (
-                <div key={idx} className="w-20 h-20 rounded-md border border-transparent overflow-hidden hover:scale-105 transition-transform block">
+                <div key={idx} className="w-20 h-20 rounded-md border border-transparent overflow-hidden hover:scale-105 transition-transform block cursor-pointer" onClick={() => setCarouselModal({ isOpen: true, images: request.imageUrls, index: idx })}>
                   <img src={img} alt="attachment" className="w-full h-full object-cover" />
                 </div>
               ))}
