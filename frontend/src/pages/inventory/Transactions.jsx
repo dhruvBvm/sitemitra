@@ -449,6 +449,9 @@ export default function Transactions() {
                     size="sm"
                     onClick={() => {
                       setCurrentPage(p => Math.max(p - 1, 1));
+                      const mainEl = document.querySelector('main');
+                      if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
+                      if (mainEl?.parentElement) mainEl.parentElement.scrollTo({ top: 0, behavior: 'smooth' });
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
                     disabled={currentPage === 1}
@@ -461,6 +464,9 @@ export default function Transactions() {
                     size="sm"
                     onClick={() => {
                       setCurrentPage(p => Math.min(p + 1, totalPages));
+                      const mainEl = document.querySelector('main');
+                      if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
+                      if (mainEl?.parentElement) mainEl.parentElement.scrollTo({ top: 0, behavior: 'smooth' });
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
                     disabled={currentPage === totalPages}
