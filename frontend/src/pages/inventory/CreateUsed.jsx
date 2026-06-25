@@ -307,6 +307,7 @@ export default function CreateUsed() {
                   
                   <div className="grid grid-cols-1 gap-2">
                     <div className="w-full">
+                      <input type="hidden" {...register(`materials.${index}.name`)} />
                       <select
                         {...register(`materials.${index}.materialId`, {
                           onChange: (e) => {
@@ -470,6 +471,13 @@ export default function CreateUsed() {
         confirmText="Confirm"
         confirmVariant="primary"
       />
-    </div>
+    
+      <ImageCarouselModal
+        isOpen={carouselModal.isOpen}
+        onClose={() => setCarouselModal({ isOpen: false, images: [], index: 0 })}
+        images={carouselModal.images}
+        initialIndex={carouselModal.index}
+      />
+</div>
   );
 }

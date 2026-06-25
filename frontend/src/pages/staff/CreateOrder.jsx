@@ -421,6 +421,13 @@ export default function CreateOrder() {
           </div>
         </div>
       </form>
-    </div>
+    
+      <ImageCarouselModal
+        isOpen={carouselModal.isOpen}
+        onClose={() => setCarouselModal({ isOpen: false, images: [], index: 0 })}
+        images={carouselModal.images}
+        initialIndex={carouselModal.index}
+      />
+</div>
   );
 }

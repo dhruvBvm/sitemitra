@@ -214,9 +214,9 @@ export default function RequestDetail() {
                   {Array.isArray(mat.imageUrls) && mat.imageUrls.length > 0 ? (
                     <div className="flex flex-wrap gap-2">
                       {mat.imageUrls.map((img, idx) => (
-                        <a key={idx} href={img} target="_blank" rel="noreferrer" className="w-16 h-16 rounded border border-transparent overflow-hidden hover:scale-105 transition-transform block">
+                        <div key={idx} className="w-16 h-16 rounded border border-transparent overflow-hidden hover:scale-105 transition-transform block">
                           <img src={img} alt="material" className="w-full h-full object-cover" />
-                        </a>
+                        </div>
                       ))}
                     </div>
                   ) : (
@@ -233,9 +233,9 @@ export default function RequestDetail() {
             <h2 className="text-sm font-bold text-green-800 uppercase tracking-wider mb-4">Order Documents</h2>
             <div className="flex flex-wrap gap-2">
               {request.imageUrls.map((img, idx) => (
-                <a key={idx} href={img} target="_blank" rel="noreferrer" className="w-20 h-20 rounded-md border border-transparent overflow-hidden hover:scale-105 transition-transform block">
+                <div key={idx} className="w-20 h-20 rounded-md border border-transparent overflow-hidden hover:scale-105 transition-transform block">
                   <img src={img} alt="attachment" className="w-full h-full object-cover" />
-                </a>
+                </div>
               ))}
             </div>
           </div>
@@ -279,6 +279,13 @@ export default function RequestDetail() {
         confirmText={modalConfig.confirmText}
         actionLoading={actionLoading}
       />
-    </div>
+    
+      <ImageCarouselModal
+        isOpen={carouselModal.isOpen}
+        onClose={() => setCarouselModal({ isOpen: false, images: [], index: 0 })}
+        images={carouselModal.images}
+        initialIndex={carouselModal.index}
+      />
+</div>
   );
 }
