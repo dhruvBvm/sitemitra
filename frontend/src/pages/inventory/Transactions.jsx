@@ -56,6 +56,13 @@ export default function Transactions() {
     fetchTransactions();
   }, [appliedFilters]);
 
+  useEffect(() => {
+    const mainEl = document.querySelector('main');
+    if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
+    if (mainEl?.parentElement) mainEl.parentElement.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]);
+
   const fetchSites = async () => {
     try {
       const data = await inventoryService.getSites();
@@ -447,13 +454,7 @@ export default function Transactions() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => {
-                      setCurrentPage(p => Math.max(p - 1, 1));
-                      const mainEl = document.querySelector('main');
-                      if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
-                      if (mainEl?.parentElement) mainEl.parentElement.scrollTo({ top: 0, behavior: 'smooth' });
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
+                    onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
                     disabled={currentPage === 1}
                     className="bg-white border-[#E5E7EB] text-[#1F2937] hover:bg-[#f8faff]"
                   >
@@ -462,13 +463,7 @@ export default function Transactions() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => {
-                      setCurrentPage(p => Math.min(p + 1, totalPages));
-                      const mainEl = document.querySelector('main');
-                      if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
-                      if (mainEl?.parentElement) mainEl.parentElement.scrollTo({ top: 0, behavior: 'smooth' });
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
+                    onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
                     disabled={currentPage === totalPages}
                     className="bg-white border-[#E5E7EB] text-[#1F2937] hover:bg-[#f8faff]"
                   >
