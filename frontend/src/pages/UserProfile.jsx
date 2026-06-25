@@ -78,12 +78,12 @@ export default function UserProfile() {
         // Find which sites the manager has access to
         const managerSitesData = await managerService.getSites();
         const managerSiteIds = managerSitesData.map(s => s._id || s.siteId);
-        
+
         // Ensure the manager only affects sites they actually manage
         const managerCurrentAssigned = profileUser.assignedSites ? profileUser.assignedSites.map(s => s._id || s.siteId) : [];
         const managerAssigned = managerCurrentAssigned.filter(id => managerSiteIds.includes(id));
         const newManagerAssigned = managerAssigned.filter(id => id !== siteToRemoveId);
-        
+
         await managerService.assignSitesToTeamStaff(profileUser._id, newManagerAssigned);
       }
       toast.success('Removed from site');
@@ -142,7 +142,7 @@ export default function UserProfile() {
               const siteId = s._id || s.siteId;
               const managerSiteIds = currentUser?.assignedSites?.map(ms => ms._id || ms.siteId || ms) || [];
               const canDelete = isOwner || (currentUser?.role === 'manager' && managerSiteIds.includes(siteId));
-              
+
               return (
                 <div key={siteId} className="bg-white rounded-lg p-2 shadow-sm border border-slate-200 flex items-center justify-between">
                   <div>
@@ -192,7 +192,7 @@ export default function UserProfile() {
         confirmVariant="danger"
       />
 
-      
+
     </>
   );
 }

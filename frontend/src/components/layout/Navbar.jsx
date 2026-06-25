@@ -8,7 +8,7 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   return (
-    <header className="sticky w-full top-0 left-0 right-0 mx-auto max-w-[428px] z-50 bg-white shadow-sm border-b border-[#E5E7EB] overflow-x-hidden">
+    <header className="sticky w-full top-0 left-0 right-0 mx-auto max-w-[428px] z-50 bg-white shadow-sm border-b border-[#E5E7EB]">
       <div className="max-w-[428px] mx-auto h-14 flex items-center justify-between px-4">
         <div className="flex items-center">
           <h1 className="text-[18px] font-bold text-[#2563EB] capitalize tracking-tight">
