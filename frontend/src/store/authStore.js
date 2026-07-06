@@ -62,6 +62,7 @@ export const useAuthStore = create(
         } catch (error) {
           // If refresh fails, ensure user is null
           set({ user: null, isInitializing: false });
+          window.location.href = '/login';
         }
       },
 
