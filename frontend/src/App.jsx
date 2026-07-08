@@ -57,12 +57,11 @@ import ReceivedDetail from './pages/inventory/ReceivedDetail';
 import UsedDetail from './pages/inventory/UsedDetail';
 
 function App() {
-  const { refreshSession, isInitializing } = useAuthStore();
+  const refreshSession = useAuthStore((state) => state.refreshSession);
+  const isInitializing = useAuthStore((state) => state.isInitializing);
 
   useEffect(() => {
     refreshSession();
-    window.addEventListener('load', refreshSession);
-    return () => window.removeEventListener('load', refreshSession);
   }, [refreshSession]);
 
   if (isInitializing) {
