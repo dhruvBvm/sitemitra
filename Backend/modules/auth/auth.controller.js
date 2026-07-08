@@ -6,13 +6,7 @@ const generateToken = require('../../utils/generateToken');
 // @route   POST /api/auth/refresh
 // @access  Public (uses httpOnly refresh token)
 const refresh = async (req, res) => {
-  let refreshToken = req.cookies?.refreshToken;
-  // If the frontend explicitly sends the refreshToken in the body, prefer it
-  // This allows the frontend to send a null/empty token to simulate a logged-out state
-  if (req.body && 'refreshToken' in req.body) {
-    refreshToken = req.body.refreshToken;
-  }
-  
+  const refreshToken = req.cookies?.refreshToken;
   if (!refreshToken) {
     return res.status(401).json({ message: 'No refresh token' });
   }
@@ -22,19 +16,18 @@ const refresh = async (req, res) => {
     if (!user || user.refreshToken !== refreshToken) {
       return res.status(401).json({ message: 'Invalid refresh token' });
     }
-    const newAccessToken = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET || process.env.JWT_SECRET, { expiresIn: '15m' });
+    const newAccessToken = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET || process.env.JWT_SECRET, { expiresIn: '1m' });
     const isProd = process.env.NODE_ENV === 'production';
     const cookieOptions = {
       httpOnly: true,
-      secure: true,
-      sameSite: 'none',
+      secure: isProd,
+      sameSite: 'lax',
       path: '/',
       maxAge: 15 * 60 * 1000,
     };
     res.cookie('accessToken', newAccessToken, cookieOptions);
     return res.json({
       message: 'Token refreshed',
-      accessToken: newAccessToken,
       user: {
         _id: user._id,
         name: user.name,
@@ -65,7 +58,7 @@ const logout = async (req, res) => {
     }
   }
   const isProd = process.env.NODE_ENV === 'production';
-  const cookieOpts = { httpOnly: true, secure: true, sameSite: 'none', path: '/' };
+  const cookieOpts = { httpOnly: true, secure: isProd, sameSite: 'lax', path: '/' };
   res.clearCookie('accessToken', cookieOpts);
   res.clearCookie('refreshToken', cookieOpts);
   return res.json({ message: 'Logged out' });
@@ -180,7 +173,7 @@ const login = async (req, res) => {
     }
 
     // Generate tokens
-    const accessToken = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET || process.env.JWT_SECRET, { expiresIn: '15m' });
+    const accessToken = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET || process.env.JWT_SECRET, { expiresIn: '1m' });
     const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET + '_refresh', { expiresIn: '7d' });
 
     // Store refresh token in DB
@@ -191,25 +184,23 @@ const login = async (req, res) => {
     const isProd = process.env.NODE_ENV === 'production';
     const cookieOptions = {
       httpOnly: true,
-      secure: true,
-      sameSite: 'none',
+      secure: isProd,
+      sameSite: 'lax',
       path: '/',
       maxAge: 15 * 60 * 1000,
     };
     const refreshCookieOptions = {
       httpOnly: true,
-      secure: true,
-      sameSite: 'none',
+      secure: isProd,
+      sameSite: 'lax',
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     };
     res.cookie('accessToken', accessToken, cookieOptions);
     res.cookie('refreshToken', refreshToken, refreshCookieOptions);
 
-    // Return user info and tokens
+    // Return user info (no tokens)
     return res.json({
-      accessToken,
-      refreshToken,
       _id: user._id,
       name: user.name,
       email: user.email,
