@@ -25,7 +25,9 @@ api.interceptors.response.use(
       } catch (refreshError) {
         // Refresh failed – clear auth storage to remove stale user data, then redirect
         localStorage.removeItem('auth-storage');
-        window.location.href = '/login';
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/login';
+        }
         return Promise.reject(refreshError);
       }
     }

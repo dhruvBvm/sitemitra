@@ -45,18 +45,18 @@ export const useAuthStore = create(
         window.location.href = '/login';
       },
 
-      // Refresh session on app load
+      // Verify session on app load
       refreshSession: async () => {
         try {
-          const response = await api.post('/auth/refresh');
+          const response = await api.get('/users/profile');
           const user = {
-            _id: response.data.user._id,
-            name: response.data.user.name,
-            email: response.data.user.email,
-            mobile: response.data.user.mobile,
-            role: response.data.user.role,
-            assignedSites: response.data.user.assignedSites,
-            bookmarkedSiteId: response.data.user.bookmarkedSiteId,
+            _id: response.data._id,
+            name: response.data.name,
+            email: response.data.email,
+            mobile: response.data.mobile,
+            role: response.data.role,
+            assignedSites: response.data.assignedSites,
+            bookmarkedSiteId: response.data.bookmarkedSiteId,
           };
           set({ user, isInitializing: false });
         } catch (error) {
