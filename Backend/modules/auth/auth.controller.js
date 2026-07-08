@@ -1,6 +1,5 @@
 const User = require('../user/user.model');
 const jwt = require('jsonwebtoken');
-const generateToken = require('../../utils/generateToken');
 
 // @desc    Refresh access token
 // @route   POST /api/auth/refresh
