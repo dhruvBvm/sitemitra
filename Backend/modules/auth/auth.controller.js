@@ -6,7 +6,13 @@ const generateToken = require('../../utils/generateToken');
 // @route   POST /api/auth/refresh
 // @access  Public (uses httpOnly refresh token)
 const refresh = async (req, res) => {
-  const refreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
+  let refreshToken = req.cookies?.refreshToken;
+  // If the frontend explicitly sends the refreshToken in the body, prefer it
+  // This allows the frontend to send a null/empty token to simulate a logged-out state
+  if (req.body && 'refreshToken' in req.body) {
+    refreshToken = req.body.refreshToken;
+  }
+  
   if (!refreshToken) {
     return res.status(401).json({ message: 'No refresh token' });
   }
