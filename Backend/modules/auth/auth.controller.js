@@ -22,7 +22,7 @@ const refresh = async (req, res) => {
       res.clearCookie('refreshToken', cookieOpts);
       return res.status(401).json({ message: 'Invalid refresh token' });
     }
-    const newAccessToken = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET || process.env.JWT_SECRET, { expiresIn: '1m' });
+    const newAccessToken = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET || process.env.JWT_SECRET, { expiresIn: '15m' });
     const cookieOptions = {
       httpOnly: true,
       secure: isProd,
@@ -180,7 +180,7 @@ const login = async (req, res) => {
     }
 
     // Generate tokens
-    const accessToken = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET || process.env.JWT_SECRET, { expiresIn: '1m' });
+    const accessToken = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET || process.env.JWT_SECRET, { expiresIn: '15m' });
     const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET + '_refresh', { expiresIn: '7d' });
 
     // Store refresh token in DB
