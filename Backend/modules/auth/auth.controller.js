@@ -6,7 +6,7 @@ const generateToken = require('../../utils/generateToken');
 // @route   POST /api/auth/refresh
 // @access  Public (uses httpOnly refresh token)
 const refresh = async (req, res) => {
-  const refreshToken = req.cookies?.refreshToken;
+  const refreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
   if (!refreshToken) {
     return res.status(401).json({ message: 'No refresh token' });
   }
@@ -28,6 +28,7 @@ const refresh = async (req, res) => {
     res.cookie('accessToken', newAccessToken, cookieOptions);
     return res.json({
       message: 'Token refreshed',
+      accessToken: newAccessToken,
       user: {
         _id: user._id,
         name: user.name,
@@ -199,8 +200,10 @@ const login = async (req, res) => {
     res.cookie('accessToken', accessToken, cookieOptions);
     res.cookie('refreshToken', refreshToken, refreshCookieOptions);
 
-    // Return user info (no tokens)
+    // Return user info and tokens
     return res.json({
+      accessToken,
+      refreshToken,
       _id: user._id,
       name: user.name,
       email: user.email,

@@ -7,6 +7,8 @@ export const useAuthStore = create(
   persist(
     (set) => ({
       user: null,
+      accessToken: null,
+      refreshToken: null,
       isLoading: false,
       isInitializing: true,
       error: null,
@@ -24,7 +26,7 @@ export const useAuthStore = create(
             assignedSites: response.assignedSites,
             bookmarkedSiteId: response.bookmarkedSiteId,
           };
-          set({ user, isLoading: false });
+          set({ user, accessToken: response.accessToken, refreshToken: response.refreshToken, isLoading: false });
           return user;
         } catch (error) {
           set({
@@ -41,14 +43,15 @@ export const useAuthStore = create(
         } catch (e) {
           console.error('Logout request failed', e);
         }
-        set({ user: null });
+        set({ user: null, accessToken: null, refreshToken: null });
         window.location.href = '/login';
       },
 
       // Refresh session on app load
       refreshSession: async () => {
         try {
-          const response = await api.post('/auth/refresh');
+          const { refreshToken } = useAuthStore.getState();
+          const response = await api.post('/auth/refresh', { refreshToken });
           const user = {
             _id: response.data.user._id,
             name: response.data.user.name,
@@ -58,10 +61,10 @@ export const useAuthStore = create(
             assignedSites: response.data.user.assignedSites,
             bookmarkedSiteId: response.data.user.bookmarkedSiteId,
           };
-          set({ user, isInitializing: false });
+          set({ user, accessToken: response.data.accessToken, isInitializing: false });
         } catch (error) {
           // If refresh fails, ensure user is null
-          set({ user: null, isInitializing: false });
+          set({ user: null, accessToken: null, refreshToken: null, isInitializing: false });
           // window.location.href = '/login';
         }
       },
@@ -74,7 +77,7 @@ export const useAuthStore = create(
     }),
     {
       name: 'auth-storage', // name of the item in the storage (must be unique)
-      partialize: (state) => ({ user: state.user }), // only persist the user object
+      partialize: (state) => ({ user: state.user, accessToken: state.accessToken, refreshToken: state.refreshToken }), // persist user and tokens
     }
   )
 );
