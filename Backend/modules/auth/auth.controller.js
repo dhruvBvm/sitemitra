@@ -6,17 +6,23 @@ const jwt = require('jsonwebtoken');
 // @access  Public (uses httpOnly refresh token)
 const refresh = async (req, res) => {
   const refreshToken = req.cookies?.refreshToken;
+  const isProd = process.env.NODE_ENV === 'production';
+  const cookieOpts = { httpOnly: true, secure: isProd, sameSite: 'lax', path: '/' };
+
   if (!refreshToken) {
+    res.clearCookie('accessToken', cookieOpts);
+    res.clearCookie('refreshToken', cookieOpts);
     return res.status(401).json({ message: 'No refresh token' });
   }
   try {
     const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET + '_refresh');
     const user = await User.findById(decoded.id);
     if (!user || user.refreshToken !== refreshToken) {
+      res.clearCookie('accessToken', cookieOpts);
+      res.clearCookie('refreshToken', cookieOpts);
       return res.status(401).json({ message: 'Invalid refresh token' });
     }
     const newAccessToken = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET || process.env.JWT_SECRET, { expiresIn: '1m' });
-    const isProd = process.env.NODE_ENV === 'production';
     const cookieOptions = {
       httpOnly: true,
       secure: isProd,
@@ -39,6 +45,8 @@ const refresh = async (req, res) => {
     });
   } catch (err) {
     console.error('Refresh token verification error:', err);
+    res.clearCookie('accessToken', cookieOpts);
+    res.clearCookie('refreshToken', cookieOpts);
     return res.status(401).json({ message: 'Invalid refresh token' });
   }
 };
